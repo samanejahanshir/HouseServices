@@ -1,5 +1,6 @@
 package config;
 
+import model.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -26,7 +27,13 @@ public class HibernateUtil {
                     setting.put(Environment.HBM2DDL_AUTO, "update");
 
                     configuration.setProperties(setting);
-                    //configuration.addAnnotatedClass(User.class);
+                    configuration.addAnnotatedClass(User.class);
+                    configuration.addAnnotatedClass(Services.class);
+                    configuration.addAnnotatedClass(Order.class);
+                    configuration.addAnnotatedClass(Manager.class);
+                    configuration.addAnnotatedClass(Expert.class);
+                    configuration.addAnnotatedClass(Customer.class);
+
                     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                             .applySettings(configuration.getProperties()).build();
                     sessionFactory = configuration.buildSessionFactory(serviceRegistry);
