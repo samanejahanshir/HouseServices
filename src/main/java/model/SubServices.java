@@ -1,6 +1,7 @@
 package model;
 
 import lombok.Data;
+import service.ManagerService;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -8,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Data
-public class Services {
+public class SubServices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,7 +21,7 @@ public class Services {
     @ManyToMany(mappedBy = "services",fetch = FetchType.EAGER)
     private Set<Expert> expertSet = new HashSet<>();
 
-    public Services() {
+    public SubServices() {
 
     }
 
@@ -63,14 +64,14 @@ public class Services {
             return this;
         }
 
-        public Services build() {
-            Services services = new Services();
-            services.setGroupService(groupService);
-            services.setSubService(subService);
-            services.setBasePrice(basePrice);
-            services.setDescription(description);
-            services.setExpertSet(expertSet);
-            return services;
+        public SubServices build() {
+            SubServices subServices = new SubServices();
+            subServices.setGroupService(groupService);
+            subServices.setSubService(subService);
+            subServices.setBasePrice(basePrice);
+            subServices.setDescription(description);
+            subServices.setExpertSet(expertSet);
+            return subServices;
         }
     }
 }

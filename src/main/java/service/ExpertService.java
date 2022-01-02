@@ -1,21 +1,23 @@
 package service;
 
-import config.SpringConfig;
 import dao.ExpertDao;
 import lombok.Data;
 import model.Expert;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 @Data
 public class ExpertService {
     ExpertDao expertDao = new ExpertDao();//AnnotationConfigApplicationContext(SpringConfig.class).getBean(ExpertDao.class);
 
     public void saveExpert(Expert expert) {
-        expertDao.save(expert);
+        if(expertDao.getExpertByEmail(expert.getEmail())==null) {
+            expertDao.save(expert);
+        }else{
+            throw  new RuntimeException("this expert by this email is exist .");
+        }
     }
 
     public Expert getExpertByEmail(String email, String password) {
-        return  expertDao.getExpertByEmail(email, password);
+        return  expertDao.getExpertByEmailAndPass(email, password);
     }
 
     public int updatePassword(String email,String newPassword){

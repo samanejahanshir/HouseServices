@@ -16,12 +16,12 @@ public class Expert extends User {
     @Column(nullable = false)
     private byte[] image;
     @ManyToMany
-    private Set<Services> services = new HashSet<>();
+    private Set<SubServices> services = new HashSet<>();
 
 
     public static final class ExpertBuilder {
         private byte[] image;
-        private Set<Services> services = new HashSet<>();
+        private Set<SubServices> services = new HashSet<>();
         private String firstName;
         private String lastName;
         private String email;
@@ -43,7 +43,7 @@ public class Expert extends User {
             return this;
         }
 
-        public ExpertBuilder withServices(Set<Services> services) {
+        public ExpertBuilder withServices(Set<SubServices> services) {
             this.services = services;
             return this;
         }

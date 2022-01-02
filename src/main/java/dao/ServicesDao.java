@@ -1,16 +1,16 @@
 package dao;
 
 import config.HibernateUtil;
-import model.Services;
+import model.SubServices;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 public class ServicesDao {
-    public void save(Services services) {
+    public void save(SubServices subServices) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(services);
+        session.save(subServices);
         transaction.commit();
         session.close();
     }
@@ -18,7 +18,7 @@ public class ServicesDao {
     public int deleteOneServices(String groupName) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("delete from Services where groupService=:groupName");
+        Query query = session.createQuery("delete from SubServices where groupService=:groupName");
         query.setParameter("groupName", groupName);
         int id = query.executeUpdate();
         transaction.commit();
@@ -29,7 +29,7 @@ public class ServicesDao {
     public int deleteOneSubServices(String subService) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("delete from Services where subService=:subService");
+        Query query = session.createQuery("delete from SubServices where subService=:subService");
         query.setParameter("subService", subService);
         int id = query.executeUpdate();
         transaction.commit();
@@ -37,15 +37,15 @@ public class ServicesDao {
         return id;
     }
 
-    public Services getService(String groupName,String subService){
+    public SubServices getService(String groupName, String subService){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from Services where subService=:subService and groupService=:groupName");
+        Query query = session.createQuery("from SubServices where subService=:subService and groupService=:groupName");
         query.setParameter("subService", subService);
         query.setParameter("groupName",groupName);
-        Services services = (Services)query.getSingleResult();
+        SubServices subServices = (SubServices)query.getSingleResult();
         transaction.commit();
         session.close();
-        return services;
+        return subServices;
     }
 }

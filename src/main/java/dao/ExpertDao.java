@@ -15,7 +15,7 @@ public class ExpertDao {
         session.close();
     }
 
-    public Expert getExpertByEmail(String email, String password) {
+    public Expert getExpertByEmailAndPass(String email, String password) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from  Expert where email=:email and password=:password");
@@ -26,6 +26,18 @@ public class ExpertDao {
         session.close();
         return expert;
     }
+
+    public Expert getExpertByEmail(String email) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("from  Expert where email=:email");
+        query.setParameter("email", email);
+        Expert expert = (Expert) query.getSingleResult();
+        transaction.commit();
+        session.close();
+        return expert;
+    }
+
 
     public int UpdatePassword(String email, String newPassword) {
         Session session = HibernateUtil.getSessionFactory().openSession();

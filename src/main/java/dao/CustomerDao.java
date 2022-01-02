@@ -15,7 +15,7 @@ public class CustomerDao {
         session.close();
     }
 
-    public Customer getCustomerByEmail(String email, String password) {
+    public Customer getCustomerByEmailAndPass(String email, String password) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from  Customer where email=:email and password=:password");
@@ -37,5 +37,16 @@ public class CustomerDao {
         transaction.commit();
         session.close();
         return  id;
+    }
+
+    public Customer getCustomerByEmail(String email) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("from  Customer where email=:email");
+        query.setParameter("email", email);
+        Customer customer = (Customer) query.getSingleResult();
+        transaction.commit();
+        session.close();
+        return customer;
     }
 }

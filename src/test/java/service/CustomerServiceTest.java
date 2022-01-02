@@ -21,6 +21,23 @@ public class CustomerServiceTest {
     }
 
     @Test
+    void getCustomer_SaveToDb_ThrowException() {
+        // ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+        Customer customer = Customer.CustomerBuilder.aCustomer()
+                .withFirstName("customer")
+                .withLastName("Cfamily")
+                .withPassword("a1234S454")
+                .withEmail("customer@email.com")
+                .build();
+
+        CustomerService customerService = new CustomerService();
+        RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
+                customerService.saveCustomer(customer));
+        System.out.println(exp.getMessage());
+        Assertions.assertEquals("this user by this email is exist", exp.getMessage());
+    }
+
+    @Test
     void getCustomer_ByEmailAndPass() {
         CustomerService customerService = new CustomerService();
         Customer customer=customerService.getCustomerByEmail("customer@email.com", "a1234S454");

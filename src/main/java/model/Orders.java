@@ -26,7 +26,7 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     private OrderState state;
     @OneToOne
-    private Services services;
+    private SubServices subServices;
     @ManyToOne
     private Customer customer;
 
@@ -42,7 +42,7 @@ public class Orders {
         private int orderDoneTime;
         private Address address;
         private OrderState state;
-        private Services services;
+        private SubServices subServices;
         private Customer customer;
 
         private OrderBuilder() {
@@ -87,8 +87,8 @@ public class Orders {
             return this;
         }
 
-        public OrderBuilder withServices(Services services) {
-            this.services = services;
+        public OrderBuilder withServices(SubServices subServices) {
+            this.subServices = subServices;
             return this;
         }
 
@@ -106,7 +106,7 @@ public class Orders {
             order.setOrderDoneTime(orderDoneTime);
             order.setAddress(address);
             order.setState(state);
-            order.setServices(services);
+            order.setSubServices(subServices);
             order.setCustomer(customer);
             return order;
         }
