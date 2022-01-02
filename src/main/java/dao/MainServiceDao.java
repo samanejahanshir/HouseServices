@@ -30,4 +30,13 @@ public class MainServiceDao {
         }else
             return  null;
     }
+    public List<MainServices> getListMainServices(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("from MainServices");
+        List<MainServices> list =  query.list();
+        transaction.commit();
+        session.close();
+        return list;
+    }
 }

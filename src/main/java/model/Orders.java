@@ -5,7 +5,9 @@ import model.enums.OrderState;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,6 +31,11 @@ public class Orders {
     private SubServices subServices;
     @ManyToOne
     private Customer customer;
+    @ManyToOne
+    private Expert expert;
+    @OneToMany(mappedBy = "order")
+    private List<Offer> offers=new ArrayList<>();
+    private String Comment;
 
     public Orders() {
 

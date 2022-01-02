@@ -52,7 +52,7 @@ public class ManagerServiceTest {
 @Test
     void save_MainServiceToDb(){
     MainServices mainServices=new MainServices();
-    mainServices.setGroupName("lavazem khanegi");
+    mainServices.setGroupName("tasisat");
     ManagerService managerService=new ManagerService();
     managerService.saveMainServiceToDb(mainServices);
 }
@@ -67,5 +67,10 @@ public class ManagerServiceTest {
         System.out.println(exp.getMessage());
         Assertions.assertEquals("this mainService is exist", exp.getMessage());
 
+    }
+    @Test
+    void getListUser(){
+        ManagerService managerService=new ManagerService();
+        System.out.println(managerService.getListUsers().size());
     }
 }

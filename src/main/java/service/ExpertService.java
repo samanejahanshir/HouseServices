@@ -3,6 +3,7 @@ package service;
 import dao.ExpertDao;
 import lombok.Data;
 import model.Expert;
+import model.enums.UserState;
 
 @Data
 public class ExpertService {
@@ -10,6 +11,7 @@ public class ExpertService {
 
     public void saveExpert(Expert expert) {
         if(expertDao.getExpertByEmail(expert.getEmail())==null) {
+            expert.setState(UserState.NOT_CONFIRMED);
             expertDao.save(expert);
         }else{
             throw  new RuntimeException("this expert by this email is exist .");

@@ -21,10 +21,10 @@ public class ExpertServiceTest {
             e.printStackTrace();
         }
         Expert expert = Expert.ExpertBuilder.anExpert()
-                .withFirstName("customer")
-                .withLastName("Cfamily")
+                .withFirstName("expert")
+                .withLastName("Efamily")
                 .withPassword("a1234S454")
-                .withEmail("customer@email.com")
+                .withEmail("expert@email.com")
                 .withImage(imageFile)
                 .build();
 
@@ -45,10 +45,10 @@ public class ExpertServiceTest {
             e.printStackTrace();
         }
         Expert expert = Expert.ExpertBuilder.anExpert()
-                .withFirstName("customer")
-                .withLastName("Cfamily")
+                .withFirstName("expert")
+                .withLastName("Efamily")
                 .withPassword("a1234S454")
-                .withEmail("customer@email.com")
+                .withEmail("expert@email.com")
                 .withImage(imageFile)
                 .build();
 

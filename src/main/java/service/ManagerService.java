@@ -3,13 +3,18 @@ package service;
 import dao.MainServiceDao;
 import dao.ManagerDao;
 import dao.ServicesDao;
+import dao.UserDao;
 import model.MainServices;
 import model.SubServices;
+import model.User;
+
+import java.util.List;
 
 public class ManagerService {
     ManagerDao managerDao = new ManagerDao();
     ServicesDao servicesDao = new ServicesDao();
     MainServiceDao mainServiceDao = new MainServiceDao();
+    UserDao userDao = new UserDao();
 
     public void addServicesToDb(SubServices subServices) {
         if (mainServiceDao.getMainService(subServices.getGroupService()) != null) {
@@ -33,11 +38,16 @@ public class ManagerService {
         return servicesDao.deleteOneSubServices(subServices);
     }
 
-    public void saveMainServiceToDb(MainServices mainServices){
-        if (mainServiceDao.getMainService(mainServices.getGroupName())==null) {
+    public void saveMainServiceToDb(MainServices mainServices) {
+        if (mainServiceDao.getMainService(mainServices.getGroupName()) == null) {
             mainServiceDao.save(mainServices);
-        }else {
+        } else {
             throw new RuntimeException("this mainService is exist");
         }
+    }
+
+    public List<User> getListUsers() {
+        return userDao.getListUser();
+
     }
 }

@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.List;
+
 public class UserDao {
     public void save(User user) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -25,5 +27,16 @@ public class UserDao {
         transaction.commit();
         session.close();
         return user;
+    }
+
+    public List<User> getListUser(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction=session.beginTransaction();
+        Query query = session.createQuery("from  User ");
+        List<User> users=query.list();
+        transaction.commit();
+        session.close();
+        return users;
+
     }
 }

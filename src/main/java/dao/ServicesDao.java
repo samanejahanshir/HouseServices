@@ -1,10 +1,13 @@
 package dao;
 
 import config.HibernateUtil;
+import model.MainServices;
 import model.SubServices;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class ServicesDao {
     public void save(SubServices subServices) {
@@ -43,9 +46,24 @@ public class ServicesDao {
         Query query = session.createQuery("from SubServices where subService=:subService and groupService=:groupName");
         query.setParameter("subService", subService);
         query.setParameter("groupName",groupName);
-        SubServices subServices = (SubServices)query.getSingleResult();
+        List<SubServices> subServices = query.list();
         transaction.commit();
         session.close();
-        return subServices;
+        if(!subServices.isEmpty()){
+            return subServices.get(0);
+        }
+        else
+            return null;
+    }
+
+    public List<SubServices> getListSubServices(String groupName){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("from SubServices where  groupService=:groupName");
+        query.setParameter("groupName",groupName);
+        List<SubServices> list =  query.list();
+        transaction.commit();
+        session.close();
+        return list;
     }
 }

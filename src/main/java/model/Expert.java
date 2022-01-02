@@ -3,10 +3,7 @@ package model;
 import lombok.Data;
 import model.enums.UserState;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.*;
 
 @Entity
@@ -30,6 +27,8 @@ public class Expert extends User {
         private Date registerDate;
         private long credit;
         private List<Address> addresses = new ArrayList<>();
+        @OneToMany(mappedBy = "expert")
+        private List<Orders> orders = new ArrayList<>();
 
         ExpertBuilder() {
         }

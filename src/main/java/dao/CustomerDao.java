@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.List;
+
 public class CustomerDao {
     public void save(Customer customer) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -44,9 +46,12 @@ public class CustomerDao {
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from  Customer where email=:email");
         query.setParameter("email", email);
-        Customer customer = (Customer) query.getSingleResult();
+        List<Customer> customers = query.list();
         transaction.commit();
         session.close();
-        return customer;
+        if (!customers.isEmpty()){
+           return customers.get(0);
+        }else
+        return null;
     }
 }

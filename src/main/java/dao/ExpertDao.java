@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.List;
+
 public class ExpertDao {
     public void save(Expert expert) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -32,10 +34,13 @@ public class ExpertDao {
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from  Expert where email=:email");
         query.setParameter("email", email);
-        Expert expert = (Expert) query.getSingleResult();
+        List<Expert> experts = query.list();
         transaction.commit();
         session.close();
-        return expert;
+        if(!experts.isEmpty()) {
+            return experts.get(0);
+        }else
+            return null;
     }
 
 

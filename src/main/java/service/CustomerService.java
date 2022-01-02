@@ -3,6 +3,7 @@ package service;
 import dao.CustomerDao;
 import lombok.Data;
 import model.Customer;
+import model.enums.UserState;
 
 @Data
 public class CustomerService {
@@ -10,6 +11,7 @@ public class CustomerService {
 
     public void saveCustomer(Customer customer) {
         if(customerDao.getCustomerByEmail(customer.getEmail())==null) {
+            customer.setState(UserState.NOT_CONFIRMED);
             customerDao.save(customer);
         }
         else {
