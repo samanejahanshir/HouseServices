@@ -33,7 +33,7 @@ public class Orders {
     private Customer customer;
     @ManyToOne
     private Expert expert;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "orders")
     private List<Offer> offers=new ArrayList<>();
     private String Comment;
 

@@ -1,9 +1,13 @@
 package service;
 
 import model.Customer;
-import model.User;
+import model.Orders;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CustomerServiceTest {
     @Test
@@ -40,7 +44,7 @@ public class CustomerServiceTest {
     @Test
     void getCustomer_ByEmailAndPass() {
         CustomerService customerService = new CustomerService();
-        Customer customer=customerService.getCustomerByEmail("customer@email.com", "a1234S454");
+        Customer customer=customerService.getCustomerByEmailAndPass("customer@email.com", "a1234S454");
         Assertions.assertNotNull(customer);
 
     }
@@ -50,5 +54,26 @@ public class CustomerServiceTest {
         CustomerService customerService = new CustomerService();
         int id = customerService.updatePassword("customer@email.com", "56A56745dd66");
         Assertions.assertEquals(1, id);
+    }
+
+    @Test
+    void saveOrderTest(){
+        CustomerService customerService = new CustomerService();
+        Customer customer=customerService.getCustomerByEmail("customer@email.com");
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd")
+                    .parse("2022-01-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Orders order=Orders.OrderBuilder.anOrder()
+                .withOrderDoneDate(date)
+                .withOrderDoneTime(10)
+                .withCustomer(customer)
+                .withDescription("saat 10 sobh anjam shavad")
+                .withProposedPrice(3000)
+                .build();
+        customerService.saveOrder(order);
     }
 }

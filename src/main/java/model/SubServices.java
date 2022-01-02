@@ -1,11 +1,10 @@
 package model;
 
 import lombok.Data;
-import service.ManagerService;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,8 +17,8 @@ public class SubServices {
     private String subService;
     private double basePrice;
     private String description;
-    @ManyToMany(mappedBy = "services",fetch = FetchType.EAGER)
-    private Set<Expert> expertSet = new HashSet<>();
+    @ManyToMany(mappedBy = "services")
+    private List<Expert> experts = new ArrayList<>();
 
     public SubServices() {
 
@@ -30,7 +29,7 @@ public class SubServices {
         private String subService;
         private double basePrice;
         private String description;
-        private Set<Expert> expertSet = new HashSet<>();
+        private List<Expert> experts = new ArrayList<>();
 
         private ServicesBuilder() {
         }
@@ -59,8 +58,8 @@ public class SubServices {
             return this;
         }
 
-        public ServicesBuilder withExpertSet(Set<Expert> expertSet) {
-            this.expertSet = expertSet;
+        public ServicesBuilder withExpertSet(List<Expert> expertSet) {
+            this.experts = expertSet;
             return this;
         }
 
@@ -70,7 +69,7 @@ public class SubServices {
             subServices.setSubService(subService);
             subServices.setBasePrice(basePrice);
             subServices.setDescription(description);
-            subServices.setExpertSet(expertSet);
+            subServices.setExperts(experts);
             return subServices;
         }
     }

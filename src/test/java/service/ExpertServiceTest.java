@@ -62,7 +62,7 @@ public class ExpertServiceTest {
     @Test
     void getExpert_ByEmailAndPass() {
         ExpertService expertService = new ExpertService();
-        Expert expert = expertService.getExpertByEmail("customer@email.com", "a1234S454");
+        Expert expert = expertService.getExpertByEmailAndPass("customer@email.com", "a1234S454");
         Assertions.assertNotNull(expert);
 
     }
@@ -72,5 +72,12 @@ public class ExpertServiceTest {
         ExpertService expertService = new ExpertService();
         int id = expertService.updatePassword("customer@email.com", "56A56745dd66");
         Assertions.assertEquals(1, id);
+    }
+
+    @Test
+    void getListOrderTest() {
+        ExpertService expertService = new ExpertService();
+        Expert expert = expertService.getExpertByEmail("expert@email.com");
+        System.out.println(expertService.getListOrders(expert).size());
     }
 }

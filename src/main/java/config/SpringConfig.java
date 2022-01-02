@@ -51,8 +51,8 @@ public class SpringConfig {
     }
 
     @Bean
-    public ServicesDao servicesDao() {
-        ServicesDao servicesDao = new ServicesDao();
+    public SubServiceDao servicesDao() {
+        SubServiceDao servicesDao = new SubServiceDao();
         return servicesDao;
     }
 

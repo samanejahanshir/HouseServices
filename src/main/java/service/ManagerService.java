@@ -2,7 +2,7 @@ package service;
 
 import dao.MainServiceDao;
 import dao.ManagerDao;
-import dao.ServicesDao;
+import dao.SubServiceDao;
 import dao.UserDao;
 import model.MainServices;
 import model.SubServices;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ManagerService {
     ManagerDao managerDao = new ManagerDao();
-    ServicesDao servicesDao = new ServicesDao();
+    SubServiceDao servicesDao = new SubServiceDao();
     MainServiceDao mainServiceDao = new MainServiceDao();
     UserDao userDao = new UserDao();
 
