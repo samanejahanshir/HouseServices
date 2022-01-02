@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@Builder
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User {
@@ -37,18 +36,5 @@ public class User {
 
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", state=" + state +
-                ", registerDate=" + registerDate +
-                ", credit=" + credit +
-                ", addresses=" + addresses +
-                '}';
-    }
+
 }

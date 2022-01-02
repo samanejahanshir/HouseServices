@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Builder
+
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,16 +21,5 @@ public class Address {
 
     public Address() {
 
-    }
-
-    @Override
-    public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", city='" + city + '\'' +
-                ", street='" + street + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                ", tag='" + tag + '\'' +
-                '}';
     }
 }

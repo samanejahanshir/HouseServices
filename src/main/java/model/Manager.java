@@ -6,7 +6,6 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-@Builder
 @Entity
 @Data
 public class Manager {
