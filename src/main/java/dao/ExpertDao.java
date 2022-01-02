@@ -2,7 +2,6 @@ package dao;
 
 import config.HibernateUtil;
 import model.Expert;
-import model.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -16,26 +15,34 @@ public class ExpertDao {
         session.close();
     }
 
-    public Expert getExpertByEmail(String email,String password) {
+    public Expert getExpertByEmail(String email, String password) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction=session.beginTransaction();
+        Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from  Expert where email=:email and password=:password");
         query.setParameter("email", email);
         query.setParameter("password", password);
-        Expert expert= (Expert) query.getSingleResult();
+        Expert expert = (Expert) query.getSingleResult();
         transaction.commit();
         session.close();
-        return  expert;
+        return expert;
     }
-    public int UpdatePassword(String email,String newPassword){
+
+    public int UpdatePassword(String email, String newPassword) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction=session.beginTransaction();
+        Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("update Expert set password=:password where email=:email ");
         query.setParameter("email", email);
         query.setParameter("password", newPassword);
-        int id= query.executeUpdate();
+        int id = query.executeUpdate();
         transaction.commit();
         session.close();
-        return  id;
+        return id;
+    }
+
+    public int deleteServiceFromExpert(String groupName) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        //  Query query = session.createQuery("update Expert e fetch join set where email=:email ");
+        return 0;//TODO
     }
 }

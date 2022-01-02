@@ -13,10 +13,11 @@ public class Services {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String groupService;
+    @Column(unique = true)
     private String subService;
     private double basePrice;
     private String description;
-    @ManyToMany(mappedBy = "services")
+    @ManyToMany(mappedBy = "services",fetch = FetchType.EAGER)
     private Set<Expert> expertSet = new HashSet<>();
 
     public Services() {
