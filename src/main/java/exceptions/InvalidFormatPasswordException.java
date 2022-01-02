@@ -1,6 +1,6 @@
 package exceptions;
 
-public class InvalidFormatPasswordException extends RuntimeException{
+public class InvalidFormatPasswordException extends RuntimeException {
     public InvalidFormatPasswordException(String message) {
         super(message);
     }

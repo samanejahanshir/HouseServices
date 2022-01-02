@@ -6,13 +6,13 @@ import model.enums.UserType;
 public class UserFactory {
     private User user;
 
-    public User getUser(UserType type){
-        switch (type){
+    public User getUser(UserType type,String firstName,String lastName,String email,String password) {
+        switch (type) {
             case EXPERT:
-                user=new Expert();
+                user = new Expert();
                 break;
             case CUSTOMER:
-                user=new Customer();
+                user = new Customer();
                 break;
             default:
                 throw new InvalidUserTypeException("Error==>this user type not exist");

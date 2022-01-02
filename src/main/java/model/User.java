@@ -1,8 +1,6 @@
 package model;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.Setter;
 import model.enums.UserState;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -16,7 +14,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private String firstName;
     private String lastName;
@@ -29,8 +27,8 @@ public class User {
     @CreationTimestamp
     private Date registerDate;
     private long credit;
-    @OneToMany
-    private List<Address> addresses=new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    private List<Address> addresses = new ArrayList<>();
 
     public User() {
 

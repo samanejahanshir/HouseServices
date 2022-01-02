@@ -1,29 +1,29 @@
 package dao;
 
 import config.HibernateUtil;
-import model.User;
+import model.Customer;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-public class UserDao {
-    public void save(User user) {
+public class CustomerDao {
+    public void save(Customer customer) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(user);
+        session.save(customer);
         transaction.commit();
         session.close();
     }
 
-    public User getUserByEmail(String email,String password) {
+    public Customer getCustomerByEmail(String email, String password) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction=session.beginTransaction();
-        Query query = session.createQuery("from  User where email=:email and password=:password");
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("from  Customer where email=:email and password=:password");
         query.setParameter("email", email);
         query.setParameter("password", password);
-        User user=  (User) query.getSingleResult();
+        Customer customer = (Customer) query.getSingleResult();
         transaction.commit();
         session.close();
-        return user;
+        return customer;
     }
 }

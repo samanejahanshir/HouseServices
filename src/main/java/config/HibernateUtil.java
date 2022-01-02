@@ -24,12 +24,13 @@ public class HibernateUtil {
                     setting.put(Environment.PASS, "1234567890");
                     setting.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
                     setting.put(Environment.SHOW_SQL, "true");
-                    setting.put(Environment.HBM2DDL_AUTO, "create");
+                    setting.put(Environment.FORMAT_SQL, "true");
+                    setting.put(Environment.HBM2DDL_AUTO, "update");
 
                     configuration.setProperties(setting);
                     configuration.addAnnotatedClass(User.class);
                     configuration.addAnnotatedClass(Services.class);
-                    configuration.addAnnotatedClass(Order.class);
+                    configuration.addAnnotatedClass(Orders.class);
                     configuration.addAnnotatedClass(Manager.class);
                     configuration.addAnnotatedClass(Expert.class);
                     configuration.addAnnotatedClass(Customer.class);

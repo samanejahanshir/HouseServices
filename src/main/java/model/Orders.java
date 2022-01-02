@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @Entity
-public class Order {
+public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -30,7 +30,7 @@ public class Order {
     @ManyToOne
     private Customer customer;
 
-    public Order() {
+    public Orders() {
 
     }
 
@@ -97,8 +97,8 @@ public class Order {
             return this;
         }
 
-        public Order build() {
-            Order order = new Order();
+        public Orders build() {
+            Orders order = new Orders();
             order.setProposedPrice(proposedPrice);
             order.setDescription(description);
             order.setOrderRegisterDate(orderRegisterDate);
