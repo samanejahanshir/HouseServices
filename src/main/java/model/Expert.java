@@ -31,7 +31,7 @@ public class Expert extends User {
         private long credit;
         private List<Address> addresses = new ArrayList<>();
 
-        private ExpertBuilder() {
+        ExpertBuilder() {
         }
 
         public static ExpertBuilder anExpert() {

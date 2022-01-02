@@ -16,5 +16,8 @@ public class CustomerService {
     public Customer getCustomerByEmail(String email,String password) {
         return customerDao.getCustomerByEmail(email,password);
     }
+    public int updatePassword(String email,String newPassword){
+       return customerDao.UpdatePassword(email,newPassword);
+    }
 
 }

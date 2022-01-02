@@ -27,7 +27,7 @@ public class Customer extends User {
         private long credit;
         private List<Address> addresses = new ArrayList<>();
 
-        private CustomerBuilder() {
+        CustomerBuilder() {
         }
 
         public static CustomerBuilder aCustomer() {

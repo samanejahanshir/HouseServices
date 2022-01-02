@@ -26,4 +26,16 @@ public class CustomerDao {
         session.close();
         return customer;
     }
+
+    public int UpdatePassword(String email,String newPassword){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction=session.beginTransaction();
+        Query query = session.createQuery("update Customer set password=:password where email=:email ");
+        query.setParameter("email", email);
+        query.setParameter("password", newPassword);
+        int id= query.executeUpdate();
+        transaction.commit();
+        session.close();
+        return  id;
+    }
 }

@@ -27,4 +27,11 @@ public class CustomerServiceTest {
         Assertions.assertNotNull(customer);
 
     }
+
+    @Test
+    void getNewPass_UpdateCustomerPass() {
+        CustomerService customerService = new CustomerService();
+        int id = customerService.updatePassword("customer@email.com", "56A56745dd66");
+        Assertions.assertEquals(1, id);
+    }
 }
