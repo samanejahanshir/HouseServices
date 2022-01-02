@@ -13,12 +13,12 @@ public class ExpertServiceTest {
     void getExpert_SaveToDb() {
         // ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
         File file = new File("/unknown.png");
-        byte[] imageFile=new byte[(int) file.length()];
+        byte[] imageFile = new byte[(int) file.length()];
         try {
-            FileInputStream fileInputStream=new FileInputStream(file);
+            FileInputStream fileInputStream = new FileInputStream(file);
             fileInputStream.read(imageFile);
             fileInputStream.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Expert expert = Expert.ExpertBuilder.anExpert()
@@ -39,5 +39,12 @@ public class ExpertServiceTest {
         Expert expert = expertService.getExpertByEmail("customer@email.com", "a1234S454");
         Assertions.assertNotNull(expert);
 
+    }
+
+    @Test
+    void getNewPass_UpdateExpertPass() {
+        ExpertService expertService = new ExpertService();
+        int id = expertService.updatePassword("customer@email.com", "56A56745dd66");
+        Assertions.assertEquals(1, id);
     }
 }

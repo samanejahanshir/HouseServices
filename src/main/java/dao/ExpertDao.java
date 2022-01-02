@@ -27,4 +27,15 @@ public class ExpertDao {
         session.close();
         return  expert;
     }
+    public int UpdatePassword(String email,String newPassword){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction=session.beginTransaction();
+        Query query = session.createQuery("update Expert set password=:password where email=:email ");
+        query.setParameter("email", email);
+        query.setParameter("password", newPassword);
+        int id= query.executeUpdate();
+        transaction.commit();
+        session.close();
+        return  id;
+    }
 }

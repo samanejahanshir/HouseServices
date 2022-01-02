@@ -18,4 +18,7 @@ public class ExpertService {
         return  expertDao.getExpertByEmail(email, password);
     }
 
+    public int updatePassword(String email,String newPassword){
+        return expertDao.UpdatePassword(email,newPassword);
+    }
 }
