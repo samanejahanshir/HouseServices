@@ -2,6 +2,7 @@ package service.validation;
 
 import exceptions.InvalidFormatNameException;
 import exceptions.InvalidFormatPasswordException;
+import exceptions.InvalidTimeException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,5 +33,13 @@ public class UserAndPassValidation {
             throw  new InvalidFormatPasswordException("password is not valid");
         }
         return true;
+    }
+    public static boolean isValidTime(int time){
+        if(time<1 || time>24){
+            throw  new InvalidTimeException("this time not valid");
+        }
+        else {
+            return  true;
+        }
     }
 }

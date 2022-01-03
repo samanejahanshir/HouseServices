@@ -5,10 +5,7 @@ import dao.MainServiceDao;
 import dao.OrderDao;
 import dao.SubServiceDao;
 import lombok.Data;
-import model.Customer;
-import model.MainServices;
-import model.Orders;
-import model.SubServices;
+import model.*;
 import model.enums.OrderState;
 import model.enums.UserState;
 
@@ -25,6 +22,16 @@ public class CustomerService {
         if (customerDao.getCustomerByEmail(customer.getEmail()) == null) {
             customer.setState(UserState.NOT_CONFIRMED);
             customerDao.save(customer);
+        } else {
+            throw new RuntimeException("this user by this email is exist");
+        }
+    }
+
+    public void updateAddress(Customer customer, Address address) {
+        if (customerDao.getCustomerByEmail(customer.getEmail()) != null) {
+            customer.getAddresses().add(address);
+            address.setUser(customer);
+            customerDao.update(customer);
         } else {
             throw new RuntimeException("this user by this email is exist");
         }

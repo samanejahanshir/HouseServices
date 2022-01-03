@@ -38,4 +38,5 @@ public class ValidationTest {
         boolean result = UserAndPassValidation.isPassValid(pass);
         Assertions.assertTrue(result);
     }
+
 }

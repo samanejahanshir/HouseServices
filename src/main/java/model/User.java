@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class User {
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
@@ -27,7 +27,7 @@ public class User {
     @CreationTimestamp
     private Date registerDate;
     private long credit;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
     private List<Address> addresses = new ArrayList<>();
 
     public User() {

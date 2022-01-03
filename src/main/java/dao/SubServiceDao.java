@@ -66,4 +66,12 @@ public class SubServiceDao {
         session.close();
         return list;
     }
+
+    public void update(SubServices subServices){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(subServices);
+        transaction.commit();
+        session.close();
+    }
 }

@@ -8,6 +8,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +41,11 @@ public class OrderDao {
             query.setParameter("state2", OrderState.WAIT_SELECT_EXPERT);
             orders.addAll(query.list());
         }*/
-        Criteria criteria = session.createCriteria(Orders.class, "orders");
+       /* Criteria criteria = session.createCriteria(Orders.class, "orders");
         criteria.createAlias("orders.subServices", "subServices");
         criteria.createAlias("subServices.expertSet", "experts");
         criteria.add(Restrictions.eq("orders.state", OrderState.WAIT_OFFER_EXPERTS));
-        // criteria.add(Restrictions.eq("subServices.expertSet",expert));
+        // criteria.add(Restrictions.eq("subServices.expertSet",expert));*/
 
        /* criteria.setProjection(Projections.distinct(Projections.projectionList()
                 .add(Projections.property("orders.description").as("description"))
@@ -53,9 +54,11 @@ public class OrderDao {
                 .add(Projections.property("orders.orderRegisterDate").as("orderRegisterDate"))
                 .add(Projections.property("orders.proposedPrice").as("proposedPrice"))));
         criteria.setResultTransformer(Transformers.aliasToBean(Orders.class));*/
-        orders = criteria.list();
-
-
+        //orders = criteria.list();
+        Query query=session.createQuery("select o from Orders o inner  join  o.subServices e inner  join e.experts expert where expert.id=:id");
+       query.setParameter("id",expert.getId());
+        List list = query.list();
+        System.out.println(list.size());
         transaction.commit();
         session.close();
         return orders;

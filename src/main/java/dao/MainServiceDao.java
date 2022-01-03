@@ -39,4 +39,12 @@ public class MainServiceDao {
         session.close();
         return list;
     }
+
+    public void update(MainServices mainServices){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(mainServices);
+        transaction.commit();
+        session.close();
+    }
 }

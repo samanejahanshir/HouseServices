@@ -10,7 +10,6 @@ import java.util.*;
 @Data
 public class Expert extends User {
     @Lob
-    @Column(nullable = false)
     private byte[] image;
     @ManyToMany
     private List<SubServices> services = new ArrayList<>();

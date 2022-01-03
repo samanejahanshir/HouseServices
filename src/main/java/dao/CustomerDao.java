@@ -23,10 +23,13 @@ public class CustomerDao {
         Query query = session.createQuery("from  Customer where email=:email and password=:password");
         query.setParameter("email", email);
         query.setParameter("password", password);
-        Customer customer = (Customer) query.getSingleResult();
+        List<Customer> customers = query.list();
         transaction.commit();
         session.close();
-        return customer;
+        if (!customers.isEmpty()){
+            return customers.get(0);
+        }else
+            return null;
     }
 
     public int UpdatePassword(String email,String newPassword){
@@ -53,5 +56,13 @@ public class CustomerDao {
            return customers.get(0);
         }else
         return null;
+    }
+
+    public void update(Customer customer){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(customer);
+        transaction.commit();
+        session.close();
     }
 }

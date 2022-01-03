@@ -1,7 +1,10 @@
 package service;
 
+import dao.SubServiceDao;
+import model.Address;
 import model.Customer;
 import model.Orders;
+import model.SubServices;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +22,6 @@ public class CustomerServiceTest {
                 .withPassword("a1234S454")
                 .withEmail("customer@email.com")
                 .build();
-
         CustomerService customerService = new CustomerService();
         customerService.saveCustomer(customer);
     }
@@ -44,7 +46,7 @@ public class CustomerServiceTest {
     @Test
     void getCustomer_ByEmailAndPass() {
         CustomerService customerService = new CustomerService();
-        Customer customer=customerService.getCustomerByEmailAndPass("customer@email.com", "a1234S454");
+        Customer customer = customerService.getCustomerByEmailAndPass("customer@email.com", "a1234S454");
         Assertions.assertNotNull(customer);
 
     }
@@ -57,9 +59,11 @@ public class CustomerServiceTest {
     }
 
     @Test
-    void saveOrderTest(){
+    void saveOrderTest() {
         CustomerService customerService = new CustomerService();
-        Customer customer=customerService.getCustomerByEmail("customer@email.com");
+        SubServiceDao subServiceDao = new SubServiceDao();
+        Customer customer = customerService.getCustomerByEmail("customer@email.com");
+
         Date date = null;
         try {
             date = new SimpleDateFormat("yyyy-MM-dd")
@@ -67,12 +71,14 @@ public class CustomerServiceTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Orders order=Orders.OrderBuilder.anOrder()
+        Orders order = Orders.OrderBuilder.anOrder()
                 .withOrderDoneDate(date)
                 .withOrderDoneTime(10)
                 .withCustomer(customer)
+                .withAddress(customer.getAddresses().get(0))
                 .withDescription("saat 10 sobh anjam shavad")
                 .withProposedPrice(3000)
+                .withServices(subServiceDao.getService("tasisat", "bargh"))
                 .build();
         customerService.saveOrder(order);
     }

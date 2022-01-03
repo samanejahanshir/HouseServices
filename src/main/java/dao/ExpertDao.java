@@ -23,10 +23,15 @@ public class ExpertDao {
         Query query = session.createQuery("from  Expert where email=:email and password=:password");
         query.setParameter("email", email);
         query.setParameter("password", password);
-        Expert expert = (Expert) query.getSingleResult();
+        List<Expert> expert = query.list();
         transaction.commit();
         session.close();
-        return expert;
+        if(!expert.isEmpty()){
+            return expert.get(0);
+        }
+        else {
+            return null;
+        }
     }
 
     public Expert getExpertByEmail(String email) {
@@ -61,5 +66,13 @@ public class ExpertDao {
         Transaction transaction = session.beginTransaction();
         //  Query query = session.createQuery("update Expert e fetch join set where email=:email ");
         return 0;//TODO
+    }
+
+    public void update(Expert expert){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(expert);
+        transaction.commit();
+        session.close();
     }
 }
