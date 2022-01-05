@@ -1,11 +1,10 @@
 package service;
 
 import dao.SubServiceDao;
-import model.Address;
 import model.Customer;
 import model.Orders;
-import model.SubServices;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
@@ -13,6 +12,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CustomerServiceTest {
+    static CustomerService customerService;
+
+    @BeforeAll
+    static void init() {
+        customerService = new CustomerService();
+    }
+
     @Test
     void getCustomer_SaveToDb() {
         // ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
@@ -22,7 +28,6 @@ public class CustomerServiceTest {
                 .withPassword("a1234S454")
                 .withEmail("customer@email.com")
                 .build();
-        CustomerService customerService = new CustomerService();
         customerService.saveCustomer(customer);
     }
 
@@ -35,8 +40,6 @@ public class CustomerServiceTest {
                 .withPassword("a1234S454")
                 .withEmail("customer@email.com")
                 .build();
-
-        CustomerService customerService = new CustomerService();
         RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
                 customerService.saveCustomer(customer));
         System.out.println(exp.getMessage());
@@ -45,25 +48,20 @@ public class CustomerServiceTest {
 
     @Test
     void getCustomer_ByEmailAndPass() {
-        CustomerService customerService = new CustomerService();
         Customer customer = customerService.getCustomerByEmailAndPass("customer@email.com", "a1234S454");
         Assertions.assertNotNull(customer);
-
     }
 
     @Test
     void getNewPass_UpdateCustomerPass() {
-        CustomerService customerService = new CustomerService();
         int id = customerService.updatePassword("customer@email.com", "56A56745dd66");
         Assertions.assertEquals(1, id);
     }
 
     @Test
     void saveOrderTest() {
-        CustomerService customerService = new CustomerService();
         SubServiceDao subServiceDao = new SubServiceDao();
         Customer customer = customerService.getCustomerByEmail("customer@email.com");
-
         Date date = null;
         try {
             date = new SimpleDateFormat("yyyy-MM-dd")
@@ -81,5 +79,17 @@ public class CustomerServiceTest {
                 .withServices(subServiceDao.getService("tasisat", "bargh"))
                 .build();
         customerService.saveOrder(order);
+    }
+
+    @Test
+    void getListSubServiceTest() {
+        int result = customerService.getListSubService("tasisat").size();
+        Assertions.assertEquals(1, result);
+    }
+
+    @Test
+    void getListMainServiceTest() {
+        int result = customerService.getListMainService().size();
+        Assertions.assertEquals(1, result);
     }
 }

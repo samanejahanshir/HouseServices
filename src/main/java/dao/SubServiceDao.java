@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class SubServiceDao {
@@ -40,37 +41,55 @@ public class SubServiceDao {
         return id;
     }
 
-    public SubServices getService(String groupName, String subService){
+    public SubServices getService(String groupName, String subService) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from SubServices where subService=:subService and groupService=:groupName");
         query.setParameter("subService", subService);
-        query.setParameter("groupName",groupName);
-        List<SubServices> subServices = query.list();
-        transaction.commit();
-        session.close();
-        if(!subServices.isEmpty()){
-            return subServices.get(0);
+        query.setParameter("groupName", groupName);
+        SubServices subServices = null;
+        try {
+            subServices = (SubServices) query.getSingleResult();
+            transaction.commit();
+            session.close();
+        } catch (NoResultException e) {
+            e.printStackTrace();
         }
-        else
-            return null;
+        return subServices;
     }
 
-    public List<SubServices> getListSubServices(String groupName){
+    public SubServices getSubServiceByName(String subService) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("from SubServices where subService=:subService");
+        query.setParameter("subService", subService);
+        SubServices subServices = null;
+        try {
+            subServices = (SubServices) query.getSingleResult();
+            transaction.commit();
+            session.close();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+        return subServices;
+    }
+
+    public List<SubServices> getListSubServices(String groupName) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from SubServices where  groupService=:groupName");
-        query.setParameter("groupName",groupName);
-        List<SubServices> list =  query.list();
+        query.setParameter("groupName", groupName);
+        List<SubServices> list = query.list();
         transaction.commit();
         session.close();
         return list;
     }
 
-    public void update(SubServices subServices){
+    public void update(SubServices subServices) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.update(subServices);
+        //TODO
+        Query query = session.createQuery("update SubServices u set u.experts =:experts where u.id in (select id from Expert )");
         transaction.commit();
         session.close();
     }

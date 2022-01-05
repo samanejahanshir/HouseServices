@@ -2,6 +2,8 @@ package model;
 
 import lombok.Data;
 import model.enums.UserState;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.*;
@@ -13,7 +15,10 @@ public class Expert extends User {
     private byte[] image;
     @ManyToMany
     private List<SubServices> services = new ArrayList<>();
-
+    @OneToMany(mappedBy = "expert")
+    private List<Orders> orders = new ArrayList<>();
+    @OneToOne
+    private Offer offer;
 
     public static final class ExpertBuilder {
         private byte[] image;
@@ -26,7 +31,7 @@ public class Expert extends User {
         private Date registerDate;
         private long credit;
         private List<Address> addresses = new ArrayList<>();
-        @OneToMany(mappedBy = "expert",fetch = FetchType.EAGER)
+        @OneToMany(mappedBy = "expert")
         private List<Orders> orders = new ArrayList<>();
 
         ExpertBuilder() {

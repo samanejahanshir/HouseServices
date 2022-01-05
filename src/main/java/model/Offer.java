@@ -17,18 +17,29 @@ public class Offer {
     private int startTime;
     @ManyToOne
     private Orders orders;
+    @OneToOne
+    private Expert expert;
+
 
     public static final class OfferBuilder {
+        private int id;
         private Date offerCreateDate;
         private double offerPrice;
         private int doneTime;
         private int startTime;
+        private Orders orders;
+        private Expert expert;
 
         private OfferBuilder() {
         }
 
         public static OfferBuilder anOffer() {
             return new OfferBuilder();
+        }
+
+        public OfferBuilder withId(int id) {
+            this.id = id;
+            return this;
         }
 
         public OfferBuilder withOfferCreateDate(Date offerCreateDate) {
@@ -51,12 +62,25 @@ public class Offer {
             return this;
         }
 
+        public OfferBuilder withOrders(Orders orders) {
+            this.orders = orders;
+            return this;
+        }
+
+        public OfferBuilder withExpert(Expert expert) {
+            this.expert = expert;
+            return this;
+        }
+
         public Offer build() {
             Offer offer = new Offer();
+            offer.setId(id);
             offer.setOfferCreateDate(offerCreateDate);
             offer.setOfferPrice(offerPrice);
             offer.setDoneTime(doneTime);
             offer.setStartTime(startTime);
+            offer.setOrders(orders);
+            offer.setExpert(expert);
             return offer;
         }
     }

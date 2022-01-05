@@ -1,12 +1,17 @@
 package service;
 
 import model.Expert;
+import model.Orders;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class ExpertServiceTest {
    static ExpertService expertService;
@@ -88,5 +93,33 @@ public class ExpertServiceTest {
     void SetImageTest(){
         File file = new File("/res/unknown.png");
         expertService.setImage(file,"expert@email.com");
+    }
+
+    @Test
+    void addSubServicesTOExpertLiseTest(){
+        Expert expert=expertService.getExpertByEmail("expert@email.com");
+        expertService.addSubServiceToExpertList(expert,"bargh");
+    }
+
+    @Test
+    void deleteSubServicesFromExpert(){
+        Expert expert=expertService.getExpertByEmail("expert@email.com");
+        expertService.deleteSubServiceFromExpert(expert,"bargh");
+    }
+
+    @Test
+    void addOfferToOrder(){
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd")
+                    .parse("2022-01-03");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Expert expert=expertService.getExpertByEmail("expert@email.com");
+        List<Orders> orders=expertService.getListOrders(expert);
+        if(!orders.isEmpty()){
+            expertService.addOfferToOrder(expert,orders.get(0),3000,date,2,14);
+        }
     }
 }

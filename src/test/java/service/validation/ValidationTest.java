@@ -2,7 +2,9 @@ package service.validation;
 
 import exceptions.InvalidFormatNameException;
 import exceptions.InvalidFormatPasswordException;
+import exceptions.InvalidTimeException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -36,6 +38,20 @@ public class ValidationTest {
     @CsvSource({"sAm23456B", "123456Smf"})
     void getPassword_ReturnTrueResult(String pass) {
         boolean result = UserAndPassValidation.isPassValid(pass);
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    void getTime_throwExceptionResult() {
+        InvalidTimeException exp = Assertions.assertThrows(InvalidTimeException.class, () ->
+                UserAndPassValidation.isValidTime(25));
+        System.out.println(exp.getMessage());
+        Assertions.assertEquals("this time not valid", exp.getMessage());
+    }
+
+    @Test
+    void getTime_ReturnTrue() {
+        boolean result = UserAndPassValidation.isValidTime(14);
         Assertions.assertTrue(result);
     }
 

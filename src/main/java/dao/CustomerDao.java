@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class CustomerDao {
@@ -23,13 +24,15 @@ public class CustomerDao {
         Query query = session.createQuery("from  Customer where email=:email and password=:password");
         query.setParameter("email", email);
         query.setParameter("password", password);
-        List<Customer> customers = query.list();
-        transaction.commit();
-        session.close();
-        if (!customers.isEmpty()){
-            return customers.get(0);
-        }else
-            return null;
+        Customer customer = null;
+        try {
+            customer = (Customer) query.getSingleResult();
+            transaction.commit();
+            session.close();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+        return  customer;
     }
 
     public int UpdatePassword(String email,String newPassword){
@@ -49,13 +52,15 @@ public class CustomerDao {
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from  Customer where email=:email");
         query.setParameter("email", email);
-        List<Customer> customers = query.list();
-        transaction.commit();
-        session.close();
-        if (!customers.isEmpty()){
-           return customers.get(0);
-        }else
-        return null;
+        Customer customer = null;
+        try {
+            customer = (Customer) query.getSingleResult();
+            transaction.commit();
+            session.close();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+        return  customer;
     }
 
     public void update(Customer customer){
