@@ -1,9 +1,6 @@
 package service;
 
-import dao.ExpertDao;
-import dao.OfferDao;
-import dao.OrderDao;
-import dao.SubServiceDao;
+import dao.*;
 import exceptions.InvalidSizeImageException;
 import exceptions.InvalidTimeException;
 import lombok.Data;
@@ -11,6 +8,7 @@ import model.Expert;
 import model.Offer;
 import model.Orders;
 import model.SubServices;
+import model.enums.OrderState;
 import model.enums.UserState;
 import service.validation.CheckValidation;
 
@@ -113,7 +111,33 @@ public class ExpertService {
         }
     }
 
-    public List<Orders> getOrdersWaitForSelectExpert(Expert expert){
-        return orderDao.getOrdersWaitForSelectExpert(expert);
+    public List<Orders> getOrdersWaitForSelectExpert(Expert expert) {
+        return orderDao.updateOrderStateToComeExpert(expert);
+    }
+
+    public int updateOrderState(int idOrder, OrderState state) {
+        return orderDao.updateOrderState(idOrder, state);
+    }
+
+    public int updateOrderStateToPaid(int orderId){
+        Orders orders=orderDao.getOrderById(orderId);
+        int result=0;
+        try {
+            if (orders != null) {
+                if (orders.getCustomer().getCredit() >= orders.getProposedPrice()) {
+                    orders.getCustomer().setCredit(orders.getCustomer().getCredit() - orders.getProposedPrice());
+                    CustomerDao customerDao = new CustomerDao();
+                    customerDao.update(orders.getCustomer());
+                    orders.getExpert().setCredit(orders.getExpert().getCredit() + orders.getProposedPrice());
+                    expertDao.update(orders.getExpert());
+                    result = orderDao.updateOrderState(orderId, OrderState.PAID);
+                } else {
+                    throw new RuntimeException("credit of customer is not enough.");
+                }
+            }
+        }catch (RuntimeException e){
+            e.printStackTrace();
+        }
+        return  result;
     }
 }

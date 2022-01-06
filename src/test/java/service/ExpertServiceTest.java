@@ -2,6 +2,7 @@ package service;
 
 import model.Expert;
 import model.Orders;
+import model.enums.OrderState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -116,5 +117,24 @@ public class ExpertServiceTest {
     void getOrdersWaitForSelectExpertTest() {
         Expert expert = expertService.getExpertByEmail("expert@email.com");
         System.out.println(expertService.getOrdersWaitForSelectExpert(expert).get(0));
+    }
+
+    @Test
+    void updateOrderStateTest() {
+        expertService.updateOrderState(2, OrderState.DONE);
+    }
+
+    @Test
+    void updateOrderStateToPaidTest_ThrowException() {
+        RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
+                expertService.updateOrderStateToPaid(2));
+        System.out.println(exp.getMessage());
+        Assertions.assertEquals("credit of customer is not enough.", exp.getMessage());
+    }
+
+    @Test
+    void updateOrderStateToPaidTest() {
+        int result = expertService.updateOrderStateToPaid(2);
+        Assertions.assertEquals(1, result);
     }
 }
