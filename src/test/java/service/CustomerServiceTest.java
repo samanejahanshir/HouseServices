@@ -119,4 +119,9 @@ public class CustomerServiceTest {
         int result = customerService.RegisterACommentToOrder(2, "alii bood . ba tashakor");
         Assertions.assertEquals(1, result);
     }
+
+    @Test
+    void deleteOrderTest(){
+        customerService.deleteOrder(2);
+    }
 }

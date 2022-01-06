@@ -81,7 +81,7 @@ public class ExpertServiceTest {
 
     @Test
     void SetImageTest() {
-        File file = new File("/res/unknown.png");
+        File file = new File("/res/img.jpg");
         expertService.setImage(file, "expert@email.com");
     }
 

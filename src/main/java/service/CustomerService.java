@@ -86,4 +86,8 @@ public class CustomerService {
     public int RegisterACommentToOrder(int orderId,String comment){
         return orderDao.updateOrderComment(orderId,comment);
     }
+
+    public void deleteOrder(int orderId){
+        orderDao.deleteOrder(orderId);
+    }
 }

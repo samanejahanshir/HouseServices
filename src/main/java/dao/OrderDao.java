@@ -126,4 +126,20 @@ public class OrderDao {
         session.close();
         return result;
     }
+
+    public void deleteOrder(int orderId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("delete from Offer o  where o.orders.id=:id");
+        query.setParameter("id",orderId);
+        transaction.commit();
+        session.close();
+
+        Session session1 = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction1 = session1.beginTransaction();
+       Query query2=session1.createQuery("delete from Orders o where o.id=:id");
+        query2.setParameter("id",orderId);
+        transaction1.commit();
+        session1.close();
+    }
 }
