@@ -5,6 +5,7 @@ import dao.ManagerDao;
 import dao.SubServiceDao;
 import dao.UserDao;
 import model.MainServices;
+import model.Manager;
 import model.SubServices;
 import model.User;
 import model.enums.UserState;
@@ -73,5 +74,13 @@ public class ManagerService {
     public void confirmUser(User user) {
         user.setState(UserState.CONFIRMED);
         userDao.confirmUser(user);
+    }
+
+    public Manager getManagerByNameAndPass(String userName,String password){
+       return managerDao.get(userName,password);
+    }
+
+    public void saveManager(Manager manager){
+        managerDao.save(manager);
     }
 }

@@ -3,6 +3,7 @@ package service;
 import dao.CustomerDao;
 import model.Customer;
 import model.MainServices;
+import model.Manager;
 import model.SubServices;
 import model.enums.UserType;
 import org.junit.jupiter.api.Assertions;
@@ -96,5 +97,20 @@ public class ManagerServiceTest {
         CustomerDao customerDao = new CustomerDao();
         Customer customer = customerDao.getCustomerByEmail("sara@gmail.com");
         managerService.confirmUser(customer);
+    }
+
+    @Test
+    void getManagerTest() {
+        Manager manager = managerService.getManagerByNameAndPass("admin", "admin");
+        Assertions.assertNull(manager);
+    }
+
+    @Test
+    void saveManagerTest() {
+        Manager manager = Manager.ManagerBuilder.aManager()
+                .withUserName("admin")
+                .withPassword("1234sd34A")
+                .build();
+        managerService.saveManager(manager);
     }
 }
