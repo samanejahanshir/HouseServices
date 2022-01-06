@@ -12,7 +12,7 @@ public class ValidationTest {
     @ParameterizedTest
     @CsvSource({"samane", "fatemehZahra"})
     void getUserName_ReturnTrueResult(String name) {
-        boolean result = UserAndPassValidation.isUserNameValid(name);
+        boolean result = CheckValidation.isUserNameValid(name);
         Assertions.assertTrue(result);
     }
 
@@ -20,7 +20,7 @@ public class ValidationTest {
     @CsvSource({"sa", "fatemehZ34"})
     void getUserName_TrowExceptionResult(String name) {
         InvalidFormatNameException exp = Assertions.assertThrows(InvalidFormatNameException.class, () ->
-                UserAndPassValidation.isUserNameValid(name));
+                CheckValidation.isUserNameValid(name));
         System.out.println(exp.getMessage());
         Assertions.assertEquals("user name is not valid", exp.getMessage());
     }
@@ -29,7 +29,7 @@ public class ValidationTest {
     @CsvSource({"sf56", "675678765"})
     void getUserAndPass_throwExceptionResult(String pass) {
         InvalidFormatPasswordException exp = Assertions.assertThrows(InvalidFormatPasswordException.class, () ->
-                UserAndPassValidation.isPassValid(pass));
+                CheckValidation.isPassValid(pass));
         System.out.println(exp.getMessage());
         Assertions.assertEquals("password is not valid", exp.getMessage());
     }
@@ -37,21 +37,21 @@ public class ValidationTest {
     @ParameterizedTest
     @CsvSource({"sAm23456B", "123456Smf"})
     void getPassword_ReturnTrueResult(String pass) {
-        boolean result = UserAndPassValidation.isPassValid(pass);
+        boolean result = CheckValidation.isPassValid(pass);
         Assertions.assertTrue(result);
     }
 
     @Test
     void getTime_throwExceptionResult() {
         InvalidTimeException exp = Assertions.assertThrows(InvalidTimeException.class, () ->
-                UserAndPassValidation.isValidTime(25));
+                CheckValidation.isValidTime(25));
         System.out.println(exp.getMessage());
         Assertions.assertEquals("this time not valid", exp.getMessage());
     }
 
     @Test
     void getTime_ReturnTrue() {
-        boolean result = UserAndPassValidation.isValidTime(14);
+        boolean result = CheckValidation.isValidTime(14);
         Assertions.assertTrue(result);
     }
 

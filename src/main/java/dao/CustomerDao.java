@@ -2,11 +2,13 @@ package dao;
 
 import config.HibernateUtil;
 import model.Customer;
+import model.Orders;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerDao {
@@ -55,6 +57,7 @@ public class CustomerDao {
         Customer customer = null;
         try {
             customer = (Customer) query.getSingleResult();
+            customer.getAddresses();
             transaction.commit();
             session.close();
         } catch (NoResultException e) {
@@ -70,4 +73,21 @@ public class CustomerDao {
         transaction.commit();
         session.close();
     }
+
+public List<Orders> getListOrders(Customer customer){
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    Transaction transaction = session.beginTransaction();
+    Query query = session.createQuery("select o from  Customer c inner join c.orders o  where o.customer.id=:id");
+    query.setParameter("id",customer.getId());
+    Customer customer1 = null;
+    List<Orders> orders=new ArrayList<>();
+    try {
+        orders = query.list();
+        transaction.commit();
+        session.close();
+    } catch (NoResultException e) {
+        e.printStackTrace();
+    }
+    return  orders;
+}
 }

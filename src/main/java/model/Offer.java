@@ -11,6 +11,7 @@ public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Temporal(TemporalType.DATE)
     private Date offerCreateDate;
     private double offerPrice;
     private int doneTime;
@@ -83,5 +84,17 @@ public class Offer {
             offer.setExpert(expert);
             return offer;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Offer{" +
+                "id=" + id +
+                ", offerCreateDate=" + offerCreateDate +
+                ", offerPrice=" + offerPrice +
+                ", doneTime=" + doneTime +
+                ", startTime=" + startTime +
+                ", expert=" + expert +
+                '}';
     }
 }

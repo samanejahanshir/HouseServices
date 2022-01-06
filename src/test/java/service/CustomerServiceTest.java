@@ -69,14 +69,14 @@ public class CustomerServiceTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Orders order = Orders.OrderBuilder.anOrder()
+        Orders order = Orders.OrdersBuilder.anOrders()
                 .withOrderDoneDate(date)
                 .withOrderDoneTime(10)
                 .withCustomer(customer)
                 .withAddress(customer.getAddresses().get(0))
                 .withDescription("saat 10 sobh anjam shavad")
                 .withProposedPrice(3000)
-                .withServices(subServiceDao.getService("tasisat", "bargh"))
+                .withSubServices(subServiceDao.getService("tasisat", "bargh"))
                 .build();
         customerService.saveOrder(order);
     }
@@ -91,5 +91,16 @@ public class CustomerServiceTest {
     void getListMainServiceTest() {
         int result = customerService.getListMainService().size();
         Assertions.assertEquals(1, result);
+    }
+
+    @Test
+    void getListOrdersTest() {
+        System.out.println(customerService.getListOrders("customer@email.com").size());
+    }
+
+    @Test
+    void getListOfferTest() {
+        Orders orders = customerService.getListOrders("customer@email.com").get(0);
+        System.out.println( customerService.getListOffers(orders));
     }
 }

@@ -7,7 +7,7 @@ import exceptions.InvalidTimeException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserAndPassValidation {
+public class CheckValidation {
     private static final String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
     private static final String USERNAME_PATTERN =  "^[a-zA-Z]{3,20}" ;
 

@@ -73,4 +73,15 @@ public class SubServices {
             return subServices;
         }
     }
+
+    @Override
+    public String toString() {
+        return "SubServices{" +
+                "id=" + id +
+                ", groupService='" + groupService + '\'' +
+                ", subService='" + subService + '\'' +
+                ", basePrice=" + basePrice +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

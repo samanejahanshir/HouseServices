@@ -71,4 +71,15 @@ public class Address {
             return address;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", tag='" + tag + '\'' +
+                '}';
+    }
 }

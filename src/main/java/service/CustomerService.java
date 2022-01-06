@@ -61,4 +61,13 @@ public class CustomerService {
     public List<SubServices> getListSubService(String groupName) {
         return subServices.getListSubServices(groupName);
     }
+
+    public List<Orders> getListOrders(String email) {
+        Customer customer = customerDao.getCustomerByEmail(email);
+        return customerDao.getListOrders(customer);
+    }
+
+    public List<Offer> getListOffers(Orders order) {
+        return orderDao.getListOffers(order);
+    }
 }

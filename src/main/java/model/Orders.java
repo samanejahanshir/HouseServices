@@ -41,7 +41,8 @@ public class Orders {
 
     }
 
-    public static final class OrderBuilder {
+
+    public static final class OrdersBuilder {
         private double proposedPrice;
         private String description;
         private Date orderRegisterDate;
@@ -51,71 +52,111 @@ public class Orders {
         private OrderState state;
         private SubServices subServices;
         private Customer customer;
+        private Expert expert;
+        private List<Offer> offers=new ArrayList<>();
+        private String Comment;
 
-        private OrderBuilder() {
+        private OrdersBuilder() {
         }
 
-        public static OrderBuilder anOrder() {
-            return new OrderBuilder();
+        public static OrdersBuilder anOrders() {
+            return new OrdersBuilder();
         }
 
-        public OrderBuilder withProposedPrice(double proposedPrice) {
+        public OrdersBuilder withProposedPrice(double proposedPrice) {
             this.proposedPrice = proposedPrice;
             return this;
         }
 
-        public OrderBuilder withDescription(String description) {
+        public OrdersBuilder withDescription(String description) {
             this.description = description;
             return this;
         }
 
-        public OrderBuilder withOrderRegisterDate(Date orderRegisterDate) {
+        public OrdersBuilder withOrderRegisterDate(Date orderRegisterDate) {
             this.orderRegisterDate = orderRegisterDate;
             return this;
         }
 
-        public OrderBuilder withOrderDoneDate(Date orderDoneDate) {
+        public OrdersBuilder withOrderDoneDate(Date orderDoneDate) {
             this.orderDoneDate = orderDoneDate;
             return this;
         }
 
-        public OrderBuilder withOrderDoneTime(int orderDoneTime) {
+        public OrdersBuilder withOrderDoneTime(int orderDoneTime) {
             this.orderDoneTime = orderDoneTime;
             return this;
         }
 
-        public OrderBuilder withAddress(Address address) {
+        public OrdersBuilder withAddress(Address address) {
             this.address = address;
             return this;
         }
 
-        public OrderBuilder withState(OrderState state) {
+        public OrdersBuilder withState(OrderState state) {
             this.state = state;
             return this;
         }
 
-        public OrderBuilder withServices(SubServices subServices) {
+        public OrdersBuilder withSubServices(SubServices subServices) {
             this.subServices = subServices;
             return this;
         }
 
-        public OrderBuilder withCustomer(Customer customer) {
+        public OrdersBuilder withCustomer(Customer customer) {
             this.customer = customer;
             return this;
         }
 
+        public OrdersBuilder withExpert(Expert expert) {
+            this.expert = expert;
+            return this;
+        }
+
+        public OrdersBuilder withOffers(List<Offer> offers) {
+            this.offers = offers;
+            return this;
+        }
+
+        public OrdersBuilder withComment(String Comment) {
+            this.Comment = Comment;
+            return this;
+        }
+
         public Orders build() {
-            Orders order = new Orders();
-            order.setProposedPrice(proposedPrice);
-            order.setDescription(description);
-            order.setOrderRegisterDate(orderRegisterDate);
-            order.setOrderDoneDate(orderDoneDate);
-            order.setOrderDoneTime(orderDoneTime);
-            order.setAddress(address);
-            order.setState(state);
-            order.setSubServices(subServices);
-            order.setCustomer(customer);
-            return order;
+            Orders orders = new Orders();
+            orders.setProposedPrice(proposedPrice);
+            orders.setDescription(description);
+            orders.setOrderRegisterDate(orderRegisterDate);
+            orders.setOrderDoneDate(orderDoneDate);
+            orders.setOrderDoneTime(orderDoneTime);
+            orders.setAddress(address);
+            orders.setState(state);
+            orders.setSubServices(subServices);
+            orders.setCustomer(customer);
+            orders.setExpert(expert);
+            orders.setOffers(offers);
+            orders.setComment(Comment);
+            return orders;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Orders{" +
+                "id=" + id +
+                ", proposedPrice=" + proposedPrice +
+                ", description='" + description + '\'' +
+                ", orderRegisterDate=" + orderRegisterDate +
+                ", orderDoneDate=" + orderDoneDate +
+                ", orderDoneTime=" + orderDoneTime +
+                ", address=" + address +
+                ", state=" + state +
+                ", subServices=" + subServices +
+                ", customer=" + customer +
+                ", expert=" + expert +
+                ", Comment='" + Comment + '\'' +
+                '}';
+    }
 }
+

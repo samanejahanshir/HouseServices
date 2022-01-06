@@ -9,7 +9,7 @@ import model.Expert;
 import model.User;
 import model.UserFactory;
 import model.enums.UserType;
-import service.validation.UserAndPassValidation;
+import service.validation.CheckValidation;
 
 @Data
 public class HomeServicesService {
@@ -32,9 +32,9 @@ public class HomeServicesService {
     }
 
     private boolean checkValidation(String name, String family, String email, String password) {
-        boolean isValidName = UserAndPassValidation.isUserNameValid(name);
-        boolean isValidFamily = UserAndPassValidation.isUserNameValid(family);
-        boolean isValidPass = UserAndPassValidation.isPassValid(password);
+        boolean isValidName = CheckValidation.isUserNameValid(name);
+        boolean isValidFamily = CheckValidation.isUserNameValid(family);
+        boolean isValidPass = CheckValidation.isPassValid(password);
         if (isValidName && isValidFamily && isValidPass) {
             return true;
         } else {

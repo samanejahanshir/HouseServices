@@ -27,12 +27,23 @@ public abstract class User {
     @CreationTimestamp
     private Date registerDate;
     private long credit;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Address> addresses = new ArrayList<>();
 
     public User() {
 
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", state=" + state +
+                ", registerDate=" + registerDate +
+                ", credit=" + credit +
+                '}';
+    }
 }

@@ -44,6 +44,7 @@ public class ExpertDao {
         Expert expert = null;
         try {
             expert =(Expert) query.getSingleResult();
+            expert.getAddresses();
             transaction.commit();
             session.close();
         }catch (NoResultException e){
@@ -88,7 +89,10 @@ public class ExpertDao {
         query.setParameter("email", email);
         try {
             Expert expert = (Expert) query.getSingleResult();
-                expert.getServices().remove(subServices);
+                List<SubServices> services=expert.getServices();
+                SubServices services1=services.stream().filter(subServices1 -> subServices1.getId()==subServices.getId()).findFirst().get();
+                services.remove(services1);
+                expert.setServices(services);
                 session.update(expert);
         }catch (NoResultException e){
             e.printStackTrace();
