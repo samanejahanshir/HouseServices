@@ -11,7 +11,7 @@ import model.Offer;
 import model.Orders;
 import model.SubServices;
 import model.enums.UserState;
-import service.validation.UserAndPassValidation;
+import service.validation.CheckValidation;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -90,7 +90,7 @@ public class ExpertService {
 
     public void addOfferToOrder(Expert expert,Orders orders, double price, Date date, int time,int startTime){
         try {
-            if (UserAndPassValidation.isValidTime(time)) {
+            if (CheckValidation.isValidTime(time)) {
                 Offer offer = Offer.OfferBuilder.anOffer()
                         .withOfferPrice(price)
                         .withOfferCreateDate(date)

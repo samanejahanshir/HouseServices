@@ -5,10 +5,8 @@ import model.Expert;
 import model.Offer;
 import model.Orders;
 import model.enums.OrderState;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 
 import javax.persistence.NoResultException;
@@ -34,30 +32,50 @@ public class OrderDao {
 
     public List<Orders> getListOrders(Expert expert) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Orders> orders = new ArrayList<>();
+       // List<Orders> orders = new ArrayList<>();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("select o from Orders o inner  join  o.subServices e inner  join e.experts expert where expert.id=:id");
+        Query query = session.createQuery("select o from Orders o inner  join  o.subServices e inner  join e.experts expert where expert.id=:id and o.state=:state");
         query.setParameter("id", expert.getId());
-        List list = query.list();
+        query.setParameter("state", OrderState.WAIT_OFFER_EXPERTS);
+        List<Orders> list = query.list();
         System.out.println(list.size());
         transaction.commit();
         session.close();
-        return orders;
+        return list;
     }
 
-    public void addOfferToOrder(Orders orders, Offer offer){
+    public void addOfferToOrder(Orders orders, Offer offer) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from  Orders where id=:id");
-        query.setParameter("id",orders.getId());
+        query.setParameter("id", orders.getId());
         try {
             Orders orders1 = (Orders) query.getSingleResult();
             orders1.getOffers().add(offer);
             session.update(orders1);
-        }catch (NoResultException e){
+        } catch (NoResultException e) {
             e.printStackTrace();
         }
         transaction.commit();
         session.close();
     }
+
+    public List<Offer> getListOffers(Orders orders) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("select offer from  Orders o inner  join Offer offer where o.id=offer.orders.id");
+       // query.setParameter("id", orders.getId());
+       // Orders orders1 = null;
+        List<Offer> offers = new ArrayList<>();
+        try {
+            offers=query.list();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+        transaction.commit();
+        session.close();
+        return offers;
+    }
+
+
 }
