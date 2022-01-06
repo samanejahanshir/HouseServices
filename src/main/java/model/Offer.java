@@ -21,7 +21,6 @@ public class Offer {
     @OneToOne
     private Expert expert;
 
-
     public static final class OfferBuilder {
         private int id;
         private Date offerCreateDate;

@@ -34,19 +34,19 @@ public class CustomerDao {
         } catch (NoResultException e) {
             e.printStackTrace();
         }
-        return  customer;
+        return customer;
     }
 
-    public int UpdatePassword(String email,String newPassword){
+    public int UpdatePassword(String email, String newPassword) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction=session.beginTransaction();
+        Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("update Customer set password=:password where email=:email ");
         query.setParameter("email", email);
         query.setParameter("password", newPassword);
-        int id= query.executeUpdate();
+        int id = query.executeUpdate();
         transaction.commit();
         session.close();
-        return  id;
+        return id;
     }
 
     public Customer getCustomerByEmail(String email) {
@@ -63,10 +63,10 @@ public class CustomerDao {
         } catch (NoResultException e) {
             e.printStackTrace();
         }
-        return  customer;
+        return customer;
     }
 
-    public void update(Customer customer){
+    public void update(Customer customer) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.update(customer);
@@ -74,20 +74,20 @@ public class CustomerDao {
         session.close();
     }
 
-public List<Orders> getListOrders(Customer customer){
-    Session session = HibernateUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
-    Query query = session.createQuery("select o from  Customer c inner join c.orders o  where o.customer.id=:id");
-    query.setParameter("id",customer.getId());
-    Customer customer1 = null;
-    List<Orders> orders=new ArrayList<>();
-    try {
-        orders = query.list();
-        transaction.commit();
-        session.close();
-    } catch (NoResultException e) {
-        e.printStackTrace();
+    public List<Orders> getListOrders(Customer customer) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("select o from  Customer c inner join c.orders o  where o.customer.id=:id");
+        query.setParameter("id", customer.getId());
+        Customer customer1 = null;
+        List<Orders> orders = new ArrayList<>();
+        try {
+            orders = query.list();
+            transaction.commit();
+            session.close();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+        return orders;
     }
-    return  orders;
-}
 }

@@ -18,7 +18,7 @@ public class ValidationTest {
 
     @ParameterizedTest
     @CsvSource({"sa", "fatemehZ34"})
-    void getUserName_TrowExceptionResult(String name) {
+    void getUserName_ThrowExceptionResult(String name) {
         InvalidFormatNameException exp = Assertions.assertThrows(InvalidFormatNameException.class, () ->
                 CheckValidation.isUserNameValid(name));
         System.out.println(exp.getMessage());
@@ -54,5 +54,4 @@ public class ValidationTest {
         boolean result = CheckValidation.isValidTime(14);
         Assertions.assertTrue(result);
     }
-
 }

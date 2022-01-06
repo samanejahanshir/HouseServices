@@ -1,5 +1,5 @@
 package model.enums;
 
 public enum UserState {
-    CONFIRMED,NOT_CONFIRMED;
+    CONFIRMED, NOT_CONFIRMED;
 }

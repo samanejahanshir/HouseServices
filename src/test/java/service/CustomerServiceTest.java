@@ -21,7 +21,6 @@ public class CustomerServiceTest {
 
     @Test
     void getCustomer_SaveToDb() {
-        // ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
         Customer customer = Customer.CustomerBuilder.aCustomer()
                 .withFirstName("customer")
                 .withLastName("Cfamily")
@@ -32,8 +31,7 @@ public class CustomerServiceTest {
     }
 
     @Test
-    void getCustomer_SaveToDb_ThrowException() {
-        // ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+    void getCustomerDuplicate_SaveToDb_ThrowException() {
         Customer customer = Customer.CustomerBuilder.aCustomer()
                 .withFirstName("customer")
                 .withLastName("Cfamily")
@@ -101,6 +99,6 @@ public class CustomerServiceTest {
     @Test
     void getListOfferTest() {
         Orders orders = customerService.getListOrders("customer@email.com").get(0);
-        System.out.println( customerService.getListOffers(orders));
+        System.out.println(customerService.getListOffers(orders));
     }
 }

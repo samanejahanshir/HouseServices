@@ -34,13 +34,12 @@ public class Orders {
     @ManyToOne
     private Expert expert;
     @OneToMany(mappedBy = "orders")
-    private List<Offer> offers=new ArrayList<>();
+    private List<Offer> offers = new ArrayList<>();
     private String Comment;
 
     public Orders() {
 
     }
-
 
     public static final class OrdersBuilder {
         private double proposedPrice;
@@ -53,7 +52,7 @@ public class Orders {
         private SubServices subServices;
         private Customer customer;
         private Expert expert;
-        private List<Offer> offers=new ArrayList<>();
+        private List<Offer> offers = new ArrayList<>();
         private String Comment;
 
         private OrdersBuilder() {

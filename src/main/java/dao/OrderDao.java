@@ -32,7 +32,6 @@ public class OrderDao {
 
     public List<Orders> getListOrders(Expert expert) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-       // List<Orders> orders = new ArrayList<>();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("select o from Orders o inner  join  o.subServices e inner  join e.experts expert where expert.id=:id and o.state=:state");
         query.setParameter("id", expert.getId());
@@ -63,12 +62,12 @@ public class OrderDao {
     public List<Offer> getListOffers(Orders orders) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("select offer from  Orders o inner  join Offer offer where o.id=offer.orders.id");
-       // query.setParameter("id", orders.getId());
-       // Orders orders1 = null;
+        Query query = session.createQuery("from  Orders o inner  join Offer offer where o.id=offer.orders.id");
+        // query.setParameter("id", orders.getId());
+        // Orders orders1 = null;
         List<Offer> offers = new ArrayList<>();
         try {
-            offers=query.list();
+            offers = query.list();
         } catch (NoResultException e) {
             e.printStackTrace();
         }
@@ -76,6 +75,4 @@ public class OrderDao {
         session.close();
         return offers;
     }
-
-
 }

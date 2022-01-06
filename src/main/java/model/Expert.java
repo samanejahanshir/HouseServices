@@ -2,11 +2,12 @@ package model;
 
 import lombok.Data;
 import model.enums.UserState;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data

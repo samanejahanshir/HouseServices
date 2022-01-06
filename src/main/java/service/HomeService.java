@@ -8,11 +8,12 @@ import model.Customer;
 import model.Expert;
 import model.User;
 import model.UserFactory;
+import model.enums.UserState;
 import model.enums.UserType;
 import service.validation.CheckValidation;
 
 @Data
-public class HomeServicesService {
+public class HomeService {
     public void register(String name, String family, String email, String password, UserType type) {
         try {
             if (checkValidation(name, family, email, password)) {
@@ -28,7 +29,6 @@ public class HomeServicesService {
         } catch (InvalidFormatNameException | InvalidFormatPasswordException | InvalidUserTypeException e) {
             e.printStackTrace();
         }
-
     }
 
     private boolean checkValidation(String name, String family, String email, String password) {
@@ -36,6 +36,14 @@ public class HomeServicesService {
         boolean isValidFamily = CheckValidation.isUserNameValid(family);
         boolean isValidPass = CheckValidation.isPassValid(password);
         if (isValidName && isValidFamily && isValidPass) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    boolean checkConfirmUser(User user) {
+        if (user.getState().equals(UserState.CONFIRMED)) {
             return true;
         } else {
             return false;

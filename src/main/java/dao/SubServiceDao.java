@@ -1,7 +1,6 @@
 package dao;
 
 import config.HibernateUtil;
-import model.MainServices;
 import model.SubServices;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

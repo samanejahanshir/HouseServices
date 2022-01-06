@@ -27,7 +27,7 @@ public abstract class User {
     @CreationTimestamp
     private Date registerDate;
     private long credit;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Address> addresses = new ArrayList<>();
 
     public User() {

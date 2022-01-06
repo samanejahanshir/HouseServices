@@ -27,10 +27,10 @@ public class ExpertDao {
         query.setParameter("password", password);
         Expert expert = null;
         try {
-            expert =(Expert) query.getSingleResult();
+            expert = (Expert) query.getSingleResult();
             transaction.commit();
             session.close();
-        }catch (NoResultException e){
+        } catch (NoResultException e) {
             e.printStackTrace();
         }
         return expert;
@@ -43,34 +43,33 @@ public class ExpertDao {
         query.setParameter("email", email);
         Expert expert = null;
         try {
-            expert =(Expert) query.getSingleResult();
+            expert = (Expert) query.getSingleResult();
             expert.getAddresses();
             transaction.commit();
             session.close();
-        }catch (NoResultException e){
+        } catch (NoResultException e) {
             e.printStackTrace();
         }
         return expert;
     }
 
-    public void UpdateExpertServicesByEmail(String email , SubServices subServices) {
+    public void UpdateExpertServicesByEmail(String email, SubServices subServices) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from  Expert where email=:email");
         query.setParameter("email", email);
-       // List<Expert> experts = query.list();
         try {
             Expert expert = (Expert) query.getSingleResult();
             expert.getServices().add(subServices);
             session.update(expert);
-        }catch (NoResultException e){
+        } catch (NoResultException e) {
             e.printStackTrace();
         }
         transaction.commit();
         session.close();
     }
 
-        public int UpdatePassword(String email, String newPassword) {
+    public int UpdatePassword(String email, String newPassword) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("update Expert set password=:password where email=:email ");
@@ -82,27 +81,26 @@ public class ExpertDao {
         return id;
     }
 
-    public void deleteServiceFromExpert(String email,SubServices subServices) {
+    public void deleteServiceFromExpert(String email, SubServices subServices) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from  Expert where email=:email");
         query.setParameter("email", email);
         try {
             Expert expert = (Expert) query.getSingleResult();
-                List<SubServices> services=expert.getServices();
-                SubServices services1=services.stream().filter(subServices1 -> subServices1.getId()==subServices.getId()).findFirst().get();
-                services.remove(services1);
-                expert.setServices(services);
-                session.update(expert);
-        }catch (NoResultException e){
+            List<SubServices> services = expert.getServices();
+            SubServices services1 = services.stream().filter(subServices1 -> subServices1.getId() == subServices.getId()).findFirst().get();
+            services.remove(services1);
+            expert.setServices(services);
+            session.update(expert);
+        } catch (NoResultException e) {
             e.printStackTrace();
         }
         transaction.commit();
         session.close();
     }
 
-
-    public void update(Expert expert){
+    public void update(Expert expert) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.update(expert);

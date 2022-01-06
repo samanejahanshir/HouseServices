@@ -14,16 +14,15 @@ import java.util.Date;
 import java.util.List;
 
 public class ExpertServiceTest {
-   static ExpertService expertService;
+    static ExpertService expertService;
 
     @BeforeAll
-    static void init(){
+    static void init() {
         expertService = new ExpertService();
     }
 
     @Test
     void getExpert_SaveToDb() {
-        // ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
         File file = new File("/res/unknown.png");
         byte[] imageFile = new byte[(int) file.length()];
         try {
@@ -46,16 +45,6 @@ public class ExpertServiceTest {
 
     @Test
     void getExpertDuplicate_SaveToDb_ThrowException() {
-        // ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-       /* File file = new File("/res/unknown.png");
-        byte[] imageFile = new byte[(int) file.length()];
-        try {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            fileInputStream.read(imageFile);
-            fileInputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
         Expert expert = Expert.ExpertBuilder.anExpert()
                 .withFirstName("expert")
                 .withLastName("Efamily")
@@ -90,25 +79,25 @@ public class ExpertServiceTest {
     }
 
     @Test
-    void SetImageTest(){
+    void SetImageTest() {
         File file = new File("/res/unknown.png");
-        expertService.setImage(file,"expert@email.com");
+        expertService.setImage(file, "expert@email.com");
     }
 
     @Test
-    void addSubServicesTOExpertLiseTest(){
-        Expert expert=expertService.getExpertByEmail("expert@email.com");
-        expertService.addSubServiceToExpertList(expert,"bargh");
+    void addSubServicesTOExpertLiseTest() {
+        Expert expert = expertService.getExpertByEmail("expert@email.com");
+        expertService.addSubServiceToExpertList(expert, "bargh");
     }
 
     @Test
-    void deleteSubServicesFromExpert(){
-        Expert expert=expertService.getExpertByEmail("expert@email.com");
-        expertService.deleteSubServiceFromExpert(expert,"bargh");
+    void deleteSubServicesFromExpert() {
+        Expert expert = expertService.getExpertByEmail("expert@email.com");
+        expertService.deleteSubServiceFromExpert(expert, "bargh");
     }
 
     @Test
-    void addOfferToOrder(){
+    void addOfferToOrder() {
         Date date = null;
         try {
             date = new SimpleDateFormat("yyyy-MM-dd")
@@ -116,10 +105,10 @@ public class ExpertServiceTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Expert expert=expertService.getExpertByEmail("expert@email.com");
-        List<Orders> orders=expertService.getListOrders(expert);
-        if(!orders.isEmpty()){
-            expertService.addOfferToOrder(expert,orders.get(0),3000,date,2,14);
+        Expert expert = expertService.getExpertByEmail("expert@email.com");
+        List<Orders> orders = expertService.getListOrders(expert);
+        if (!orders.isEmpty()) {
+            expertService.addOfferToOrder(expert, orders.get(0), 3000, date, 2, 14);
         }
     }
 }

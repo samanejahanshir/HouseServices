@@ -19,14 +19,18 @@ public class ManagerService {
     UserDao userDao = new UserDao();
 
     public void addServicesToDb(SubServices subServices) {
-        if (mainServiceDao.getMainService(subServices.getGroupService()) != null) {
-            if (servicesDao.getService(subServices.getGroupService(), subServices.getSubService()) == null) {
-                servicesDao.save(subServices);
+        try {
+            if (mainServiceDao.getMainService(subServices.getGroupService()) != null) {
+                if (servicesDao.getService(subServices.getGroupService(), subServices.getSubService()) == null) {
+                    servicesDao.save(subServices);
+                } else {
+                    throw new RuntimeException("this services is exist .");
+                }
             } else {
-                throw new RuntimeException("this services is exist .");
+                throw new RuntimeException("this Main service not exist");
             }
-        } else {
-            throw new RuntimeException("this Main service not exist");
+        }catch (RuntimeException e){
+            e.printStackTrace();
         }
     }
 
@@ -41,10 +45,14 @@ public class ManagerService {
     }
 
     public void saveMainServiceToDb(MainServices mainServices) {
-        if (mainServiceDao.getMainService(mainServices.getGroupName()) == null) {
-            mainServiceDao.save(mainServices);
-        } else {
-            throw new RuntimeException("this mainService is exist");
+        try {
+            if (mainServiceDao.getMainService(mainServices.getGroupName()) == null) {
+                mainServiceDao.save(mainServices);
+            } else {
+                throw new RuntimeException("this mainService is exist");
+            }
+        }catch (RuntimeException e){
+            e.printStackTrace();
         }
     }
 

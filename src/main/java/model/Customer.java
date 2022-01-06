@@ -15,7 +15,6 @@ public class Customer extends User {
     @OneToMany(mappedBy = "customer")
     private List<Orders> orders = new ArrayList<>();
 
-
     public static final class CustomerBuilder {
         private List<Orders> orders = new ArrayList<>();
         private String firstName;

@@ -4,6 +4,7 @@ import dao.ExpertDao;
 import dao.OfferDao;
 import dao.OrderDao;
 import dao.SubServiceDao;
+import exceptions.InvalidSizeImageException;
 import exceptions.InvalidTimeException;
 import lombok.Data;
 import model.Expert;
@@ -20,10 +21,10 @@ import java.util.List;
 
 @Data
 public class ExpertService {
-    ExpertDao expertDao = new ExpertDao();//AnnotationConfigApplicationContext(SpringConfig.class).getBean(ExpertDao.class);
+    ExpertDao expertDao = new ExpertDao();
     OrderDao orderDao = new OrderDao();
     SubServiceDao subServiceDao = new SubServiceDao();
-    OfferDao offerDao=new OfferDao();
+    OfferDao offerDao = new OfferDao();
 
     public void saveExpert(Expert expert) {
         if (expertDao.getExpertByEmail(expert.getEmail()) == null) {
@@ -47,18 +48,22 @@ public class ExpertService {
     }
 
     public void setImage(File image, String email) {
+        int maxsize = 300000;
         byte[] imageFile = new byte[(int) image.length()];
         try {
-            FileInputStream fileInputStream = new FileInputStream(image);
-            fileInputStream.read(imageFile);
-            fileInputStream.close();
+            if (imageFile.length <= maxsize) {
+                FileInputStream fileInputStream = new FileInputStream(image);
+                fileInputStream.read(imageFile);
+                fileInputStream.close();
+                Expert expert = getExpertByEmail(email);
+                expert.setImage(imageFile);
+                expertDao.update(expert);
+            } else {
+                throw new InvalidSizeImageException("this image is big please upload anyImage");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Expert expert = getExpertByEmail(email);
-        expert.setImage(imageFile);
-        expertDao.update(expert);
-
     }
 
     public void updateExpert(Expert expert) {
@@ -85,10 +90,9 @@ public class ExpertService {
         } else {
             throw new RuntimeException("this subService not found");
         }
-
     }
 
-    public void addOfferToOrder(Expert expert,Orders orders, double price, Date date, int time,int startTime){
+    public void addOfferToOrder(Expert expert, Orders orders, double price, Date date, int time, int startTime) {
         try {
             if (CheckValidation.isValidTime(time)) {
                 Offer offer = Offer.OfferBuilder.anOffer()
@@ -102,9 +106,9 @@ public class ExpertService {
                 offerDao.save(offer);
                 expert.setOffer(offer);
                 expertDao.update(expert);
-                orderDao.addOfferToOrder(orders,offer);
+                orderDao.addOfferToOrder(orders, offer);
             }
-        }catch (InvalidTimeException e){
+        } catch (InvalidTimeException e) {
             e.printStackTrace();
         }
     }

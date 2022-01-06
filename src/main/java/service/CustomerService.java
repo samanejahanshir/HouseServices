@@ -13,7 +13,7 @@ import java.util.List;
 
 @Data
 public class CustomerService {
-    CustomerDao customerDao = new CustomerDao();//new AnnotationConfigApplicationContext(SpringConfig.class).getBean(CustomerDao.class);
+    CustomerDao customerDao = new CustomerDao();
     OrderDao orderDao = new OrderDao();
     MainServiceDao mainServiceDao = new MainServiceDao();
     SubServiceDao subServices = new SubServiceDao();

@@ -15,5 +15,4 @@ public class UserService {
     public User getUserByEmail(String email, String password) {
         return userDao.getUserByEmail(email, password);
     }
-
 }

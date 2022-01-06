@@ -49,7 +49,6 @@ public class UserDao {
         transaction.commit();
         session.close();
         return users;
-
     }
 
     public List<User> getListUserNoConfirm() {
@@ -61,10 +60,9 @@ public class UserDao {
         transaction.commit();
         session.close();
         return users;
-
     }
 
-    public void confirmUser(User user){
+    public void confirmUser(User user) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.update(user);
@@ -97,5 +95,4 @@ public class UserDao {
         session.close();
         return users;
     }
-
 }

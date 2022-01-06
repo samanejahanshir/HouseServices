@@ -29,7 +29,7 @@ public class ManagerServiceTest {
     }
 
     @Test
-    void getService_SaveToDb_ThrowException() {
+    void getServiceDuplicate_SaveToDb_ThrowException() {
         SubServices subServices = SubServices.ServicesBuilder.aServices()
                 .withBasePrice(2000)
                 .withGroupService("Decoration home")
@@ -47,9 +47,9 @@ public class ManagerServiceTest {
     void getServiceThatNotExistMainService_SaveToDb_ThrowException() {
         SubServices subServices = SubServices.ServicesBuilder.aServices()
                 .withBasePrice(2000)
-                .withGroupService("tasisat")
-                .withSubService("bargh")
-                .withDescription("sim keshi sakhteman")
+                .withGroupService("lavazem khanegi")
+                .withSubService("yakhchal")
+                .withDescription("tamirate anva yakhchal")
                 .build();
 
         RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
@@ -73,7 +73,6 @@ public class ManagerServiceTest {
                 managerService.saveMainServiceToDb(mainServices));
         System.out.println(exp.getMessage());
         Assertions.assertEquals("this mainService is exist", exp.getMessage());
-
     }
 
     @Test
@@ -86,19 +85,6 @@ public class ManagerServiceTest {
         int result = managerService.getListUsersByCondition(UserType.CUSTOMER, "", "sara", "").size();
         Assertions.assertEquals(1, result);
     }
-
-    @Test
-    void getListUserByConditionTestReturnAnyThing() {
-        int result = managerService.getListUsersByCondition(UserType.CUSTOMER, "sara@yahoo.com", "", "").size();
-        Assertions.assertEquals(0, result);
-    }
-
-   /* //TODO.....
-    @Test
-    void getListUserByConditionTestWithoutType() {
-        int result = managerService.getListUsersByCondition(null, "", "sara", "").size();
-        Assertions.assertEquals(1, result);
-    }*/
 
     @Test
     void getListUserNoConfirmTest() {

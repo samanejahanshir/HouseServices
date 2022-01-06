@@ -13,6 +13,4 @@ public class ManagerDao {
         transaction.commit();
         session.close();
     }
-
-
 }

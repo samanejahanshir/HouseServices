@@ -5,7 +5,7 @@ import model.enums.UserType;
 
 public class UserFactory {
 
-    public static User getUser(UserType type,String firstName,String lastName,String email,String password) {
+    public static User getUser(UserType type, String firstName, String lastName, String email, String password) {
         switch (type) {
             case EXPERT:
                 return new Expert.ExpertBuilder().withFirstName(firstName)
