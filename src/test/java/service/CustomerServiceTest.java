@@ -106,4 +106,17 @@ public class CustomerServiceTest {
     void selectOfferForOrderTest() {
         customerService.selectOfferForOrder(8, 2);
     }
+
+    @Test
+    void incrementCreditTest() {
+        Customer customer = customerService.getCustomerByEmail("customer@email.com");
+        int result = customerService.incrementCredit(customer, 4000);
+        Assertions.assertEquals(1, result);
+    }
+
+    @Test
+    void RegisterACommentToOrderTest() {
+        int result = customerService.RegisterACommentToOrder(2, "alii bood . ba tashakor");
+        Assertions.assertEquals(1, result);
+    }
 }

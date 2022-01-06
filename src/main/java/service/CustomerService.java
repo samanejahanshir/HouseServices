@@ -14,6 +14,7 @@ public class CustomerService {
     OrderDao orderDao = new OrderDao();
     MainServiceDao mainServiceDao = new MainServiceDao();
     SubServiceDao subServices = new SubServiceDao();
+
     public void saveCustomer(Customer customer) {
         if (customerDao.getCustomerByEmail(customer.getEmail()) == null) {
             customer.setState(UserState.NOT_CONFIRMED);
@@ -69,12 +70,20 @@ public class CustomerService {
 
     public void selectOfferForOrder(int idExpert, int idOrder) {
         Orders order = orderDao.getOrderById(idOrder);
-        ExpertDao expertDao=new ExpertDao();
-        Expert expert=expertDao.getExpertById(idExpert);
-        if (order != null && expert!=null){
+        ExpertDao expertDao = new ExpertDao();
+        Expert expert = expertDao.getExpertById(idExpert);
+        if (order != null && expert != null) {
             order.setExpert(expert);
             order.setState(OrderState.WAIT_SELECT_EXPERT);
             orderDao.update(order);
         }
+    }
+
+    public int incrementCredit(Customer customer, double amount) {
+        return customerDao.updateCredit(customer, customer.getCredit() + amount);
+    }
+
+    public int RegisterACommentToOrder(int orderId,String comment){
+        return orderDao.updateOrderComment(orderId,comment);
     }
 }

@@ -26,7 +26,7 @@ public abstract class User {
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date registerDate;
-    private long credit;
+    private double credit;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Address> addresses = new ArrayList<>();
 

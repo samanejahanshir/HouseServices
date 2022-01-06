@@ -90,4 +90,16 @@ public class CustomerDao {
         }
         return orders;
     }
+
+    public int updateCredit(Customer customer,double amount){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("update Customer set credit=:amount where id=:id");
+        query.setParameter("id", customer.getId());
+        query.setParameter("amount",amount);
+        int result=query.executeUpdate();
+        transaction.commit();
+        session.close();
+        return  result;
+    }
 }

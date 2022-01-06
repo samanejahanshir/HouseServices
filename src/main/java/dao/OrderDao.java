@@ -91,15 +91,39 @@ public class OrderDao {
         return orders;
     }
 
-    public List<Orders> getOrdersWaitForSelectExpert(Expert expert) {
+    public List<Orders> updateOrderStateToComeExpert(Expert expert) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from Orders o where o.expert.id=:id and o.state=:state");
         query.setParameter("id", expert.getId());
         query.setParameter("state", OrderState.WAIT_SELECT_EXPERT);
-        List<Orders> orders=query.list();
+        List<Orders> orders = query.list();
         transaction.commit();
         session.close();
         return orders;
+    }
+
+    public int updateOrderState(int idOrder,OrderState state) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("update Orders o set o.state=:state where o.id=:id");
+        query.setParameter("id", idOrder);
+        query.setParameter("state",state);
+        int result=query.executeUpdate();
+        transaction.commit();
+        session.close();
+        return result;
+    }
+
+    public int updateOrderComment(int orderId,String comment){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("update Orders o set o.Comment=:comment where o.id=:id");
+        query.setParameter("id", orderId);
+        query.setParameter("comment",comment);
+        int result=query.executeUpdate();
+        transaction.commit();
+        session.close();
+        return result;
     }
 }
