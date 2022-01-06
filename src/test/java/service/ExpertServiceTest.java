@@ -111,4 +111,10 @@ public class ExpertServiceTest {
             expertService.addOfferToOrder(expert, orders.get(0), 3000, date, 2, 14);
         }
     }
+
+    @Test
+    void getOrdersWaitForSelectExpertTest() {
+        Expert expert = expertService.getExpertByEmail("expert@email.com");
+        System.out.println(expertService.getOrdersWaitForSelectExpert(expert).get(0));
+    }
 }

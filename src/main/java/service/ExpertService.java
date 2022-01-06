@@ -112,4 +112,8 @@ public class ExpertService {
             e.printStackTrace();
         }
     }
+
+    public List<Orders> getOrdersWaitForSelectExpert(Expert expert){
+        return orderDao.getOrdersWaitForSelectExpert(expert);
+    }
 }

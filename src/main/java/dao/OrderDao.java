@@ -62,9 +62,8 @@ public class OrderDao {
     public List<Offer> getListOffers(Orders orders) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from  Orders o inner  join Offer offer where o.id=offer.orders.id");
-        // query.setParameter("id", orders.getId());
-        // Orders orders1 = null;
+        Query query = session.createQuery("select o from Offer o inner join o.expert e inner  join e.services s where o.orders.id=:id");
+        query.setParameter("id", orders.getId());
         List<Offer> offers = new ArrayList<>();
         try {
             offers = query.list();
@@ -74,5 +73,33 @@ public class OrderDao {
         transaction.commit();
         session.close();
         return offers;
+    }
+
+    public Orders getOrderById(int id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("from Orders where id=:id");
+        query.setParameter("id", id);
+        Orders orders = null;
+        try {
+            orders = (Orders) query.getSingleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+        transaction.commit();
+        session.close();
+        return orders;
+    }
+
+    public List<Orders> getOrdersWaitForSelectExpert(Expert expert) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("from Orders o where o.expert.id=:id and o.state=:state");
+        query.setParameter("id", expert.getId());
+        query.setParameter("state", OrderState.WAIT_SELECT_EXPERT);
+        List<Orders> orders=query.list();
+        transaction.commit();
+        session.close();
+        return orders;
     }
 }

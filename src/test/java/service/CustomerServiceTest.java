@@ -101,4 +101,9 @@ public class CustomerServiceTest {
         Orders orders = customerService.getListOrders("customer@email.com").get(0);
         System.out.println(customerService.getListOffers(orders));
     }
+
+    @Test
+    void selectOfferForOrderTest() {
+        customerService.selectOfferForOrder(8, 2);
+    }
 }

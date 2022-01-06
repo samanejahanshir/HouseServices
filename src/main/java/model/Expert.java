@@ -110,9 +110,6 @@ public class Expert extends User {
 
     @Override
     public String toString() {
-        return "Expert{" +
-                "image=" + Arrays.toString(image) +
-                ", services=" + services +
-                '}';
+        return super.toString();
     }
 }

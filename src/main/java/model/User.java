@@ -41,9 +41,6 @@ public abstract class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", state=" + state +
-                ", registerDate=" + registerDate +
-                ", credit=" + credit +
                 '}';
     }
 }

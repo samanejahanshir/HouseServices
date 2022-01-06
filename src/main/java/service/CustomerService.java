@@ -1,9 +1,6 @@
 package service;
 
-import dao.CustomerDao;
-import dao.MainServiceDao;
-import dao.OrderDao;
-import dao.SubServiceDao;
+import dao.*;
 import lombok.Data;
 import model.*;
 import model.enums.OrderState;
@@ -17,7 +14,6 @@ public class CustomerService {
     OrderDao orderDao = new OrderDao();
     MainServiceDao mainServiceDao = new MainServiceDao();
     SubServiceDao subServices = new SubServiceDao();
-
     public void saveCustomer(Customer customer) {
         if (customerDao.getCustomerByEmail(customer.getEmail()) == null) {
             customer.setState(UserState.NOT_CONFIRMED);
@@ -69,5 +65,16 @@ public class CustomerService {
 
     public List<Offer> getListOffers(Orders order) {
         return orderDao.getListOffers(order);
+    }
+
+    public void selectOfferForOrder(int idExpert, int idOrder) {
+        Orders order = orderDao.getOrderById(idOrder);
+        ExpertDao expertDao=new ExpertDao();
+        Expert expert=expertDao.getExpertById(idExpert);
+        if (order != null && expert!=null){
+            order.setExpert(expert);
+            order.setState(OrderState.WAIT_SELECT_EXPERT);
+            orderDao.update(order);
+        }
     }
 }

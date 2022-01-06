@@ -2,6 +2,7 @@ package dao;
 
 import config.HibernateUtil;
 import model.Expert;
+import model.Orders;
 import model.SubServices;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -106,5 +107,21 @@ public class ExpertDao {
         session.update(expert);
         transaction.commit();
         session.close();
+    }
+
+    public Expert getExpertById(int id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("from Expert where id=:id");
+        query.setParameter("id", id);
+        Expert expert = null;
+        try {
+            expert = (Expert) query.getSingleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+        transaction.commit();
+        session.close();
+        return expert;
     }
 }
