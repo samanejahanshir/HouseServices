@@ -4,20 +4,33 @@ import dao.MainServiceDao;
 import dao.ManagerDao;
 import dao.SubServiceDao;
 import dao.UserDao;
-import model.MainServices;
-import model.Manager;
-import model.SubServices;
-import model.User;
-import model.enums.UserState;
-import model.enums.UserType;
+import data.MainServices;
+import data.Manager;
+import data.SubServices;
+import data.User;
+import data.enums.UserState;
+import data.enums.UserType;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@Data
 public class ManagerService {
-    ManagerDao managerDao = new ManagerDao();
-    SubServiceDao servicesDao = new SubServiceDao();
-    MainServiceDao mainServiceDao = new MainServiceDao();
-    UserDao userDao = new UserDao();
+    private final ManagerDao managerDao;
+    private final SubServiceDao servicesDao;
+    private final MainServiceDao mainServiceDao;
+    private final UserDao userDao;
+
+    @Autowired
+    public ManagerService(ManagerDao managerDao, SubServiceDao servicesDao, MainServiceDao mainServiceDao, UserDao userDao) {
+        this.managerDao = managerDao;
+        this.servicesDao = servicesDao;
+        this.mainServiceDao = mainServiceDao;
+        this.userDao = userDao;
+    }
 
     public void addServicesToDb(SubServices subServices) {
         try {
@@ -30,7 +43,7 @@ public class ManagerService {
             } else {
                 throw new RuntimeException("this Main service not exist");
             }
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
     }
@@ -52,7 +65,7 @@ public class ManagerService {
             } else {
                 throw new RuntimeException("this mainService is exist");
             }
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
     }
@@ -76,11 +89,11 @@ public class ManagerService {
         userDao.confirmUser(user);
     }
 
-    public Manager getManagerByNameAndPass(String userName,String password){
-       return managerDao.get(userName,password);
+    public Manager getManagerByNameAndPass(String userName, String password) {
+        return managerDao.get(userName, password);
     }
 
-    public void saveManager(Manager manager){
+    public void saveManager(Manager manager) {
         managerDao.save(manager);
     }
 }

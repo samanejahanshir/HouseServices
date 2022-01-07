@@ -1,18 +1,19 @@
 package dao;
 
 import config.HibernateUtil;
-import model.Expert;
-import model.Offer;
-import model.Orders;
-import model.enums.OrderState;
+import data.Expert;
+import data.Offer;
+import data.Orders;
+import data.enums.OrderState;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class OrderDao {
     public void save(Orders order) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -49,9 +50,9 @@ public class OrderDao {
         Query query = session.createQuery("from  Orders where id=:id");
         query.setParameter("id", orders.getId());
         try {
-            Orders orders1 = (Orders) query.getSingleResult();
-            orders1.getOffers().add(offer);
-            session.update(orders1);
+            orders = (Orders) query.getSingleResult();
+            orders.getOffers().add(offer);
+            session.update(orders);
         } catch (NoResultException e) {
             e.printStackTrace();
         }

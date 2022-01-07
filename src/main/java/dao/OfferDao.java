@@ -1,11 +1,13 @@
 package dao;
 
 import config.HibernateUtil;
-import model.Offer;
+import data.Offer;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OfferDao {
     public void save(Offer offer) {
         Session session = HibernateUtil.getSessionFactory().openSession();

@@ -4,25 +4,33 @@ import dao.*;
 import exceptions.InvalidSizeImageException;
 import exceptions.InvalidTimeException;
 import lombok.Data;
-import model.Expert;
-import model.Offer;
-import model.Orders;
-import model.SubServices;
-import model.enums.OrderState;
-import model.enums.UserState;
+import data.Expert;
+import data.Offer;
+import data.Orders;
+import data.SubServices;
+import data.enums.OrderState;
+import data.enums.UserState;
+import org.springframework.stereotype.Service;
 import service.validation.CheckValidation;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Date;
 import java.util.List;
-
+@Service
 @Data
 public class ExpertService {
-    ExpertDao expertDao = new ExpertDao();
-    OrderDao orderDao = new OrderDao();
-    SubServiceDao subServiceDao = new SubServiceDao();
-    OfferDao offerDao = new OfferDao();
+    ExpertDao expertDao ;
+    OrderDao orderDao ;
+    SubServiceDao subServiceDao ;
+    OfferDao offerDao ;
+
+    public ExpertService(ExpertDao expertDao, OrderDao orderDao, SubServiceDao subServiceDao, OfferDao offerDao) {
+        this.expertDao = expertDao;
+        this.orderDao = orderDao;
+        this.subServiceDao = subServiceDao;
+        this.offerDao = offerDao;
+    }
 
     public void saveExpert(Expert expert) {
         if (expertDao.getExpertByEmail(expert.getEmail()) == null) {

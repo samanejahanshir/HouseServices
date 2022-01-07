@@ -1,19 +1,30 @@
 package service;
 
 import dao.*;
+import data.*;
 import lombok.Data;
-import model.*;
-import model.enums.OrderState;
-import model.enums.UserState;
+import data.enums.OrderState;
+import data.enums.UserState;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 @Data
 public class CustomerService {
-    CustomerDao customerDao = new CustomerDao();
-    OrderDao orderDao = new OrderDao();
-    MainServiceDao mainServiceDao = new MainServiceDao();
-    SubServiceDao subServices = new SubServiceDao();
+    private final CustomerDao customerDao;
+    private final OrderDao orderDao;
+    private final MainServiceDao mainServiceDao;
+    private final SubServiceDao subServices;
+
+    @Autowired
+    public CustomerService(CustomerDao customerDao, OrderDao orderDao, MainServiceDao mainServiceDao, SubServiceDao subServices) {
+        this.customerDao = customerDao;
+        this.orderDao = orderDao;
+        this.mainServiceDao = mainServiceDao;
+        this.subServices = subServices;
+    }
 
     public void saveCustomer(Customer customer) {
         if (customerDao.getCustomerByEmail(customer.getEmail()) == null) {
@@ -83,11 +94,11 @@ public class CustomerService {
         return customerDao.updateCredit(customer, customer.getCredit() + amount);
     }
 
-    public int RegisterACommentToOrder(int orderId,String comment){
-        return orderDao.updateOrderComment(orderId,comment);
+    public int RegisterACommentToOrder(int orderId, String comment) {
+        return orderDao.updateOrderComment(orderId, comment);
     }
 
-    public void deleteOrder(int orderId){
+    public void deleteOrder(int orderId) {
         orderDao.deleteOrder(orderId);
     }
 }

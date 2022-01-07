@@ -1,11 +1,13 @@
 package service;
 
+import config.SpringConfig;
 import dao.SubServiceDao;
-import model.Customer;
-import model.Orders;
+import data.Customer;
+import data.Orders;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,7 +18,7 @@ public class CustomerServiceTest {
 
     @BeforeAll
     static void init() {
-        customerService = new CustomerService();
+        customerService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(CustomerService.class);
     }
 
     @Test

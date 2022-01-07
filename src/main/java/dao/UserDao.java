@@ -1,20 +1,21 @@
 package dao;
 
 import config.HibernateUtil;
-import model.Customer;
-import model.Expert;
-import model.User;
-import model.enums.UserState;
-import model.enums.UserType;
+import data.Customer;
+import data.Expert;
+import data.User;
+import data.enums.UserState;
+import data.enums.UserType;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.NoResultException;
 import java.util.List;
-
+@Component
 public class UserDao {
     public void save(User user) {
         Session session = HibernateUtil.getSessionFactory().openSession();

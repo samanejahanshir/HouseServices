@@ -1,14 +1,15 @@
 package dao;
 
 import config.HibernateUtil;
-import model.MainServices;
+import data.MainServices;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.NoResultException;
 import java.util.List;
-
+@Component
 public class MainServiceDao {
     public void save(MainServices mainServices) {
         Session session = HibernateUtil.getSessionFactory().openSession();

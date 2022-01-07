@@ -1,16 +1,16 @@
 package dao;
 
 import config.HibernateUtil;
-import model.Expert;
-import model.Orders;
-import model.SubServices;
+import data.Expert;
+import data.SubServices;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.NoResultException;
 import java.util.List;
-
+@Component
 public class ExpertDao {
     public void save(Expert expert) {
         Session session = HibernateUtil.getSessionFactory().openSession();

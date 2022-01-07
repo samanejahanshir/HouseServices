@@ -42,4 +42,13 @@ public class CheckValidation {
             return true;
         }
     }
+
+    public static boolean validEmail(String email) {
+        boolean matches = email.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*" +
+                "@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
+        if (matches)
+            return true;
+        return false;
+    }
+
 }

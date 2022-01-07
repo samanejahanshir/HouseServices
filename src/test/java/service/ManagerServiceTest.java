@@ -1,21 +1,22 @@
 package service;
-
-import dao.CustomerDao;
-import model.Customer;
-import model.MainServices;
-import model.Manager;
-import model.SubServices;
-import model.enums.UserType;
+import config.SpringConfig;
+import data.Customer;
+import data.MainServices;
+import data.Manager;
+import data.SubServices;
+import data.enums.UserType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ManagerServiceTest {
     static ManagerService managerService;
-
+static  CustomerService customerService;
     @BeforeAll
     static void init() {
-        managerService = new ManagerService();
+        managerService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(ManagerService.class);
+customerService=new AnnotationConfigApplicationContext(SpringConfig.class).getBean(CustomerService.class);
     }
 
     @Test
@@ -61,8 +62,8 @@ public class ManagerServiceTest {
 
     @Test
     void save_MainServiceToDb() {
-        MainServices mainServices = new MainServices();
-        mainServices.setGroupName("tasisat");
+        MainServices mainServices=new MainServices();
+        mainServices.setGroupName("decorat home");
         managerService.saveMainServiceToDb(mainServices);
     }
 
@@ -94,8 +95,7 @@ public class ManagerServiceTest {
 
     @Test
     void confirmUserTest() {
-        CustomerDao customerDao = new CustomerDao();
-        Customer customer = customerDao.getCustomerByEmail("sara@gmail.com");
+        Customer customer =customerService.getCustomerByEmail("sara@gmail.com");
         managerService.confirmUser(customer);
     }
 

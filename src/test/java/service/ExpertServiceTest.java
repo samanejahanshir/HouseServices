@@ -1,11 +1,13 @@
 package service;
 
-import model.Expert;
-import model.Orders;
-import model.enums.OrderState;
+import config.SpringConfig;
+import data.Expert;
+import data.Orders;
+import data.enums.OrderState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +21,7 @@ public class ExpertServiceTest {
 
     @BeforeAll
     static void init() {
-        expertService = new ExpertService();
+        expertService =  new AnnotationConfigApplicationContext(SpringConfig.class).getBean(ExpertService.class);
     }
 
     @Test
@@ -34,10 +36,10 @@ public class ExpertServiceTest {
             e.printStackTrace();
         }
         Expert expert = Expert.ExpertBuilder.anExpert()
-                .withFirstName("expert")
-                .withLastName("Efamily")
+                .withFirstName("alireza")
+                .withLastName("alian")
                 .withPassword("a1234S454")
-                .withEmail("expert@email.com")
+                .withEmail("alireza@email.com")
                 .withImage(imageFile)
                 .build();
 
