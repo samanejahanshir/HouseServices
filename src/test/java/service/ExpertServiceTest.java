@@ -1,8 +1,8 @@
 package service;
 
 import config.SpringConfig;
-import data.Expert;
-import data.Orders;
+import data.model.Expert;
+import data.model.Orders;
 import data.enums.OrderState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -49,13 +49,11 @@ public class ExpertServiceTest {
     @Test
     void getExpertDuplicate_SaveToDb_ThrowException() {
         Expert expert = Expert.ExpertBuilder.anExpert()
-                .withFirstName("expert")
-                .withLastName("Efamily")
-                .withPassword("a1234S45874")
-                .withEmail("expert@email.com")
-                //.withImage(imageFile)
+                .withFirstName("alireza")
+                .withLastName("alian")
+                .withPassword("a1234S454")
+                .withEmail("alireza@email.com")
                 .build();
-
         RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
                 expertService.saveExpert(expert));
         System.out.println(exp.getMessage());
@@ -77,8 +75,7 @@ public class ExpertServiceTest {
 
     @Test
     void getListOrderTest() {
-        Expert expert = expertService.getExpertByEmail("expert@email.com");
-        System.out.println(expertService.getListOrders(expert).size());
+        System.out.println(expertService.getListOrdersOfSubServiceExpert("expert@email.com").size());
     }
 
     @Test
@@ -89,8 +86,7 @@ public class ExpertServiceTest {
 
     @Test
     void addSubServicesTOExpertLiseTest() {
-        Expert expert = expertService.getExpertByEmail("expert@email.com");
-        expertService.addSubServiceToExpertList(expert, "bargh");
+        expertService.addSubServiceToExpertList("alireza@email.com", "bargh");
     }
 
     @Test
@@ -109,10 +105,10 @@ public class ExpertServiceTest {
             e.printStackTrace();
         }
         Expert expert = expertService.getExpertByEmail("expert@email.com");
-        List<Orders> orders = expertService.getListOrders(expert);
-        if (!orders.isEmpty()) {
-            expertService.addOfferToOrder(expert, orders.get(0), 3000, date, 2, 14);
-        }
+        List<Orders> orders = expertService.getListOrdersOfSubServiceExpert("expert@email.com");
+       /* if (!orders.isEmpty()) {
+            expertService.addOfferToOrder(expert, orders.get(0), 3000, 2, 14);
+        }*/
     }
 
     @Test

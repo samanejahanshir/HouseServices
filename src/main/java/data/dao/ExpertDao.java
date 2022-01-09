@@ -1,88 +1,41 @@
-package dao;
+package data.dao;
 
-import config.HibernateUtil;
-import data.Expert;
-import data.SubServices;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
+import data.model.Expert;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
-import java.util.List;
-@Component
-public class ExpertDao {
-    public void save(Expert expert) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(expert);
-        transaction.commit();
-        session.close();
-    }
+import java.util.Optional;
 
-    public Expert getExpertByEmailAndPass(String email, String password) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from  Expert where email=:email and password=:password");
-        query.setParameter("email", email);
-        query.setParameter("password", password);
-        Expert expert = null;
-        try {
-            expert = (Expert) query.getSingleResult();
-            transaction.commit();
-            session.close();
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        return expert;
-    }
+@Repository
+public interface ExpertDao extends JpaRepository<Expert, Integer> {
 
-    public Expert getExpertByEmail(String email) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from  Expert where email=:email");
-        query.setParameter("email", email);
-        Expert expert = null;
-        try {
-            expert = (Expert) query.getSingleResult();
-            expert.getAddresses();
-            transaction.commit();
-            session.close();
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        return expert;
-    }
 
-    public void UpdateExpertServicesByEmail(String email, SubServices subServices) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from  Expert where email=:email");
-        query.setParameter("email", email);
-        try {
-            Expert expert = (Expert) query.getSingleResult();
-            expert.getServices().add(subServices);
-            session.update(expert);
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        transaction.commit();
-        session.close();
-    }
+    Optional<Expert> findByEmailAndPassword(String email, String password);
 
-    public int UpdatePassword(String email, String newPassword) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("update Expert set password=:password where email=:email ");
-        query.setParameter("email", email);
-        query.setParameter("password", newPassword);
-        int id = query.executeUpdate();
-        transaction.commit();
-        session.close();
-        return id;
-    }
+    Optional<Expert> findByEmail(String email);
 
-    public void deleteServiceFromExpert(String email, SubServices subServices) {
+    /*  public void UpdateExpertServicesByEmail(String email, SubServices subServices) {
+          Session session = HibernateUtil.getSessionFactory().openSession();
+          Transaction transaction = session.beginTransaction();
+          Query query = session.createQuery("from  Expert where email=:email");
+          query.setParameter("email", email);
+          try {
+              Expert expert = (Expert) query.getSingleResult();
+              expert.getServices().add(subServices);
+              session.update(expert);
+          } catch (NoResultException e) {
+              e.printStackTrace();
+          }
+          transaction.commit();
+          session.close();
+      }*/
+    @Modifying
+    @org.springframework.data.jpa.repository.Query(value = "update Expert set password=:password where email=:email")
+    int UpdatePassword(@Param("email") String email, @Param("password") String newPassword);
+
+   /* public void deleteServiceFromExpert(String email, SubServices subServices) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("from  Expert where email=:email");
@@ -99,29 +52,15 @@ public class ExpertDao {
         }
         transaction.commit();
         session.close();
-    }
+    }*/
 
-    public void update(Expert expert) {
+   /* public void update(Expert expert) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.update(expert);
         transaction.commit();
         session.close();
     }
+*/
 
-    public Expert getExpertById(int id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from Expert where id=:id");
-        query.setParameter("id", id);
-        Expert expert = null;
-        try {
-            expert = (Expert) query.getSingleResult();
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        transaction.commit();
-        session.close();
-        return expert;
-    }
 }
