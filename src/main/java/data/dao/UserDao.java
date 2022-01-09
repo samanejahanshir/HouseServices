@@ -1,77 +1,31 @@
-package dao;
+package data.dao;
 
-import config.HibernateUtil;
-import data.Customer;
-import data.Expert;
-import data.User;
-import data.enums.UserState;
-import data.enums.UserType;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
+import data.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import java.util.List;
-@Component
-public class UserDao {
-    public void save(User user) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(user);
-        transaction.commit();
-        session.close();
-    }
+import java.util.Optional;
 
-    public User getUserByEmail(String email, String password) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from  User where email=:email and password=:password");
-        query.setParameter("email", email);
-        query.setParameter("password", password);
-        User user = null;
-        try {
-            user = (User) query.getSingleResult();
-            transaction.commit();
-            session.close();
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
+@Repository
+public interface UserDao extends JpaRepository<User, Integer> {
 
-    public List<User> getListUser() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from  User ");
-        List<User> users = query.list();
-        transaction.commit();
-        session.close();
-        return users;
-    }
+    Optional<User> findByEmailAndPassword(String email, String password);
 
-    public List<User> getListUserNoConfirm() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from  User where state=:state");
-        query.setParameter("state", UserState.NOT_CONFIRMED);
-        List<User> users = query.list();
-        transaction.commit();
-        session.close();
-        return users;
-    }
+  Optional<User> findByEmail(String email);
 
-    public void confirmUser(User user) {
+   @org.springframework.data.jpa.repository.Query(value = "from  User where state='NOT_CONFIRMED'")
+   List<User> getListUserNoConfirm() ;
+
+  /*  public void confirmUser(User user) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.update(user);
         transaction.commit();
         session.close();
-    }
+    }*/
 
-    public List<User> getListUserByCondition(UserType type, String email, String name, String family) {
+   /* public List<User> getListUserByCondition(UserType type, String email, String name, String family) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Criteria criteria;
@@ -95,5 +49,5 @@ public class UserDao {
         transaction.commit();
         session.close();
         return users;
-    }
+    }*/
 }

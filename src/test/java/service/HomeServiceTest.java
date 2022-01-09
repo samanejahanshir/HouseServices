@@ -1,7 +1,7 @@
 package service;
 
 import config.SpringConfig;
-import data.Expert;
+import data.model.Expert;
 import data.enums.UserType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,7 +20,7 @@ static  ExpertService expertService;
     @Test
     void registerTest() {
         service = new HomeService();
-        service.register("zahra", "rezaii", "zahra@gmail.com", "rg456H543", UserType.CUSTOMER);
+        service.register("reza", "rezaii", "reza@gmail.com", "rg456H543", UserType.EXPERT);
     }
 
     @Test

@@ -1,4 +1,4 @@
-package data;
+package data.model;
 
 import data.enums.UserState;
 import lombok.Data;
@@ -13,10 +13,10 @@ import java.util.Objects;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class User {
+public  class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     @Column(unique = true)
@@ -28,7 +28,7 @@ public abstract class User {
     @CreationTimestamp
     private Date registerDate;
     private double credit;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Address> addresses = new ArrayList<>();
 
     public User() {

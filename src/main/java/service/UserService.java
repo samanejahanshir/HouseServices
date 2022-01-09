@@ -1,8 +1,8 @@
 package service;
 
-import dao.UserDao;
+import data.dao.UserDao;
 import lombok.Data;
-import data.User;
+import data.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,9 @@ public class UserService {
         userDao.save(user);
     }
 
+/*
     public User getUserByEmail(String email, String password) {
         return userDao.getUserByEmail(email, password);
     }
+*/
 }

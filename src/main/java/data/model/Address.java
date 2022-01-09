@@ -1,4 +1,4 @@
-package data;
+package data.model;
 
 import lombok.Data;
 
@@ -9,13 +9,13 @@ import javax.persistence.*;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String city;
     private String street;
     private String postalCode;
     private String tag;
-    @ManyToOne
-    private User user;
+   /* @ManyToOne
+    private User user;*/
 
     public Address() {
 
@@ -26,7 +26,7 @@ public class Address {
         private String street;
         private String postalCode;
         private String tag;
-        private User user;
+      //  private User user;
 
         private AddressBuilder() {
         }
@@ -55,10 +55,10 @@ public class Address {
             return this;
         }
 
-        public AddressBuilder withUser(User user) {
+      /*  public AddressBuilder withUser(User user) {
             this.user = user;
             return this;
-        }
+        }*/
 
         public Address build() {
             Address address = new Address();
@@ -66,7 +66,7 @@ public class Address {
             address.setStreet(street);
             address.setPostalCode(postalCode);
             address.setTag(tag);
-            address.setUser(user);
+        //    address.setUser(user);
             return address;
         }
     }

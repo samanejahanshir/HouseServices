@@ -1,4 +1,4 @@
-package data;
+package data.model;
 
 import data.enums.UserType;
 import exceptions.InvalidUserTypeException;
