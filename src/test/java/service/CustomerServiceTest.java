@@ -24,7 +24,7 @@ public class CustomerServiceTest {
 
     @Test
     void getCustomer_SaveToDb() {
-        Address address=Address.AddressBuilder.anAddress()
+        Address address = Address.AddressBuilder.anAddress()
                 .withCity("semnan")
                 .withStreet("yas")
                 .withPostalCode("3424")
@@ -68,7 +68,7 @@ public class CustomerServiceTest {
 
     @Test
     void saveOrderTest() {
-       SubServiceDao subServiceDao=new AnnotationConfigApplicationContext(SpringConfig.class).getBean(SubServiceDao.class);
+        SubServiceDao subServiceDao = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(SubServiceDao.class);
         Customer customer = customerService.getCustomerByEmail("customer@email.com");
         Date date = null;
         try {
@@ -84,9 +84,36 @@ public class CustomerServiceTest {
                 .withAddress(customer.getAddresses().get(0))
                 .withDescription("saat 10 sobh anjam shavad")
                 .withProposedPrice(3000)
-      //TODO          .withSubServices(subServiceDao.getService("tasisat", "bargh").get())
+                .withSubServices(subServiceDao.getService("tasisat", "bargh").get())
                 .build();
         customerService.saveOrder(order);
+    }
+
+    @Test
+    void saveOrderTestByPriceLowerThanBasePrice_ThrowException() {
+        SubServiceDao subServiceDao = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(SubServiceDao.class);
+        Customer customer = customerService.getCustomerByEmail("customer@email.com");
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd")
+                    .parse("2022-01-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Orders order = Orders.OrdersBuilder.anOrders()
+                .withOrderDoneDate(date)
+                .withOrderDoneTime(10)
+                .withCustomer(customer)
+                .withAddress(customer.getAddresses().get(0))
+                .withDescription("saat 10 sobh anjam shavad")
+                .withProposedPrice(1000)
+                .withSubServices(subServiceDao.getService("tasisat", "bargh").get())
+                .build();
+
+        RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
+                customerService.saveOrder(order));
+        System.out.println(exp.getMessage());
+        Assertions.assertEquals("proposedPrice should be bigger than basePrice of subService", exp.getMessage());
     }
 
     @Test
@@ -131,7 +158,7 @@ public class CustomerServiceTest {
     }
 
     @Test
-    void deleteOrderTest(){
+    void deleteOrderTest() {
         customerService.deleteOrder(2);
     }
 

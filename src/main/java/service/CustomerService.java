@@ -74,8 +74,14 @@ public class CustomerService {
     }
 
     public void saveOrder(Orders order) {
-        order.setState(OrderState.WAIT_OFFER_EXPERTS);
-        orderDao.save(order);
+        double basePrice=order.getSubServices().getBasePrice();
+        double proposedPrice = order.getProposedPrice();
+        if(proposedPrice>=basePrice) {
+            order.setState(OrderState.WAIT_OFFER_EXPERTS);
+            orderDao.save(order);
+        }else {
+            throw new RuntimeException("proposedPrice should be bigger than basePrice of subService");
+        }
     }
 
     public List<MainServices> getListMainService() {
