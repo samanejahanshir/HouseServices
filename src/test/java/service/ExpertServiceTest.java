@@ -97,11 +97,11 @@ public class ExpertServiceTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Expert expert = expertService.getExpertByEmail("expert@email.com");
-        List<Orders> orders = expertService.getListOrdersOfSubServiceExpert("expert@email.com");
-       /* if (!orders.isEmpty()) {
+        Expert expert = expertService.getExpertByEmail("alireza@email.com");
+        List<Orders> orders = expertService.getListOrdersOfSubServiceExpert("alireza@email.com");
+        if (!orders.isEmpty()) {
             expertService.addOfferToOrder(expert, orders.get(0), 3000, 2, 14);
-        }*/
+        }
     }
 
     @Test

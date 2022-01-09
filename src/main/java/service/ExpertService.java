@@ -1,14 +1,17 @@
 package service;
 
 import data.model.Expert;
+import data.model.Offer;
 import data.model.Orders;
 import data.model.SubServices;
 import data.dao.*;
 import data.enums.OrderState;
 import data.enums.UserState;
 import exceptions.InvalidSizeImageException;
+import exceptions.InvalidTimeException;
 import lombok.Data;
 import org.springframework.stereotype.Service;
+import service.validation.CheckValidation;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,12 +28,12 @@ public class ExpertService {
     OfferDao offerDao;
     CustomerDao customerDao;
 
-    public ExpertService(ExpertDao expertDao, OrderDao orderDao, SubServiceDao subServiceDao, OfferDao offerDao,CustomerDao customerDao) {
+    public ExpertService(ExpertDao expertDao, OrderDao orderDao, SubServiceDao subServiceDao, OfferDao offerDao, CustomerDao customerDao) {
         this.expertDao = expertDao;
         this.orderDao = orderDao;
         this.subServiceDao = subServiceDao;
         this.offerDao = offerDao;
-        this.customerDao=customerDao;
+        this.customerDao = customerDao;
     }
 
     public void saveExpert(Expert expert) {
@@ -43,19 +46,19 @@ public class ExpertService {
     }
 
     public Expert getExpertByEmailAndPass(String email, String password) {
-        Optional<Expert> expertOptional=expertDao.findByEmailAndPassword(email, password);
-        if(expertOptional.isPresent()){
-          return  expertOptional.get();
-        }else {
+        Optional<Expert> expertOptional = expertDao.findByEmailAndPassword(email, password);
+        if (expertOptional.isPresent()) {
+            return expertOptional.get();
+        } else {
             throw new RuntimeException("this expert by this email and pass not exist");
         }
     }
 
     public Expert getExpertByEmail(String email) {
-        Optional<Expert> expertOptional=expertDao.findByEmail(email);
-        if(expertOptional.isPresent()){
-            return  expertOptional.get();
-        }else {
+        Optional<Expert> expertOptional = expertDao.findByEmail(email);
+        if (expertOptional.isPresent()) {
+            return expertOptional.get();
+        } else {
             throw new RuntimeException("this expert by this email not exist");
         }
     }
@@ -74,7 +77,7 @@ public class ExpertService {
                 fileInputStream.close();
                 Expert expert = getExpertByEmail(email);
                 expert.setImage(imageFile);
-               expertDao.save(expert);
+                expertDao.save(expert);
             } else {
                 throw new InvalidSizeImageException("this image is big please upload anyImage");
             }
@@ -83,32 +86,33 @@ public class ExpertService {
         }
     }
 
-    public Expert getExpertByEmailJoinSubService(String email){
-        Optional<Expert> expertOptional=expertDao.getExpertByEmailJoinSubService(email);
-        if(expertOptional.isPresent()){
-            return  expertOptional.get();
-        }else {
+    public Expert getExpertByEmailJoinSubService(String email) {
+        Optional<Expert> expertOptional = expertDao.getExpertByEmailJoinSubService(email);
+        if (expertOptional.isPresent()) {
+            return expertOptional.get();
+        } else {
             throw new RuntimeException("this expert by this email not exist");
         }
     }
+
     public void updateExpert(Expert expert) {
         expertDao.save(expert);
     }
 
     public List<Orders> getListOrdersOfSubServiceExpert(String email) {
-        Expert expert=getExpertByEmailJoinSubService(email);
-        List<String> subServiceNames=expert.getServices().stream().map(subServices -> subServices.getSubService()).collect(Collectors.toList());
+        Expert expert = getExpertByEmailJoinSubService(email);
+        List<String> subServiceNames = expert.getServices().stream().map(subServices -> subServices.getSubService()).collect(Collectors.toList());
         return orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
     }
 
     //TODO  delete subservice from expert model
     public void addSubServiceToExpertList(String email, String subService) {
-        Expert expert=getExpertByEmail(email);
+        Expert expert = getExpertByEmail(email);
         Optional<SubServices> subServicesOptional = subServiceDao.getSubServiceByName(subService);
-        if (subServicesOptional.isPresent() && expert!=null) {
-            SubServices subServices=subServicesOptional.get();
-          expert.getServices().add(subServices);
-          expertDao.save(expert);
+        if (subServicesOptional.isPresent() && expert != null) {
+            SubServices subServices = subServicesOptional.get();
+            expert.getServices().add(subServices);
+            expertDao.save(expert);
         } else {
             throw new RuntimeException("this subService not found");
         }
@@ -117,8 +121,8 @@ public class ExpertService {
     //TODO
     public void deleteSubServiceFromExpert(String email, String subService) {
         Optional<SubServices> subServicesOptional = subServiceDao.getSubServiceByName(subService);
-       Expert expert=getExpertByEmailJoinSubService(email);
-        if (subServicesOptional.isPresent() && expert!=null) {
+        Expert expert = getExpertByEmailJoinSubService(email);
+        if (subServicesOptional.isPresent() && expert != null) {
             expert.getServices().remove(subServicesOptional.get());
             expertDao.save(expert);
         } else {
@@ -126,24 +130,28 @@ public class ExpertService {
         }
     }
 
-   /* public void addOfferToOrder(Expert expert, Orders orders, double price, int time, int startTime) {
+    public void addOfferToOrder(Expert expert, Orders orders, double price, int time, int startTime) {
         try {
-            if (CheckValidation.isValidTime(time)) {
-                Offer offer = Offer.OfferBuilder.anOffer()
-                        .withOfferPrice(price)
-                        .withDoneTime(time)
-                        .withStartTime(startTime)
-                        .withExpert(expert)
-                        .withOrders(orders)
-                        .build();
-                offerDao.save(offer);
-                orders.getOffers().add(offer);
-                orderDao.update(orders);
+            if (CheckValidation.isValidTime(startTime)) {
+                if (price>=orders.getSubServices().getBasePrice()) {
+                    Offer offer = Offer.OfferBuilder.anOffer()
+                            .withOfferPrice(price)
+                            .withDoneTime(time)
+                            .withStartTime(startTime)
+                            .withExpert(expert)
+                            .withOrders(orders)
+                            .build();
+                    offerDao.save(offer);
+                    orders.setState(OrderState.WAIT_SELECT_EXPERT);
+                    orderDao.save(orders);
+                }else {
+                    throw new RuntimeException("price should be bigger than basePrice of subService");
+                }
             }
         } catch (InvalidTimeException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
     public List<Orders> getOrdersWaitForSelectExpert(Expert expert) {
         return orderDao.updateOrderStateToComeExpert(expert.getId());
@@ -156,15 +164,15 @@ public class ExpertService {
     public int updateOrderStateToPaid(int orderId) {
         Optional<Orders> orders = orderDao.findById(orderId);
         int result = 0;
-        if(orders.isPresent()) {
-            Orders order=orders.get();
+        if (orders.isPresent()) {
+            Orders order = orders.get();
             try {
                 if (orders != null) {
                     if (order.getCustomer().getCredit() >= order.getProposedPrice()) {
                         order.getCustomer().setCredit(order.getCustomer().getCredit() - order.getProposedPrice());
-                     //TODO   customerDao.update(order.getCustomer());
+                        //TODO   customerDao.update(order.getCustomer());
                         order.getExpert().setCredit(order.getExpert().getCredit() + order.getProposedPrice());
-                     //   expertDao.update(order.getExpert());
+                        //   expertDao.update(order.getExpert());
                         result = orderDao.updateOrderState(orderId, OrderState.PAID);
                     } else {
                         throw new RuntimeException("credit of customer is not enough.");

@@ -21,8 +21,8 @@ public class Orders {
     @CreationTimestamp
     private Date orderRegisterDate;
     @Temporal(TemporalType.DATE)
-    private Date orderDoneDate;
-    private int orderDoneTime;
+    private Date orderDoingDate;
+    private int orderDoingTime;
     @OneToOne
     private Address address;
     @Enumerated(EnumType.STRING)
@@ -33,8 +33,8 @@ public class Orders {
     private Customer customer;
     @ManyToOne
     private Expert expert;
-    @OneToMany(mappedBy = "orders")
-    private List<Offer> offers = new ArrayList<>();
+   /* @OneToMany(mappedBy = "orders")
+    private List<Offer> offers = new ArrayList<>();*/
     private String Comment;
 
     public Orders() {
@@ -45,14 +45,14 @@ public class Orders {
         private double proposedPrice;
         private String description;
         private Date orderRegisterDate;
-        private Date orderDoneDate;
-        private int orderDoneTime;
+        private Date orderDoingDate;
+        private int orderDoingTime;
         private Address address;
         private OrderState state;
         private SubServices subServices;
         private Customer customer;
         private Expert expert;
-        private List<Offer> offers = new ArrayList<>();
+      //  private List<Offer> offers = new ArrayList<>();
         private String Comment;
 
         private OrdersBuilder() {
@@ -78,12 +78,12 @@ public class Orders {
         }
 
         public OrdersBuilder withOrderDoneDate(Date orderDoneDate) {
-            this.orderDoneDate = orderDoneDate;
+            this.orderDoingDate = orderDoneDate;
             return this;
         }
 
         public OrdersBuilder withOrderDoneTime(int orderDoneTime) {
-            this.orderDoneTime = orderDoneTime;
+            this.orderDoingTime = orderDoneTime;
             return this;
         }
 
@@ -112,10 +112,10 @@ public class Orders {
             return this;
         }
 
-        public OrdersBuilder withOffers(List<Offer> offers) {
+       /* public OrdersBuilder withOffers(List<Offer> offers) {
             this.offers = offers;
             return this;
-        }
+        }*/
 
         public OrdersBuilder withComment(String Comment) {
             this.Comment = Comment;
@@ -127,14 +127,14 @@ public class Orders {
             orders.setProposedPrice(proposedPrice);
             orders.setDescription(description);
             orders.setOrderRegisterDate(orderRegisterDate);
-            orders.setOrderDoneDate(orderDoneDate);
-            orders.setOrderDoneTime(orderDoneTime);
+            orders.setOrderDoingDate(orderDoingDate);
+            orders.setOrderDoingTime(orderDoingTime);
             orders.setAddress(address);
             orders.setState(state);
             orders.setSubServices(subServices);
             orders.setCustomer(customer);
             orders.setExpert(expert);
-            orders.setOffers(offers);
+           // orders.setOffers(offers);
             orders.setComment(Comment);
             return orders;
         }
@@ -147,8 +147,8 @@ public class Orders {
                 ", proposedPrice=" + proposedPrice +
                 ", description='" + description + '\'' +
                 ", orderRegisterDate=" + orderRegisterDate +
-                ", orderDoneDate=" + orderDoneDate +
-                ", orderDoneTime=" + orderDoneTime +
+                ", orderDoneDate=" + orderDoingDate +
+                ", orderDoneTime=" + orderDoingTime +
                 ", address=" + address +
                 ", state=" + state +
                 ", subServices=" + subServices +

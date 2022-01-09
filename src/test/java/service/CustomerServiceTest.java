@@ -130,7 +130,7 @@ public class CustomerServiceTest {
 
     @Test
     void getListOrdersTest() {
-        System.out.println(customerService.getListOrders("customer@email.com").size());
+        System.out.println(customerService.getListOrders("customer@email.com"));
     }
 
     @Test
@@ -160,6 +160,12 @@ public class CustomerServiceTest {
     @Test
     void deleteOrderTest() {
         customerService.deleteOrder(2);
+    }
+
+    @Test
+    void getListOfferBySortTest() {
+        Orders orders = customerService.getListOrders("customer@email.com").get(0);
+        System.out.println(customerService.getListOffersSortByScoreOrPrice(orders,true,true));
     }
 
 

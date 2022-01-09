@@ -17,6 +17,7 @@ public class Expert extends User {
     private List<SubServices> services = new ArrayList<>();
     @OneToMany(mappedBy = "expert")
     private List<Orders> orders = new ArrayList<>();
+    private  int score;
    /* @OneToMany
     private List<Offer> offers;*/
 

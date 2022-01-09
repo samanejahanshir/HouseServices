@@ -6,6 +6,9 @@ import lombok.Data;
 import data.enums.OrderState;
 import data.enums.UserState;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,16 +110,27 @@ public class CustomerService {
         return orderDao.getListOffers(order.getId());
     }
 
+    public List<Offer> getListOffersSortByScoreOrPrice(Orders order,boolean byPrice,boolean byScoreExpert) {
+        if(byPrice && !byScoreExpert){
+            return orderDao.getListOffersBySort(order.getId(), Sort.by("offerPrice").ascending());
+        }else if(!byPrice && byScoreExpert){
+            return orderDao.getListOffersBySort(order.getId(), Sort.by("expert.score").ascending());
+        }else if(byPrice && byScoreExpert){
+            return orderDao.getListOffersBySort(order.getId(), Sort.by("expert.score").ascending().and(Sort.by("offerPrice").ascending()));
+        }
+        else {
+            return  getListOffers(order);
+        }
+    }
+
     public void selectOfferForOrder(int idExpert, int idOrder) {
         Optional<Orders> orders = orderDao.findById(idOrder);
         if(orders.isPresent()) {
             Orders order=orders.get();
             Expert expert = expertDao.findById(idExpert).get();
-            if (order != null && expert != null) {
-                order.setExpert(expert);
-                order.setState(OrderState.WAIT_SELECT_EXPERT);
-               //TODO orderDao.update(order);
-            }
+            order.setExpert(expert);
+            order.setState(OrderState.WAIT_SELECT_EXPERT);
+            orderDao.save(order);
         }
     }
 
