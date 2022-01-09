@@ -1,9 +1,10 @@
 package service;
 
 import config.SpringConfig;
-import dao.SubServiceDao;
-import data.Customer;
-import data.Orders;
+import data.dao.SubServiceDao;
+import data.model.Address;
+import data.model.Customer;
+import data.model.Orders;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,12 +24,19 @@ public class CustomerServiceTest {
 
     @Test
     void getCustomer_SaveToDb() {
+        Address address=Address.AddressBuilder.anAddress()
+                .withCity("semnan")
+                .withStreet("yas")
+                .withPostalCode("3424")
+                .withTag("34")
+                .build();
         Customer customer = Customer.CustomerBuilder.aCustomer()
                 .withFirstName("customer")
                 .withLastName("Cfamily")
                 .withPassword("a1234S454")
                 .withEmail("customer@email.com")
                 .build();
+        customer.getAddresses().add(address);
         customerService.saveCustomer(customer);
     }
 
@@ -60,7 +68,7 @@ public class CustomerServiceTest {
 
     @Test
     void saveOrderTest() {
-        SubServiceDao subServiceDao = new SubServiceDao();
+       SubServiceDao subServiceDao=new AnnotationConfigApplicationContext(SpringConfig.class).getBean(SubServiceDao.class);
         Customer customer = customerService.getCustomerByEmail("customer@email.com");
         Date date = null;
         try {
@@ -76,7 +84,7 @@ public class CustomerServiceTest {
                 .withAddress(customer.getAddresses().get(0))
                 .withDescription("saat 10 sobh anjam shavad")
                 .withProposedPrice(3000)
-                .withSubServices(subServiceDao.getService("tasisat", "bargh"))
+      //TODO          .withSubServices(subServiceDao.getService("tasisat", "bargh").get())
                 .build();
         customerService.saveOrder(order);
     }
@@ -126,4 +134,6 @@ public class CustomerServiceTest {
     void deleteOrderTest(){
         customerService.deleteOrder(2);
     }
+
+
 }

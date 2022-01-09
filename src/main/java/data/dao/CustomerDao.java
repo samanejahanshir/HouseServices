@@ -1,106 +1,40 @@
-package dao;
+package data.dao;
 
-import config.HibernateUtil;
-import data.Customer;
-import data.Orders;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
+import data.model.Customer;
+import data.model.Orders;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NoResultException;
-import java.util.ArrayList;
 import java.util.List;
-@Component
-public class CustomerDao {
-    public void save(Customer customer) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(customer);
-        transaction.commit();
-        session.close();
-    }
+import java.util.Optional;
 
-    public Customer getCustomerByEmailAndPass(String email, String password) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from  Customer where email=:email and password=:password");
-        query.setParameter("email", email);
-        query.setParameter("password", password);
-        Customer customer = null;
-        try {
-            customer = (Customer) query.getSingleResult();
-            transaction.commit();
-            session.close();
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        return customer;
-    }
+@Repository
+public interface CustomerDao extends JpaRepository<Customer, Integer> {
 
-    public int UpdatePassword(String email, String newPassword) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("update Customer set password=:password where email=:email ");
-        query.setParameter("email", email);
-        query.setParameter("password", newPassword);
-        int id = query.executeUpdate();
-        transaction.commit();
-        session.close();
-        return id;
-    }
 
-    public Customer getCustomerByEmail(String email) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from  Customer where email=:email");
-        query.setParameter("email", email);
-        Customer customer = null;
-        try {
-            customer = (Customer) query.getSingleResult();
-            customer.getAddresses();
-            transaction.commit();
-            session.close();
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        return customer;
-    }
+    Optional<Customer> findByEmailAndPassword(String email, String password);
 
-    public void update(Customer customer) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.update(customer);
-        transaction.commit();
-        session.close();
-    }
+    @Transactional
+    @Modifying
+    @org.springframework.data.jpa.repository.Query(value = "update Customer set password=:password where email=:email")
+    int UpdatePassword(@Param("email") String email, @Param("password") String newPassword);
 
-    public List<Orders> getListOrders(Customer customer) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("select o from  Customer c inner join c.orders o  where o.customer.id=:id");
-        query.setParameter("id", customer.getId());
-        Customer customer1 = null;
-        List<Orders> orders = new ArrayList<>();
-        try {
-            orders = query.list();
-            transaction.commit();
-            session.close();
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        return orders;
-    }
+    Optional<Customer> findByEmail(String email);
 
-    public int updateCredit(Customer customer,double amount){
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("update Customer set credit=:amount where id=:id");
-        query.setParameter("id", customer.getId());
-        query.setParameter("amount",amount);
-        int result=query.executeUpdate();
-        transaction.commit();
-        session.close();
-        return  result;
-    }
+   /* public void update(Customer customer) {
+    }*/
+
+    @org.springframework.data.jpa.repository.Query(value = "select o from  Customer c inner join c.orders o  where o.customer.id=:id")
+    List<Orders> getListOrders(@Param("id") int customerId);
+
+    @Modifying
+    @org.springframework.data.jpa.repository.Query(value = "update Customer set credit=:amount where id=:id")
+    int updateCredit(@Param("id") int customerId, @Param("amount") double amount);
+
+    @Query(value = "from Customer c join c.addresses where c.email=:email")
+    Optional<Customer> getCustomerByEmail(@Param("email") String email);
 }

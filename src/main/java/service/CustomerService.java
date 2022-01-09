@@ -1,14 +1,18 @@
 package service;
 
-import dao.*;
-import data.*;
+import data.dao.*;
+import data.model.*;
 import lombok.Data;
 import data.enums.OrderState;
 import data.enums.UserState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Data
@@ -17,17 +21,19 @@ public class CustomerService {
     private final OrderDao orderDao;
     private final MainServiceDao mainServiceDao;
     private final SubServiceDao subServices;
+    private final ExpertDao expertDao;
 
     @Autowired
-    public CustomerService(CustomerDao customerDao, OrderDao orderDao, MainServiceDao mainServiceDao, SubServiceDao subServices) {
+    public CustomerService(CustomerDao customerDao, OrderDao orderDao, MainServiceDao mainServiceDao, SubServiceDao subServices ,ExpertDao expertDao) {
         this.customerDao = customerDao;
         this.orderDao = orderDao;
         this.mainServiceDao = mainServiceDao;
         this.subServices = subServices;
+        this.expertDao=expertDao;
     }
 
     public void saveCustomer(Customer customer) {
-        if (customerDao.getCustomerByEmail(customer.getEmail()) == null) {
+        if (customerDao.findByEmail(customer.getEmail()).isEmpty()) {
             customer.setState(UserState.NOT_CONFIRMED);
             customerDao.save(customer);
         } else {
@@ -35,22 +41,32 @@ public class CustomerService {
         }
     }
 
-    public void updateAddress(Customer customer, Address address) {
-        if (customerDao.getCustomerByEmail(customer.getEmail()) != null) {
+   /* public void updateAddress(Customer customer, Address address) {
+        if (customerDao.findByEmail(customer.getEmail()).isPresent()) {
             customer.getAddresses().add(address);
             address.setUser(customer);
             customerDao.update(customer);
         } else {
             throw new RuntimeException("this user by this email is exist");
         }
-    }
+    }*/
 
     public Customer getCustomerByEmailAndPass(String email, String password) {
-        return customerDao.getCustomerByEmailAndPass(email, password);
+        Optional<Customer> customer = customerDao.findByEmailAndPassword(email, password);
+        if (customer.isPresent()) {
+            return customer.get();
+        } else {
+            throw new RuntimeException("this customer by this email and password not exist.");
+        }
     }
 
     public Customer getCustomerByEmail(String email) {
-        return customerDao.getCustomerByEmail(email);
+        Optional<Customer> customer = customerDao.findByEmail(email);
+        if (customer.isPresent()) {
+            return customer.get();
+        } else {
+            throw new RuntimeException("this customer by this email not exist.");
+        }
     }
 
     public int updatePassword(String email, String newPassword) {
@@ -63,35 +79,44 @@ public class CustomerService {
     }
 
     public List<MainServices> getListMainService() {
-        return mainServiceDao.getListMainServices();
+        return mainServiceDao.findAll();
     }
 
     public List<SubServices> getListSubService(String groupName) {
-        return subServices.getListSubServices(groupName);
+        return subServices.findAllByGroupName(groupName);
     }
 
     public List<Orders> getListOrders(String email) {
-        Customer customer = customerDao.getCustomerByEmail(email);
-        return customerDao.getListOrders(customer);
+        List<Orders> ordersList=new ArrayList<>();
+        try {
+            Customer customer = customerDao.findByEmail(email).get();
+            ordersList= customerDao.getListOrders(customer.getId());
+        }catch (NoSuchElementException e){
+            e.printStackTrace();
+        }
+        return ordersList;
     }
 
     public List<Offer> getListOffers(Orders order) {
-        return orderDao.getListOffers(order);
+        return orderDao.getListOffers(order.getId());
     }
 
     public void selectOfferForOrder(int idExpert, int idOrder) {
-        Orders order = orderDao.getOrderById(idOrder);
-        ExpertDao expertDao = new ExpertDao();
-        Expert expert = expertDao.getExpertById(idExpert);
-        if (order != null && expert != null) {
-            order.setExpert(expert);
-            order.setState(OrderState.WAIT_SELECT_EXPERT);
-            orderDao.update(order);
+        Optional<Orders> orders = orderDao.findById(idOrder);
+        if(orders.isPresent()) {
+            Orders order=orders.get();
+            Expert expert = expertDao.findById(idExpert).get();
+            if (order != null && expert != null) {
+                order.setExpert(expert);
+                order.setState(OrderState.WAIT_SELECT_EXPERT);
+               //TODO orderDao.update(order);
+            }
         }
     }
 
+    @Transactional
     public int incrementCredit(Customer customer, double amount) {
-        return customerDao.updateCredit(customer, customer.getCredit() + amount);
+        return customerDao.updateCredit(customer.getId(), customer.getCredit() + amount);
     }
 
     public int RegisterACommentToOrder(int orderId, String comment) {
@@ -99,6 +124,15 @@ public class CustomerService {
     }
 
     public void deleteOrder(int orderId) {
-        orderDao.deleteOrder(orderId);
+        orderDao.deleteById(orderId);
+    }
+
+    public Customer getCustomerByEmailWithFetchJoinAddress(String email) {
+        Optional<Customer> customer = customerDao.getCustomerByEmail(email);
+        if (customer.isPresent()) {
+            return customer.get();
+        } else {
+            throw new RuntimeException("this customer by this email not exist.");
+        }
     }
 }

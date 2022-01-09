@@ -1,4 +1,4 @@
-package data;
+package data.model;
 
 import lombok.Data;
 import data.enums.UserState;
