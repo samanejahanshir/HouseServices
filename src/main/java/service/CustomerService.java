@@ -27,12 +27,12 @@ public class CustomerService {
     private final ExpertDao expertDao;
 
     @Autowired
-    public CustomerService(CustomerDao customerDao, OrderDao orderDao, MainServiceDao mainServiceDao, SubServiceDao subServices ,ExpertDao expertDao) {
+    public CustomerService(CustomerDao customerDao, OrderDao orderDao, MainServiceDao mainServiceDao, SubServiceDao subServices, ExpertDao expertDao) {
         this.customerDao = customerDao;
         this.orderDao = orderDao;
         this.mainServiceDao = mainServiceDao;
         this.subServices = subServices;
-        this.expertDao=expertDao;
+        this.expertDao = expertDao;
     }
 
     public void saveCustomer(Customer customer) {
@@ -77,12 +77,12 @@ public class CustomerService {
     }
 
     public void saveOrder(Orders order) {
-        double basePrice=order.getSubServices().getBasePrice();
+        double basePrice = order.getSubServices().getBasePrice();
         double proposedPrice = order.getProposedPrice();
-        if(proposedPrice>=basePrice) {
+        if (proposedPrice >= basePrice) {
             order.setState(OrderState.WAIT_OFFER_EXPERTS);
             orderDao.save(order);
-        }else {
+        } else {
             throw new RuntimeException("proposedPrice should be bigger than basePrice of subService");
         }
     }
@@ -96,11 +96,11 @@ public class CustomerService {
     }
 
     public List<Orders> getListOrders(String email) {
-        List<Orders> ordersList=new ArrayList<>();
+        List<Orders> ordersList = new ArrayList<>();
         try {
             Customer customer = customerDao.findByEmail(email).get();
-            ordersList= customerDao.getListOrders(customer.getId());
-        }catch (NoSuchElementException e){
+            ordersList = customerDao.getListOrders(customer.getId());
+        } catch (NoSuchElementException e) {
             e.printStackTrace();
         }
         return ordersList;
@@ -110,26 +110,25 @@ public class CustomerService {
         return orderDao.getListOffers(order.getId());
     }
 
-    public List<Offer> getListOffersSortByScoreOrPrice(Orders order,boolean byPrice,boolean byScoreExpert) {
-        if(byPrice && !byScoreExpert){
+    public List<Offer> getListOffersSortByScoreOrPrice(Orders order, boolean byPrice, boolean byScoreExpert) {
+        if (byPrice && !byScoreExpert) {
             return orderDao.getListOffersBySort(order.getId(), Sort.by("offerPrice").ascending());
-        }else if(!byPrice && byScoreExpert){
+        } else if (!byPrice && byScoreExpert) {
             return orderDao.getListOffersBySort(order.getId(), Sort.by("expert.score").ascending());
-        }else if(byPrice && byScoreExpert){
+        } else if (byPrice && byScoreExpert) {
             return orderDao.getListOffersBySort(order.getId(), Sort.by("expert.score").ascending().and(Sort.by("offerPrice").ascending()));
-        }
-        else {
-            return  getListOffers(order);
+        } else {
+            return getListOffers(order);
         }
     }
 
     public void selectOfferForOrder(int idExpert, int idOrder) {
         Optional<Orders> orders = orderDao.findById(idOrder);
-        if(orders.isPresent()) {
-            Orders order=orders.get();
+        if (orders.isPresent()) {
+            Orders order = orders.get();
             Expert expert = expertDao.findById(idExpert).get();
             order.setExpert(expert);
-            order.setState(OrderState.WAIT_SELECT_EXPERT);
+            order.setState(OrderState.WAIT_EXPERT_COME);
             orderDao.save(order);
         }
     }

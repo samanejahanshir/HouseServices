@@ -141,7 +141,7 @@ public class CustomerServiceTest {
 
     @Test
     void selectOfferForOrderTest() {
-        customerService.selectOfferForOrder(8, 2);
+        customerService.selectOfferForOrder(1, 1);
     }
 
     @Test
