@@ -1,4 +1,4 @@
-package data;
+package data.model;
 
 import lombok.Data;
 
@@ -12,8 +12,8 @@ import java.util.Objects;
 public class SubServices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String groupService;
+    private Integer id;
+    private String groupName;
     @Column(unique = true)
     private String subService;
     private double basePrice;
@@ -26,7 +26,7 @@ public class SubServices {
     }
 
     public static final class ServicesBuilder {
-        private String groupService;
+        private String groupName;
         private String subService;
         private double basePrice;
         private String description;
@@ -40,7 +40,7 @@ public class SubServices {
         }
 
         public ServicesBuilder withGroupService(String groupService) {
-            this.groupService = groupService;
+            this.groupName = groupService;
             return this;
         }
 
@@ -66,7 +66,7 @@ public class SubServices {
 
         public SubServices build() {
             SubServices subServices = new SubServices();
-            subServices.setGroupService(groupService);
+            subServices.setGroupName(groupName);
             subServices.setSubService(subService);
             subServices.setBasePrice(basePrice);
             subServices.setDescription(description);
@@ -79,7 +79,7 @@ public class SubServices {
     public String toString() {
         return "SubServices{" +
                 "id=" + id +
-                ", groupService='" + groupService + '\'' +
+                ", groupService='" + groupName + '\'' +
                 ", subService='" + subService + '\'' +
                 ", basePrice=" + basePrice +
                 ", description='" + description + '\'' +
