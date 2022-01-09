@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -83,5 +84,18 @@ public class SubServices {
                 ", basePrice=" + basePrice +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SubServices)) return false;
+        SubServices that = (SubServices) o;
+        return subService.equals(that.subService);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(subService);
     }
 }

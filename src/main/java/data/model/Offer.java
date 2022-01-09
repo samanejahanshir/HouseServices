@@ -1,6 +1,7 @@
 package data;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,20 +13,21 @@ public class Offer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Temporal(TemporalType.DATE)
+    @CreationTimestamp
     private Date offerCreateDate;
     private double offerPrice;
-    private int doneTime;
+    private int durationTime;
     private int startTime;
     @ManyToOne
     private Orders orders;
-    @OneToOne
+    @ManyToOne
     private Expert expert;
 
     public static final class OfferBuilder {
         private int id;
         private Date offerCreateDate;
         private double offerPrice;
-        private int doneTime;
+        private int durationTime;
         private int startTime;
         private Orders orders;
         private Expert expert;
@@ -53,7 +55,7 @@ public class Offer {
         }
 
         public OfferBuilder withDoneTime(int doneTime) {
-            this.doneTime = doneTime;
+            this.durationTime = doneTime;
             return this;
         }
 
@@ -77,7 +79,7 @@ public class Offer {
             offer.setId(id);
             offer.setOfferCreateDate(offerCreateDate);
             offer.setOfferPrice(offerPrice);
-            offer.setDoneTime(doneTime);
+            offer.setDurationTime(durationTime);
             offer.setStartTime(startTime);
             offer.setOrders(orders);
             offer.setExpert(expert);
@@ -91,7 +93,7 @@ public class Offer {
                 "id=" + id +
                 ", offerCreateDate=" + offerCreateDate +
                 ", offerPrice=" + offerPrice +
-                ", doneTime=" + doneTime +
+                ", doneTime=" + durationTime +
                 ", startTime=" + startTime +
                 ", expert=" + expert +
                 '}';
