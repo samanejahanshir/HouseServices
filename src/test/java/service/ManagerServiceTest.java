@@ -1,10 +1,10 @@
 package service;
+
 import config.SpringConfig;
-import data.Customer;
-import data.MainServices;
-import data.Manager;
-import data.SubServices;
-import data.enums.UserType;
+import data.model.Customer;
+import data.model.MainServices;
+import data.model.Manager;
+import data.model.SubServices;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,20 +12,21 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class ManagerServiceTest {
     static ManagerService managerService;
-static  CustomerService customerService;
+    static CustomerService customerService;
+
     @BeforeAll
     static void init() {
         managerService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(ManagerService.class);
-customerService=new AnnotationConfigApplicationContext(SpringConfig.class).getBean(CustomerService.class);
+        customerService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(CustomerService.class);
     }
 
     @Test
     void getService_SaveToDb() {
         SubServices subServices = SubServices.ServicesBuilder.aServices()
                 .withBasePrice(2000)
-                .withGroupService("Decoration home")
-                .withSubService("wallpaper design")
-                .withDescription("this is wallpaper design.price is for one meter wallpaper")
+                .withGroupService("tasisat")
+                .withSubService("bargh")
+                .withDescription("sim keshi sakhteman va hale moshkele bargh sakhteman")
                 .build();
         managerService.addServicesToDb(subServices);
     }
@@ -34,11 +35,10 @@ customerService=new AnnotationConfigApplicationContext(SpringConfig.class).getBe
     void getServiceDuplicate_SaveToDb_ThrowException() {
         SubServices subServices = SubServices.ServicesBuilder.aServices()
                 .withBasePrice(2000)
-                .withGroupService("Decoration home")
-                .withSubService("wallpaper design")
-                .withDescription("this is wallpaper design.price is for one meter wallpaper")
+                .withGroupService("tasisat")
+                .withSubService("bargh")
+                .withDescription("sim keshi sakhteman va hale moshkele bargh sakhteman")
                 .build();
-
         RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
                 managerService.addServicesToDb(subServices));
         System.out.println(exp.getMessage());
@@ -62,8 +62,8 @@ customerService=new AnnotationConfigApplicationContext(SpringConfig.class).getBe
 
     @Test
     void save_MainServiceToDb() {
-        MainServices mainServices=new MainServices();
-        mainServices.setGroupName("decorat home");
+        MainServices mainServices = new MainServices();
+        mainServices.setGroupName("tasisat");
         managerService.saveMainServiceToDb(mainServices);
     }
 
@@ -82,11 +82,11 @@ customerService=new AnnotationConfigApplicationContext(SpringConfig.class).getBe
         System.out.println(managerService.getListUsers().size());
     }
 
-    @Test
+   /* @Test
     void getListUserByConditionTest() {
         int result = managerService.getListUsersByCondition(UserType.CUSTOMER, "", "sara", "").size();
         Assertions.assertEquals(1, result);
-    }
+    }*/
 
     @Test
     void getListUserNoConfirmTest() {
@@ -95,7 +95,7 @@ customerService=new AnnotationConfigApplicationContext(SpringConfig.class).getBe
 
     @Test
     void confirmUserTest() {
-        Customer customer =customerService.getCustomerByEmail("sara@gmail.com");
+        Customer customer =customerService.getCustomerByEmail("customer@email.com");
         managerService.confirmUser(customer);
     }
 

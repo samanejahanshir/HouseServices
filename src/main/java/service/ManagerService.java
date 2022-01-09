@@ -1,20 +1,21 @@
 package service;
 
-import dao.MainServiceDao;
-import dao.ManagerDao;
-import dao.SubServiceDao;
-import dao.UserDao;
-import data.MainServices;
-import data.Manager;
-import data.SubServices;
-import data.User;
+import data.dao.MainServiceDao;
+import data.dao.ManagerDao;
+import data.dao.SubServiceDao;
+import data.dao.UserDao;
 import data.enums.UserState;
 import data.enums.UserType;
+import data.model.MainServices;
+import data.model.Manager;
+import data.model.SubServices;
+import data.model.User;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Data
@@ -34,8 +35,8 @@ public class ManagerService {
 
     public void addServicesToDb(SubServices subServices) {
         try {
-            if (mainServiceDao.getMainService(subServices.getGroupService()) != null) {
-                if (servicesDao.getService(subServices.getGroupService(), subServices.getSubService()) == null) {
+            if (mainServiceDao.findByGroupName(subServices.getGroupName()).isPresent()) {
+                if (servicesDao.getService(subServices.getGroupName(), subServices.getSubService()).isEmpty()) {
                     servicesDao.save(subServices);
                 } else {
                     throw new RuntimeException("this services is exist .");
@@ -48,9 +49,9 @@ public class ManagerService {
         }
     }
 
-    public int deleteServices(String groupName) {
+    public int deleteMainServices(String groupName) {
         //TODO delete from expert list
-        return servicesDao.deleteOneServices(groupName);
+        return servicesDao.deleteByGroupName(groupName);
     }
 
     public int deleteSubServices(String subServices) {
@@ -60,7 +61,7 @@ public class ManagerService {
 
     public void saveMainServiceToDb(MainServices mainServices) {
         try {
-            if (mainServiceDao.getMainService(mainServices.getGroupName()) == null) {
+            if (mainServiceDao.findByGroupName(mainServices.getGroupName()).isEmpty()) {
                 mainServiceDao.save(mainServices);
             } else {
                 throw new RuntimeException("this mainService is exist");
@@ -71,14 +72,14 @@ public class ManagerService {
     }
 
     public List<User> getListUsers() {
-        return userDao.getListUser();
+        return userDao.findAll();
 
     }
 
-    public List<User> getListUsersByCondition(UserType type, String email, String name, String family) {
+   /* public List<User> getListUsersByCondition(UserType type, String email, String name, String family) {
         return userDao.getListUserByCondition(type, email, name, family);
 
-    }
+    }*/
 
     public List<User> getListUserNoConfirm() {
         return userDao.getListUserNoConfirm();
@@ -86,11 +87,16 @@ public class ManagerService {
 
     public void confirmUser(User user) {
         user.setState(UserState.CONFIRMED);
-        userDao.confirmUser(user);
+        userDao.save(user);
     }
 
     public Manager getManagerByNameAndPass(String userName, String password) {
-        return managerDao.get(userName, password);
+        Optional<Manager> managerOptional= managerDao.findByUserNameAndPassword(userName, password);
+    if (managerOptional.isPresent()){
+        return managerOptional.get();
+    }else {
+        throw new RuntimeException("this manager by this userName and password not exist");
+    }
     }
 
     public void saveManager(Manager manager) {

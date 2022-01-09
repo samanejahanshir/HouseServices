@@ -1,4 +1,4 @@
-package data;
+package data.model;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import javax.persistence.Id;
 public class Manager {
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
     private String userName;
     private String password;
 

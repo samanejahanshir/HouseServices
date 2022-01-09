@@ -1,35 +1,13 @@
-package dao;
+package data.dao;
 
-import config.HibernateUtil;
-import data.Manager;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
+import data.model.Manager;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
-@Component
-public class ManagerDao {
-    public void save(Manager manager) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(manager);
-        transaction.commit();
-        session.close();
-    }
+import java.util.Optional;
 
-    public Manager get(String userName, String password) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from Manager where userName=:userName and password=:password");
-        query.setParameter("userName", userName);
-        query.setParameter("password", password);
-        Manager manager = null;
-        try {
-            manager = (Manager) query.getSingleResult();
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        return manager;
-    }
+@Repository
+public interface ManagerDao extends JpaRepository<Manager, Integer> {
+
+    Optional<Manager> findByUserNameAndPassword(String userName, String password);
 }
