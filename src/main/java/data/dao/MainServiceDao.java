@@ -1,55 +1,23 @@
-package dao;
+package data.dao;
 
-import config.HibernateUtil;
-import data.MainServices;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
+import data.model.MainServices;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
-import java.util.List;
-@Component
-public class MainServiceDao {
-    public void save(MainServices mainServices) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(mainServices);
-        transaction.commit();
-        session.close();
-    }
+import java.util.Optional;
 
-    public MainServices getMainService(String groupName) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from MainServices where  groupName=:groupName");
-        query.setParameter("groupName", groupName);
-        MainServices mainServices = null;
-        try {
-            mainServices = (MainServices) query.getSingleResult();
-            transaction.commit();
-            session.close();
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        return mainServices;
-    }
+@Repository
+public interface MainServiceDao extends JpaRepository<MainServices, Integer> {
 
-    public List<MainServices> getListMainServices() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from MainServices");
-        List<MainServices> list = query.list();
-        transaction.commit();
-        session.close();
-        return list;
-    }
+    Optional<MainServices> findByGroupName(String groupName);
 
-    public void update(MainServices mainServices) {
+
+
+   /* public void update(MainServices mainServices) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.update(mainServices);
         transaction.commit();
         session.close();
-    }
+    }*/
 }
