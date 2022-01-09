@@ -1,28 +1,10 @@
-package dao;
+package data.dao;
 
-import config.HibernateUtil;
-import data.Offer;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
+import data.model.Offer;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@Component
-public class OfferDao {
-    public void save(Offer offer) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(offer);
-        transaction.commit();
-        session.close();
-    }
+@Repository
+public interface OfferDao extends JpaRepository<Offer, Integer> {
 
-    public void deleteOffer(int orderId) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("delete from Offer o  where o.orders.id=:id");
-        query.setParameter("id", orderId);
-        transaction.commit();
-        session.close();
-    }
 }

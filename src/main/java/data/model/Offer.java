@@ -1,4 +1,4 @@
-package data;
+package data.model;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,7 +11,7 @@ import java.util.Date;
 public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Temporal(TemporalType.DATE)
     @CreationTimestamp
     private Date offerCreateDate;
