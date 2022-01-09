@@ -3,6 +3,7 @@ package data.dao;
 import data.enums.OrderState;
 import data.model.Offer;
 import data.model.Orders;
+import data.model.SubServices;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
@@ -20,8 +21,8 @@ public interface OrderDao extends JpaRepository<Orders, Integer> {
          transaction.commit();
          session.close();
      }*/
-    @org.springframework.data.jpa.repository.Query(value = "select o from Orders o inner  join  o.subServices e inner  join e.experts expert where expert.id=:id and o.state='WAIT_OFFER_EXPERTS'")
-    List<Orders> getListOrdersOfSubServiceExpert(@Param("id") int expertId);
+    @org.springframework.data.jpa.repository.Query(value = "select o from Orders o inner  join o.subServices s where s.subService in :list and o.state='WAIT_OFFER_EXPERTS'")
+    List<Orders> getListOrdersOfSubServiceExpert(@Param("list") List<String> subServices);
 
     /*  public void addOfferToOrder(int ordersId, Offer offer) {
           Session session = HibernateUtil.getSessionFactory().openSession();

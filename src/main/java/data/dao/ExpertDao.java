@@ -3,6 +3,7 @@ package data.dao;
 import data.model.Expert;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,10 @@ public interface ExpertDao extends JpaRepository<Expert, Integer> {
     Optional<Expert> findByEmailAndPassword(String email, String password);
 
     Optional<Expert> findByEmail(String email);
+
+    @Query(value = "from Expert e join fetch e.services where e.email=:email")
+    Optional<Expert> getExpertByEmailJoinSubService(@Param("email") String email);
+
 
     /*  public void UpdateExpertServicesByEmail(String email, SubServices subServices) {
           Session session = HibernateUtil.getSessionFactory().openSession();

@@ -22,7 +22,7 @@ public class Expert extends User {
 
     public static final class ExpertBuilder {
         private byte[] image;
-      //  private List<SubServices> services = new ArrayList<>();
+       private List<SubServices> services = new ArrayList<>();
         private String firstName;
         private String lastName;
         private String email;
@@ -46,10 +46,10 @@ public class Expert extends User {
             return this;
         }
 
-       /* public ExpertBuilder withServices(List<SubServices> services) {
+        public ExpertBuilder withServices(List<SubServices> services) {
             this.services = services;
             return this;
-        }*/
+        }
 
         public ExpertBuilder withFirstName(String firstName) {
             this.firstName = firstName;
@@ -94,7 +94,7 @@ public class Expert extends User {
         public Expert build() {
             Expert expert = new Expert();
             expert.setImage(image);
-          //  expert.setServices(services);
+            expert.setServices(services);
             expert.setFirstName(firstName);
             expert.setLastName(lastName);
             expert.setEmail(email);

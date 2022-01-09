@@ -18,8 +18,8 @@ public class SubServices {
     private String subService;
     private double basePrice;
     private String description;
-    @ManyToMany(mappedBy = "services")
-    private List<Expert> experts = new ArrayList<>();
+   /* @ManyToMany(mappedBy = "services")
+    private List<Expert> experts = new ArrayList<>();*/
 
     public SubServices() {
 
@@ -30,7 +30,7 @@ public class SubServices {
         private String subService;
         private double basePrice;
         private String description;
-        private List<Expert> experts = new ArrayList<>();
+       // private List<Expert> experts = new ArrayList<>();
 
         private ServicesBuilder() {
         }
@@ -59,10 +59,10 @@ public class SubServices {
             return this;
         }
 
-        public ServicesBuilder withExpertSet(List<Expert> expertSet) {
+       /* public ServicesBuilder withExpertSet(List<Expert> expertSet) {
             this.experts = expertSet;
             return this;
-        }
+        }*/
 
         public SubServices build() {
             SubServices subServices = new SubServices();
@@ -70,7 +70,7 @@ public class SubServices {
             subServices.setSubService(subService);
             subServices.setBasePrice(basePrice);
             subServices.setDescription(description);
-            subServices.setExperts(experts);
+           // subServices.setExperts(experts);
             return subServices;
         }
     }

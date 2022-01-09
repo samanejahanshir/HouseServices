@@ -1,16 +1,16 @@
 package service;
 
 import config.SpringConfig;
+import data.enums.OrderState;
 import data.model.Expert;
 import data.model.Orders;
-import data.enums.OrderState;
+import data.model.SubServices;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,31 +18,25 @@ import java.util.List;
 
 public class ExpertServiceTest {
     static ExpertService expertService;
+    static ManagerService managerService;
 
     @BeforeAll
     static void init() {
-        expertService =  new AnnotationConfigApplicationContext(SpringConfig.class).getBean(ExpertService.class);
+        expertService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(ExpertService.class);
+        managerService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(ManagerService.class);
     }
 
     @Test
     void getExpert_SaveToDb() {
-        File file = new File("/res/unknown.png");
-        byte[] imageFile = new byte[(int) file.length()];
-        try {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            fileInputStream.read(imageFile);
-            fileInputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        SubServices subServices = managerService.getServicesDao().getSubServiceByName("bargh").get();
         Expert expert = Expert.ExpertBuilder.anExpert()
                 .withFirstName("alireza")
                 .withLastName("alian")
                 .withPassword("a1234S454")
                 .withEmail("alireza@email.com")
-                .withImage(imageFile)
                 .build();
-
+        expert.getServices().add(subServices);
         expertService.saveExpert(expert);
     }
 
@@ -75,7 +69,7 @@ public class ExpertServiceTest {
 
     @Test
     void getListOrderTest() {
-        System.out.println(expertService.getListOrdersOfSubServiceExpert("expert@email.com").size());
+        System.out.println(expertService.getListOrdersOfSubServiceExpert("alireza@email.com"));
     }
 
     @Test
@@ -91,8 +85,7 @@ public class ExpertServiceTest {
 
     @Test
     void deleteSubServicesFromExpert() {
-        Expert expert = expertService.getExpertByEmail("expert@email.com");
-        expertService.deleteSubServiceFromExpert(expert, "bargh");
+        expertService.deleteSubServiceFromExpert("expert@email.com", "bargh");
     }
 
     @Test

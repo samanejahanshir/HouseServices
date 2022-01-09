@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Data
@@ -73,7 +74,7 @@ public class ExpertService {
                 fileInputStream.close();
                 Expert expert = getExpertByEmail(email);
                 expert.setImage(imageFile);
-            //TODO    expertDao.update(expert);
+               expertDao.save(expert);
             } else {
                 throw new InvalidSizeImageException("this image is big please upload anyImage");
             }
@@ -82,13 +83,22 @@ public class ExpertService {
         }
     }
 
+    public Expert getExpertByEmailJoinSubService(String email){
+        Optional<Expert> expertOptional=expertDao.getExpertByEmailJoinSubService(email);
+        if(expertOptional.isPresent()){
+            return  expertOptional.get();
+        }else {
+            throw new RuntimeException("this expert by this email not exist");
+        }
+    }
     public void updateExpert(Expert expert) {
-        //TODO expertDao.update(expert);
+        expertDao.save(expert);
     }
 
     public List<Orders> getListOrdersOfSubServiceExpert(String email) {
-        Expert expert=getExpertByEmail(email);
-        return orderDao.getListOrdersOfSubServiceExpert(expert.getId());
+        Expert expert=getExpertByEmailJoinSubService(email);
+        List<String> subServiceNames=expert.getServices().stream().map(subServices -> subServices.getSubService()).collect(Collectors.toList());
+        return orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
     }
 
     //TODO  delete subservice from expert model
@@ -97,18 +107,20 @@ public class ExpertService {
         Optional<SubServices> subServicesOptional = subServiceDao.getSubServiceByName(subService);
         if (subServicesOptional.isPresent() && expert!=null) {
             SubServices subServices=subServicesOptional.get();
-            subServices.getExperts().add(expert);
-          //TODO  subServiceDao.update(subServices);
+          expert.getServices().add(subServices);
+          expertDao.save(expert);
         } else {
             throw new RuntimeException("this subService not found");
         }
     }
 
     //TODO
-    public void deleteSubServiceFromExpert(Expert expert, String subService) {
+    public void deleteSubServiceFromExpert(String email, String subService) {
         Optional<SubServices> subServicesOptional = subServiceDao.getSubServiceByName(subService);
-        if (subServicesOptional.isPresent()) {
-          //TODO  expertDao.deleteServiceFromExpert(expert.getEmail(), subServices);
+       Expert expert=getExpertByEmailJoinSubService(email);
+        if (subServicesOptional.isPresent() && expert!=null) {
+            expert.getServices().remove(subServicesOptional.get());
+            expertDao.save(expert);
         } else {
             throw new RuntimeException("this subService not found");
         }
