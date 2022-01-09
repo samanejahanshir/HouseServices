@@ -1,4 +1,4 @@
-package data;
+package data.model;
 
 import data.enums.OrderState;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.List;
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private double proposedPrice;
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
