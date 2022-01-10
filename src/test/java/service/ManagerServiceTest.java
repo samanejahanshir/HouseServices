@@ -95,7 +95,7 @@ public class ManagerServiceTest {
 
     @Test
     void confirmUserTest() {
-        Customer customer =customerService.getCustomerByEmail("customer@email.com");
+        Customer customer = customerService.getCustomerByEmail("customer@email.com");
         managerService.confirmUser(customer);
     }
 

@@ -1,12 +1,12 @@
 package service;
 
+import data.dao.*;
+import data.enums.OrderState;
+import data.enums.UserState;
 import data.model.Expert;
 import data.model.Offer;
 import data.model.Orders;
 import data.model.SubServices;
-import data.dao.*;
-import data.enums.OrderState;
-import data.enums.UserState;
 import exceptions.InvalidSizeImageException;
 import exceptions.InvalidTimeException;
 import lombok.Data;
@@ -105,9 +105,8 @@ public class ExpertService {
         return orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
     }
 
-    //TODO  delete subservice from expert model
     public void addSubServiceToExpertList(String email, String subService) {
-        Expert expert = getExpertByEmail(email);
+        Expert expert = getExpertByEmailJoinSubService(email);
         Optional<SubServices> subServicesOptional = subServiceDao.getSubServiceByName(subService);
         if (subServicesOptional.isPresent() && expert != null) {
             SubServices subServices = subServicesOptional.get();
@@ -133,7 +132,7 @@ public class ExpertService {
     public void addOfferToOrder(Expert expert, Orders orders, double price, int time, int startTime) {
         try {
             if (CheckValidation.isValidTime(startTime)) {
-                if (price>=orders.getSubServices().getBasePrice()) {
+                if (price >= orders.getSubServices().getBasePrice()) {
                     Offer offer = Offer.OfferBuilder.anOffer()
                             .withOfferPrice(price)
                             .withDoneTime(time)
@@ -144,7 +143,7 @@ public class ExpertService {
                     offerDao.save(offer);
                     orders.setState(OrderState.WAIT_SELECT_EXPERT);
                     orderDao.save(orders);
-                }else {
+                } else {
                     throw new RuntimeException("price should be bigger than basePrice of subService");
                 }
             }

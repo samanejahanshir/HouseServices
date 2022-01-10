@@ -80,7 +80,7 @@ public class ExpertServiceTest {
 
     @Test
     void addSubServicesTOExpertLiseTest() {
-        expertService.addSubServiceToExpertList("alireza@email.com", "bargh");
+        expertService.addSubServiceToExpertList("alireza@email.com", "yakhchal");
     }
 
     @Test

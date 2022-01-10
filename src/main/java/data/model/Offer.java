@@ -18,7 +18,7 @@ public class Offer {
     private double offerPrice;
     private int durationTime;
     private int startTime;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Orders orders;
     @ManyToOne
     private Expert expert;

@@ -1,13 +1,11 @@
 package service;
 
 import data.dao.*;
-import data.model.*;
-import lombok.Data;
 import data.enums.OrderState;
 import data.enums.UserState;
+import data.model.*;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Data
@@ -25,14 +24,16 @@ public class CustomerService {
     private final MainServiceDao mainServiceDao;
     private final SubServiceDao subServices;
     private final ExpertDao expertDao;
+    private final OfferDao offerDao;
 
     @Autowired
-    public CustomerService(CustomerDao customerDao, OrderDao orderDao, MainServiceDao mainServiceDao, SubServiceDao subServices, ExpertDao expertDao) {
+    public CustomerService(CustomerDao customerDao, OrderDao orderDao, MainServiceDao mainServiceDao, SubServiceDao subServices, ExpertDao expertDao, OfferDao offerDao) {
         this.customerDao = customerDao;
         this.orderDao = orderDao;
         this.mainServiceDao = mainServiceDao;
         this.subServices = subServices;
         this.expertDao = expertDao;
+        this.offerDao = offerDao;
     }
 
     public void saveCustomer(Customer customer) {
@@ -114,9 +115,9 @@ public class CustomerService {
         if (byPrice && !byScoreExpert) {
             return orderDao.getListOffersBySort(order.getId(), Sort.by("offerPrice").ascending());
         } else if (!byPrice && byScoreExpert) {
-            return orderDao.getListOffersBySort(order.getId(), Sort.by("expert.score").ascending());
+            return orderDao.getListOffersBySort(order.getId(), Sort.by("expert.score").descending());
         } else if (byPrice && byScoreExpert) {
-            return orderDao.getListOffersBySort(order.getId(), Sort.by("expert.score").ascending().and(Sort.by("offerPrice").ascending()));
+            return orderDao.getListOffersBySort(order.getId(), Sort.by("expert.score").descending().and(Sort.by("offerPrice").ascending()));
         } else {
             return getListOffers(order);
         }
@@ -143,6 +144,11 @@ public class CustomerService {
     }
 
     public void deleteOrder(int orderId) {
+        //offerDao.deleteOffersOfAOrder(orderId);
+        List<Integer> offersId = orderDao.getListOffers(orderId).stream().map(offer -> offer.getId()).collect(Collectors.toList());
+        if (!offersId.isEmpty()) {
+            offerDao.deleteByIdIn(offersId);
+        }
         orderDao.deleteById(orderId);
     }
 

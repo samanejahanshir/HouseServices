@@ -159,7 +159,7 @@ public class CustomerServiceTest {
 
     @Test
     void deleteOrderTest() {
-        customerService.deleteOrder(2);
+        customerService.deleteOrder(1);
     }
 
     @Test
@@ -167,6 +167,4 @@ public class CustomerServiceTest {
         Orders orders = customerService.getListOrders("customer@email.com").get(0);
         System.out.println(customerService.getListOffersSortByScoreOrPrice(orders,true,true));
     }
-
-
 }
