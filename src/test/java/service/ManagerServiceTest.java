@@ -25,8 +25,8 @@ public class ManagerServiceTest {
         SubServices subServices = SubServices.ServicesBuilder.aServices()
                 .withBasePrice(3000)
                 .withGroupService("tasisat")
-                .withSubService("kooler")
-                .withDescription("kooler sakhteman va hale moshkele ")
+                .withSubService("bargh")
+                .withDescription("bargh sakhteman va hale moshkele ")
                 .build();
         managerService.addServicesToDb(subServices);
     }
@@ -117,5 +117,10 @@ public class ManagerServiceTest {
     @Test
     void deleteMainServicesTest(){
         managerService.deleteMainServices("tasisat");
+    }
+
+    @Test
+    void deleteSubServiceTest(){
+        managerService.deleteSubServices("kooler");
     }
 }

@@ -29,12 +29,12 @@ public class ExpertServiceTest {
     @Test
     void getExpert_SaveToDb() {
 
-        SubServices subServices = managerService.getServicesDao().getSubServiceByName("tamirat yakhchal").get();
+        SubServices subServices = managerService.getServicesDao().getSubServiceByName("bargh").get();
         Expert expert = Expert.ExpertBuilder.anExpert()
-                .withFirstName("alireza")
+                .withFirstName("ali")
                 .withLastName("alian")
                 .withPassword("a1234S454")
-                .withEmail("alireza@email.com")
+                .withEmail("ali@email.com")
                 .build();
         expert.getServices().add(subServices);
         expertService.saveExpert(expert);

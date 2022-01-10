@@ -22,7 +22,10 @@ public interface ExpertDao extends JpaRepository<Expert, Integer> {
     Optional<Expert> getExpertByEmailJoinSubService(@Param("email") String email);
 
     @Query(value = "select e from Expert e join fetch e.services s where s.groupName=:groupName")
-    List<Expert> getListExpertBySubServiceName(@Param("groupName") String groupName);
+    List<Expert> getListExpertByGroupName(@Param("groupName") String groupName);
+
+    @Query(value = "select e from Expert e join fetch e.services s where s.subService=:subService")
+    List<Expert> getListExpertBySubServiceName(@Param("subService") String subService);
 
     /*  public void UpdateExpertServicesByEmail(String email, SubServices subServices) {
               Session session = HibernateUtil.getSessionFactory().openSession();

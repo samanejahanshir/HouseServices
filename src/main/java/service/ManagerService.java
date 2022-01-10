@@ -2,7 +2,6 @@ package service;
 
 import data.dao.*;
 import data.enums.UserState;
-import data.enums.UserType;
 import data.model.*;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,21 +48,31 @@ public class ManagerService {
 
     @Transactional
     public void deleteMainServices(String groupName) {
-        //TODO delete from expert list
         List<SubServices> subServicesList = servicesDao.findAllByGroupName(groupName);
-        List<Expert> experts = expertDao.getListExpertBySubServiceName(groupName);
+        List<Expert> experts = expertDao.getListExpertByGroupName(groupName);
         for (Expert expert : experts) {
-           // expert.setServices(expert.getServices().stream().filter(subServices -> !subServices.getGroupName().equals(groupName)).collect(Collectors.toList()));
-        expert.getServices().removeAll(expert.getServices().stream().filter(subServices -> subServices.getGroupName().equals(groupName)).collect(Collectors.toList()));
+            expert.getServices().removeAll(expert.getServices().stream().filter(subServices -> subServices.getGroupName().equals(groupName)).collect(Collectors.toList()));
         }
         expertDao.saveAll(experts);
         servicesDao.deleteAll(subServicesList);
         mainServiceDao.deleteByGroupName(groupName);
     }
 
-    public int deleteSubServices(String subServices) {
+    @Transactional
+    public void deleteSubServices(String subServices) {
         //TODO delete from expert list
-        return servicesDao.deleteOneSubServices(subServices);
+        Optional<SubServices> subServiceOptional = servicesDao.getSubServiceByName(subServices);
+        if (subServiceOptional.isPresent()) {
+            SubServices subService = subServiceOptional.get();
+            List<Expert> experts = expertDao.getListExpertBySubServiceName(subServices);
+            for (Expert expert : experts) {
+                expert.getServices().remove(subService);
+            }
+            expertDao.saveAll(experts);
+            servicesDao.delete(subService);
+        } else {
+            throw new RuntimeException("this subService not found");
+        }
     }
 
     public void saveMainServiceToDb(MainServices mainServices) {
