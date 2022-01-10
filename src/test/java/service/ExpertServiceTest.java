@@ -29,7 +29,7 @@ public class ExpertServiceTest {
     @Test
     void getExpert_SaveToDb() {
 
-        SubServices subServices = managerService.getServicesDao().getSubServiceByName("bargh").get();
+        SubServices subServices = managerService.getServicesDao().getSubServiceByName("tamirat yakhchal").get();
         Expert expert = Expert.ExpertBuilder.anExpert()
                 .withFirstName("alireza")
                 .withLastName("alian")
@@ -80,12 +80,12 @@ public class ExpertServiceTest {
 
     @Test
     void addSubServicesTOExpertLiseTest() {
-        expertService.addSubServiceToExpertList("alireza@email.com", "yakhchal");
+        expertService.addSubServiceToExpertList("alireza@email.com", "bargh");
     }
 
     @Test
     void deleteSubServicesFromExpert() {
-        expertService.deleteSubServiceFromExpert("expert@email.com", "bargh");
+        expertService.deleteSubServiceFromExpert("alireza@email.com", "bargh");
     }
 
     @Test

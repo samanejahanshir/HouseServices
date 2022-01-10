@@ -25,9 +25,6 @@ public interface CustomerDao extends JpaRepository<Customer, Integer> {
 
     Optional<Customer> findByEmail(String email);
 
-   /* public void update(Customer customer) {
-    }*/
-
     @org.springframework.data.jpa.repository.Query(value = "select o from  Customer c inner join c.orders o  where o.customer.id=:id")
     List<Orders> getListOrders(@Param("id") int customerId);
 

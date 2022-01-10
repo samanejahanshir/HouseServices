@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -20,22 +21,24 @@ public interface ExpertDao extends JpaRepository<Expert, Integer> {
     @Query(value = "from Expert e join fetch e.services where e.email=:email")
     Optional<Expert> getExpertByEmailJoinSubService(@Param("email") String email);
 
+    @Query(value = "select e from Expert e join fetch e.services s where s.groupName=:groupName")
+    List<Expert> getListExpertBySubServiceName(@Param("groupName") String groupName);
 
     /*  public void UpdateExpertServicesByEmail(String email, SubServices subServices) {
-          Session session = HibernateUtil.getSessionFactory().openSession();
-          Transaction transaction = session.beginTransaction();
-          Query query = session.createQuery("from  Expert where email=:email");
-          query.setParameter("email", email);
-          try {
-              Expert expert = (Expert) query.getSingleResult();
-              expert.getServices().add(subServices);
-              session.update(expert);
-          } catch (NoResultException e) {
-              e.printStackTrace();
-          }
-          transaction.commit();
-          session.close();
-      }*/
+              Session session = HibernateUtil.getSessionFactory().openSession();
+              Transaction transaction = session.beginTransaction();
+              Query query = session.createQuery("from  Expert where email=:email");
+              query.setParameter("email", email);
+              try {
+                  Expert expert = (Expert) query.getSingleResult();
+                  expert.getServices().add(subServices);
+                  session.update(expert);
+              } catch (NoResultException e) {
+                  e.printStackTrace();
+              }
+              transaction.commit();
+              session.close();
+          }*/
     @Modifying
     @org.springframework.data.jpa.repository.Query(value = "update Expert set password=:password where email=:email")
     int UpdatePassword(@Param("email") String email, @Param("password") String newPassword);

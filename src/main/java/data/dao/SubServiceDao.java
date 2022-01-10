@@ -26,6 +26,7 @@ public interface SubServiceDao extends JpaRepository<SubServices, Integer> {
 
     List<SubServices> findAllByGroupName(String groupName);
 
+    void deleteAllById(int id);
     /*public void update(SubServices subServices) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();

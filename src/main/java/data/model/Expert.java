@@ -15,7 +15,7 @@ public class Expert extends User {
     private byte[] image;
     @ManyToMany
     private List<SubServices> services = new ArrayList<>();
-    @OneToMany(mappedBy = "expert")
+    @OneToMany(mappedBy = "expert" ,cascade = CascadeType.REMOVE)
     private List<Orders> orders = new ArrayList<>();
     private  int score;
    /* @OneToMany

@@ -23,10 +23,10 @@ public class ManagerServiceTest {
     @Test
     void getService_SaveToDb() {
         SubServices subServices = SubServices.ServicesBuilder.aServices()
-                .withBasePrice(2000)
+                .withBasePrice(3000)
                 .withGroupService("tasisat")
-                .withSubService("bargh")
-                .withDescription("sim keshi sakhteman va hale moshkele bargh sakhteman")
+                .withSubService("kooler")
+                .withDescription("kooler sakhteman va hale moshkele ")
                 .build();
         managerService.addServicesToDb(subServices);
     }
@@ -112,5 +112,10 @@ public class ManagerServiceTest {
                 .withPassword("1234sd34A")
                 .build();
         managerService.saveManager(manager);
+    }
+
+    @Test
+    void deleteMainServicesTest(){
+        managerService.deleteMainServices("tasisat");
     }
 }

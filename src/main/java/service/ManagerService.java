@@ -1,21 +1,17 @@
 package service;
 
-import data.dao.MainServiceDao;
-import data.dao.ManagerDao;
-import data.dao.SubServiceDao;
-import data.dao.UserDao;
+import data.dao.*;
 import data.enums.UserState;
 import data.enums.UserType;
-import data.model.MainServices;
-import data.model.Manager;
-import data.model.SubServices;
-import data.model.User;
+import data.model.*;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Data
@@ -23,14 +19,16 @@ public class ManagerService {
     private final ManagerDao managerDao;
     private final SubServiceDao servicesDao;
     private final MainServiceDao mainServiceDao;
+    private final ExpertDao expertDao;
     private final UserDao userDao;
 
     @Autowired
-    public ManagerService(ManagerDao managerDao, SubServiceDao servicesDao, MainServiceDao mainServiceDao, UserDao userDao) {
+    public ManagerService(ManagerDao managerDao, SubServiceDao servicesDao, MainServiceDao mainServiceDao, UserDao userDao, ExpertDao expertDao) {
         this.managerDao = managerDao;
         this.servicesDao = servicesDao;
         this.mainServiceDao = mainServiceDao;
         this.userDao = userDao;
+        this.expertDao = expertDao;
     }
 
     public void addServicesToDb(SubServices subServices) {
@@ -49,9 +47,18 @@ public class ManagerService {
         }
     }
 
-    public int deleteMainServices(String groupName) {
+    @Transactional
+    public void deleteMainServices(String groupName) {
         //TODO delete from expert list
-        return servicesDao.deleteByGroupName(groupName);
+        List<SubServices> subServicesList = servicesDao.findAllByGroupName(groupName);
+        List<Expert> experts = expertDao.getListExpertBySubServiceName(groupName);
+        for (Expert expert : experts) {
+           // expert.setServices(expert.getServices().stream().filter(subServices -> !subServices.getGroupName().equals(groupName)).collect(Collectors.toList()));
+        expert.getServices().removeAll(expert.getServices().stream().filter(subServices -> subServices.getGroupName().equals(groupName)).collect(Collectors.toList()));
+        }
+        expertDao.saveAll(experts);
+        servicesDao.deleteAll(subServicesList);
+        mainServiceDao.deleteByGroupName(groupName);
     }
 
     public int deleteSubServices(String subServices) {
@@ -91,12 +98,12 @@ public class ManagerService {
     }
 
     public Manager getManagerByNameAndPass(String userName, String password) {
-        Optional<Manager> managerOptional= managerDao.findByUserNameAndPassword(userName, password);
-    if (managerOptional.isPresent()){
-        return managerOptional.get();
-    }else {
-        throw new RuntimeException("this manager by this userName and password not exist");
-    }
+        Optional<Manager> managerOptional = managerDao.findByUserNameAndPassword(userName, password);
+        if (managerOptional.isPresent()) {
+            return managerOptional.get();
+        } else {
+            throw new RuntimeException("this manager by this userName and password not exist");
+        }
     }
 
     public void saveManager(Manager manager) {
