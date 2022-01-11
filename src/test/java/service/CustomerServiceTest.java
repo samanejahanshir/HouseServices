@@ -83,7 +83,7 @@ public class CustomerServiceTest {
                 .withCustomer(customer)
                 .withAddress(customer.getAddresses().get(0))
                 .withDescription("saat 10 sobh anjam shavad")
-                .withProposedPrice(3000)
+                .withProposedPrice(3500)
                 .withSubServices(subServiceDao.getService("tasisat", "bargh").get())
                 .build();
         customerService.saveOrder(order);
@@ -134,6 +134,11 @@ public class CustomerServiceTest {
     }
 
     @Test
+    void getListOrdersThatNotFinishedTest() {
+        System.out.println(customerService.getListOrdersThatNotFinished("customer@email.com"));
+    }
+
+    @Test
     void getListOfferTest() {
         Orders orders = customerService.getListOrders("customer@email.com").get(0);
         System.out.println(customerService.getListOffers(orders));
@@ -141,7 +146,7 @@ public class CustomerServiceTest {
 
     @Test
     void selectOfferForOrderTest() {
-        customerService.selectOfferForOrder(1, 1);
+        customerService.selectOfferForOrder(13, 2);
     }
 
     @Test

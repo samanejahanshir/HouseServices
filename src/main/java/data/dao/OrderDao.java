@@ -49,7 +49,7 @@ public interface OrderDao extends JpaRepository<Orders, Integer> {
     List<Offer> getListOffersBySort(@Param("id") int ordersId, Sort sort);
 
     @org.springframework.data.jpa.repository.Query(value = "from Orders o where o.expert.id=:id and o.state='WAIT_SELECT_EXPERT'")
-    List<Orders> updateOrderStateToComeExpert(@Param("id") int expertId);
+    List<Orders> getListOrdersWaitExpertCome(@Param("id") int expertId);
 
     @Modifying
     @org.springframework.data.jpa.repository.Query(value = "update Orders o set o.state=:state where o.id=:id")

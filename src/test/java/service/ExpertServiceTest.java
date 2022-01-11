@@ -97,8 +97,8 @@ public class ExpertServiceTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Expert expert = expertService.getExpertByEmail("alireza@email.com");
-        List<Orders> orders = expertService.getListOrdersOfSubServiceExpert("alireza@email.com");
+        Expert expert = expertService.getExpertByEmail("ali@email.com");
+        List<Orders> orders = expertService.getListOrdersOfSubServiceExpert("ali@email.com");
         if (!orders.isEmpty()) {
             expertService.addOfferToOrder(expert, orders.get(0), 3000, 2, 14);
         }
@@ -107,7 +107,7 @@ public class ExpertServiceTest {
     @Test
     void getOrdersWaitForSelectExpertTest() {
         Expert expert = expertService.getExpertByEmail("expert@email.com");
-        System.out.println(expertService.getOrdersWaitForSelectExpert(expert).get(0));
+        System.out.println(expertService.getListOrdersWaitExpertCome(expert).get(0));
     }
 
     @Test

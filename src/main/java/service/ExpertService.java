@@ -11,6 +11,7 @@ import exceptions.InvalidSizeImageException;
 import exceptions.InvalidTimeException;
 import lombok.Data;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import service.validation.CheckValidation;
 
 import java.io.File;
@@ -152,31 +153,29 @@ public class ExpertService {
         }
     }
 
-    public List<Orders> getOrdersWaitForSelectExpert(Expert expert) {
-        return orderDao.updateOrderStateToComeExpert(expert.getId());
+    public List<Orders> getListOrdersWaitExpertCome(Expert expert) {
+        return orderDao.getListOrdersWaitExpertCome(expert.getId());
     }
 
     public int updateOrderState(int idOrder, OrderState state) {
         return orderDao.updateOrderState(idOrder, state);
     }
-
+@Transactional
     public int updateOrderStateToPaid(int orderId) {
         Optional<Orders> orders = orderDao.findById(orderId);
         int result = 0;
         if (orders.isPresent()) {
             Orders order = orders.get();
             try {
-                if (orders != null) {
                     if (order.getCustomer().getCredit() >= order.getProposedPrice()) {
                         order.getCustomer().setCredit(order.getCustomer().getCredit() - order.getProposedPrice());
-                        //TODO   customerDao.update(order.getCustomer());
+                        customerDao.save(order.getCustomer());
                         order.getExpert().setCredit(order.getExpert().getCredit() + order.getProposedPrice());
-                        //   expertDao.update(order.getExpert());
+                        expertDao.save(order.getExpert());
                         result = orderDao.updateOrderState(orderId, OrderState.PAID);
                     } else {
                         throw new RuntimeException("credit of customer is not enough.");
                     }
-                }
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }

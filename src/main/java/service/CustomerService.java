@@ -100,7 +100,18 @@ public class CustomerService {
         List<Orders> ordersList = new ArrayList<>();
         try {
             Customer customer = customerDao.findByEmail(email).get();
-            ordersList = customerDao.getListOrders(customer.getId());
+            ordersList = customerDao.getAllOrders(customer.getId());
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
+        return ordersList;
+    }
+
+    public List<Orders> getListOrdersThatNotFinished(String email) {
+        List<Orders> ordersList = new ArrayList<>();
+        try {
+            Customer customer = customerDao.findByEmail(email).get();
+            ordersList = customerDao.getListOrdersThatNotFinished(customer.getId());
         } catch (NoSuchElementException e) {
             e.printStackTrace();
         }
