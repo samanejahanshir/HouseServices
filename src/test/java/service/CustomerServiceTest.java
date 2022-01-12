@@ -31,10 +31,10 @@ public class CustomerServiceTest {
                 .withTag("34")
                 .build();
         Customer customer = Customer.CustomerBuilder.aCustomer()
-                .withFirstName("customer")
-                .withLastName("Cfamily")
+                .withFirstName("sama")
+                .withLastName("samaii")
                 .withPassword("a1234S454")
-                .withEmail("customer@email.com")
+                .withEmail("sama@email.com")
                 .build();
         customer.getAddresses().add(address);
         customerService.saveCustomer(customer);
@@ -171,5 +171,16 @@ public class CustomerServiceTest {
     void getListOfferBySortTest() {
         Orders orders = customerService.getListOrders("customer@email.com").get(0);
         System.out.println(customerService.getListOffersSortByScoreOrPrice(orders,true,true));
+    }
+
+    @Test
+    void addAddressToListAddressTest(){
+        Address address=Address.AddressBuilder.anAddress()
+                .withTag("25")
+                .withPostalCode("3453")
+                .withStreet("30metri")
+                .withCity("tehran")
+                .build();
+        customerService.addAddressToListAddresses(address,"sama@email.com");
     }
 }

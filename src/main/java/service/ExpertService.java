@@ -3,10 +3,7 @@ package service;
 import data.dao.*;
 import data.enums.OrderState;
 import data.enums.UserState;
-import data.model.Expert;
-import data.model.Offer;
-import data.model.Orders;
-import data.model.SubServices;
+import data.model.*;
 import exceptions.InvalidSizeImageException;
 import exceptions.InvalidTimeException;
 import lombok.Data;
@@ -99,15 +96,16 @@ public class ExpertService {
     public void updateExpert(Expert expert) {
         expertDao.save(expert);
     }
-
+@Transactional
     public List<Orders> getListOrdersOfSubServiceExpert(String email) {
-        Expert expert = getExpertByEmailJoinSubService(email);
+        Expert expert = getExpertByEmail(email);
         List<String> subServiceNames = expert.getServices().stream().map(subServices -> subServices.getSubService()).collect(Collectors.toList());
         return orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
     }
 
+    @Transactional
     public void addSubServiceToExpertList(String email, String subService) {
-        Expert expert = getExpertByEmailJoinSubService(email);
+        Expert expert = getExpertByEmail(email);
         Optional<SubServices> subServicesOptional = subServiceDao.getSubServiceByName(subService);
         if (subServicesOptional.isPresent() && expert != null) {
             SubServices subServices = subServicesOptional.get();
@@ -160,26 +158,28 @@ public class ExpertService {
     public int updateOrderState(int idOrder, OrderState state) {
         return orderDao.updateOrderState(idOrder, state);
     }
-@Transactional
+
+    @Transactional
     public int updateOrderStateToPaid(int orderId) {
         Optional<Orders> orders = orderDao.findById(orderId);
         int result = 0;
         if (orders.isPresent()) {
             Orders order = orders.get();
             try {
-                    if (order.getCustomer().getCredit() >= order.getProposedPrice()) {
-                        order.getCustomer().setCredit(order.getCustomer().getCredit() - order.getProposedPrice());
-                        customerDao.save(order.getCustomer());
-                        order.getExpert().setCredit(order.getExpert().getCredit() + order.getProposedPrice());
-                        expertDao.save(order.getExpert());
-                        result = orderDao.updateOrderState(orderId, OrderState.PAID);
-                    } else {
-                        throw new RuntimeException("credit of customer is not enough.");
-                    }
+                if (order.getCustomer().getCredit() >= order.getProposedPrice()) {
+                    order.getCustomer().setCredit(order.getCustomer().getCredit() - order.getProposedPrice());
+                    customerDao.save(order.getCustomer());
+                    order.getExpert().setCredit(order.getExpert().getCredit() + order.getProposedPrice());
+                    expertDao.save(order.getExpert());
+                    result = orderDao.updateOrderState(orderId, OrderState.PAID);
+                } else {
+                    throw new RuntimeException("credit of customer is not enough.");
+                }
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
         }
         return result;
     }
+
 }

@@ -4,7 +4,6 @@ import config.SpringConfig;
 import data.enums.OrderState;
 import data.model.Expert;
 import data.model.Orders;
-import data.model.SubServices;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,14 +28,14 @@ public class ExpertServiceTest {
     @Test
     void getExpert_SaveToDb() {
 
-        SubServices subServices = managerService.getServicesDao().getSubServiceByName("bargh").get();
+        //   SubServices subServices = managerService.getServicesDao().getSubServiceByName("bargh").get();
         Expert expert = Expert.ExpertBuilder.anExpert()
-                .withFirstName("ali")
-                .withLastName("alian")
+                .withFirstName("reza")
+                .withLastName("rezaii")
                 .withPassword("a1234S454")
-                .withEmail("ali@email.com")
+                .withEmail("reza@email.com")
                 .build();
-        expert.getServices().add(subServices);
+        // expert.getServices().add(subServices);
         expertService.saveExpert(expert);
     }
 
@@ -69,7 +68,7 @@ public class ExpertServiceTest {
 
     @Test
     void getListOrderTest() {
-        System.out.println(expertService.getListOrdersOfSubServiceExpert("alireza@email.com"));
+        System.out.println(expertService.getListOrdersOfSubServiceExpert("ali@email.com"));
     }
 
     @Test
@@ -80,7 +79,7 @@ public class ExpertServiceTest {
 
     @Test
     void addSubServicesTOExpertLiseTest() {
-        expertService.addSubServiceToExpertList("alireza@email.com", "bargh");
+        expertService.addSubServiceToExpertList("reza@email.com", "bargh");
     }
 
     @Test

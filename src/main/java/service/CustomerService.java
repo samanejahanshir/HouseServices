@@ -171,4 +171,14 @@ public class CustomerService {
             throw new RuntimeException("this customer by this email not exist.");
         }
     }
+
+    @Transactional
+    public void addAddressToListAddresses(Address address,String email){
+        Optional<Customer> customerOptional = customerDao.getCustomerByEmail(email);
+        if(customerOptional.isPresent()){
+            Customer customer = customerOptional.get();
+            customer.getAddresses().add(address);
+            customerDao.save(customer);
+        }
+    }
 }
