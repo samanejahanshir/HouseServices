@@ -73,7 +73,7 @@ public class CustomerServiceTest {
         Date date = null;
         try {
             date = new SimpleDateFormat("yyyy-MM-dd")
-                    .parse("2022-01-01");
+                    .parse("2022-02-01");
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -17,6 +17,7 @@ public class Offer {
     private Date offerCreateDate;
     private double offerPrice;
     private int durationTime;
+
     private int startTime;
     @ManyToOne(fetch = FetchType.EAGER)
     private Orders orders;

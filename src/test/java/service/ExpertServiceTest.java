@@ -92,14 +92,32 @@ public class ExpertServiceTest {
         Date date = null;
         try {
             date = new SimpleDateFormat("yyyy-MM-dd")
+                    .parse("2022-02-03");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        List<Orders> orders = expertService.getListOrdersOfSubServiceExpert("ali@email.com");
+        if (!orders.isEmpty()) {
+            expertService.addOfferToOrder("ali@email.com", orders.get(0), 3000, 2, 14);
+        }
+    }
+
+    @Test
+    void addOfferToOrder_ThrowException() {
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd")
                     .parse("2022-01-03");
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Expert expert = expertService.getExpertByEmail("ali@email.com");
         List<Orders> orders = expertService.getListOrdersOfSubServiceExpert("ali@email.com");
         if (!orders.isEmpty()) {
-            expertService.addOfferToOrder(expert, orders.get(0), 3000, 2, 14);
+            RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
+                    expertService.addOfferToOrder("ali@email.com", orders.get(0), 3000, 2, 14));
+            System.out.println(exp.getMessage());
+            Assertions.assertEquals("there is a offer by this date and time", exp.getMessage());
+
         }
     }
 

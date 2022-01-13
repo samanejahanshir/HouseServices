@@ -173,9 +173,9 @@ public class CustomerService {
     }
 
     @Transactional
-    public void addAddressToListAddresses(Address address,String email){
+    public void addAddressToListAddresses(Address address, String email) {
         Optional<Customer> customerOptional = customerDao.getCustomerByEmail(email);
-        if(customerOptional.isPresent()){
+        if (customerOptional.isPresent()) {
             Customer customer = customerOptional.get();
             customer.getAddresses().add(address);
             customerDao.save(customer);
