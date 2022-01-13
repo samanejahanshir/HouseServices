@@ -13,6 +13,10 @@ import java.util.List;
 public interface OfferDao extends JpaRepository<Offer, Integer> {
     @Transactional
     void deleteByIdIn(List<Integer> ids);
+
     @Query(value = "from  Offer  o join fetch o.expert e where e.id=:id")
     List<Offer> getListOfferByExpertId(@Param("id") int expertId);
+
+   /* @Query(value = "select o from Offer o join fetch o.orders order where order.orderDoingDate=:date and o.durationTime+o.startTime>:time")
+    Optional<Offer> getOfferByCondition(@Param("date") Date date, @Param("time") int time);*/
 }

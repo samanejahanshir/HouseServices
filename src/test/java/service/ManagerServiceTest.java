@@ -115,12 +115,12 @@ public class ManagerServiceTest {
     }
 
     @Test
-    void deleteMainServicesTest(){
+    void deleteMainServicesTest() {
         managerService.deleteMainServices("tasisat");
     }
 
     @Test
-    void deleteSubServiceTest(){
+    void deleteSubServiceTest() {
         managerService.deleteSubServices("kooler");
     }
 }

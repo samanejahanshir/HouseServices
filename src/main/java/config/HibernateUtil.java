@@ -47,7 +47,7 @@ public class HibernateUtil {
         return entityManagerFactoryBean;
     }
 
-    private Properties hibernateProperties(){
+    private Properties hibernateProperties() {
         Properties jpaProperties = new Properties();
         jpaProperties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
         jpaProperties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));

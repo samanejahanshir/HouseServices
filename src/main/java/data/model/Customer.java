@@ -1,7 +1,7 @@
 package data.model;
 
-import lombok.Data;
 import data.enums.UserState;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;

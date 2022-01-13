@@ -3,7 +3,10 @@ package service;
 import data.dao.*;
 import data.enums.OrderState;
 import data.enums.UserState;
-import data.model.*;
+import data.model.Expert;
+import data.model.Offer;
+import data.model.Orders;
+import data.model.SubServices;
 import exceptions.InvalidSizeImageException;
 import exceptions.InvalidTimeException;
 import lombok.Data;
@@ -96,7 +99,8 @@ public class ExpertService {
     public void updateExpert(Expert expert) {
         expertDao.save(expert);
     }
-@Transactional
+
+    @Transactional
     public List<Orders> getListOrdersOfSubServiceExpert(String email) {
         Expert expert = getExpertByEmail(email);
         List<String> subServiceNames = expert.getServices().stream().map(subServices -> subServices.getSubService()).collect(Collectors.toList());
@@ -127,41 +131,45 @@ public class ExpertService {
             throw new RuntimeException("this subService not found");
         }
     }
-@Transactional
+
+    @Transactional
     public void addOfferToOrder(String email, Orders orders, double price, int time, int startTime) {
-       Expert expert=getExpertByEmail(email);
-       if(expert!=null) {
-           List<Offer> offers=offerDao.getListOfferByExpertId(expert.getId());
-          if( offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(orders.getOrderDoingDate()) && offer.getStartTime()+offer.getDurationTime()>startTime
-           ).findFirst().isEmpty()) {
-              try {
-                  if (CheckValidation.isValidTime(startTime)) {
-                      if (price >= orders.getSubServices().getBasePrice()) {
-                          Offer offer = Offer.OfferBuilder.anOffer()
-                                  .withOfferPrice(price)
-                                  .withDoneTime(time)
-                                  .withStartTime(startTime)
-                                  .withExpert(expert)
-                                  .withOrders(orders)
-                                  .build();
-                          offerDao.save(offer);
-                          orders.setState(OrderState.WAIT_SELECT_EXPERT);
-                          orderDao.save(orders);
-                      } else {
-                          throw new RuntimeException("price should be bigger than basePrice of subService");
-                      }
-                  }
-              } catch (InvalidTimeException e) {
-                  e.printStackTrace();
-              }
-          }else{
-              throw  new RuntimeException("there is a offer by this date and time");
-          }
-       }
+        Expert expert = getExpertByEmail(email);
+        if (expert != null) {
+          /* Optional<Offer> offerOptional=offerDao.getOfferByCondition(orders.getOrderDoingDate(),startTime);
+           if(offerOptional.isEmpty()){*/
+            try {
+                if (CheckValidation.isValidTime(startTime)) {
+                    List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
+                    if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(orders.getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > startTime
+                    ).findFirst().isEmpty()) {
+                        if (price >= orders.getSubServices().getBasePrice()) {
+                            Offer offer = Offer.OfferBuilder.anOffer()
+                                    .withOfferPrice(price)
+                                    .withDoneTime(time)
+                                    .withStartTime(startTime)
+                                    .withExpert(expert)
+                                    .withOrders(orders)
+                                    .build();
+                            offerDao.save(offer);
+                            orders.setState(OrderState.WAIT_SELECT_EXPERT);
+                            orderDao.save(orders);
+                        } else {
+                            throw new RuntimeException("price should be bigger than basePrice of subService");
+                        }
+                    } else {
+                        throw new RuntimeException("there is a offer by this date and time");
+                    }
+                }
+            } catch (InvalidTimeException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
-    public List<Orders> getListOrdersWaitExpertCome(Expert expert) {
-        return orderDao.getListOrdersWaitExpertCome(expert.getId());
+    public List<Orders> getListOrdersForExpert(Expert expert) {
+        return orderDao.getListOrdersForExpert(expert.getId());
     }
 
     public int updateOrderState(int idOrder, OrderState state) {
@@ -190,5 +198,4 @@ public class ExpertService {
         }
         return result;
     }
-
 }

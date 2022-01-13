@@ -4,6 +4,7 @@ C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\config\SpringConf
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\model\UserFactory.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\model\MainServices.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\service\HomeService.java
+C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\dto\OrderDto.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\dao\MainServiceDao.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\dao\SubServiceDao.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\enums\UserState.java
@@ -16,6 +17,7 @@ C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\enums\OrderS
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\model\Address.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\service\ManagerService.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\dao\OrderDao.java
+C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\dto\UserDto.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\model\Manager.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\exceptions\InvalidFormatPasswordException.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\dao\UserDao.java
@@ -23,6 +25,7 @@ C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\model\User.j
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\exceptions\InvalidFormatNameException.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\model\SubServices.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\exceptions\InvalidUserTypeException.java
+C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\dto\OfferDto.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\model\Orders.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\dao\OfferDao.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\service\UserService.java
@@ -31,4 +34,5 @@ C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\enums\UserTy
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\service\ExpertService.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\config\HibernateUtil.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\dao\ExpertDao.java
+C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\dto\SubServiceDto.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\data\model\Expert.java

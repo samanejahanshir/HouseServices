@@ -1,19 +1,20 @@
 package service;
 
 import config.SpringConfig;
-import exceptions.InvalidFormatNameException;
-import exceptions.InvalidFormatPasswordException;
-import exceptions.InvalidUserTypeException;
-import lombok.Data;
+import data.enums.UserState;
+import data.enums.UserType;
 import data.model.Customer;
 import data.model.Expert;
 import data.model.User;
 import data.model.UserFactory;
-import data.enums.UserState;
-import data.enums.UserType;
+import exceptions.InvalidFormatNameException;
+import exceptions.InvalidFormatPasswordException;
+import exceptions.InvalidUserTypeException;
+import lombok.Data;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import service.validation.CheckValidation;
+
 @Service
 @Data
 public class HomeService {
@@ -22,7 +23,7 @@ public class HomeService {
             if (checkValidation(name, family, email, password)) {
                 User user = UserFactory.getUser(type, name, family, email, password);
                 if (user instanceof Customer) {
-                    CustomerService customerService =new AnnotationConfigApplicationContext(SpringConfig.class).getBean(CustomerService.class);
+                    CustomerService customerService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(CustomerService.class);
                     customerService.saveCustomer((Customer) user);
                 } else if (user instanceof Expert) {
                     ExpertService expertService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(ExpertService.class);

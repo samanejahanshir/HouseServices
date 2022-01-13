@@ -124,7 +124,7 @@ public class ExpertServiceTest {
     @Test
     void getOrdersWaitForSelectExpertTest() {
         Expert expert = expertService.getExpertByEmail("expert@email.com");
-        System.out.println(expertService.getListOrdersWaitExpertCome(expert).get(0));
+        System.out.println(expertService.getListOrdersForExpert(expert).get(0));
     }
 
     @Test

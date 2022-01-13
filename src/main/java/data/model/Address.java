@@ -2,7 +2,10 @@ package data.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 @Data
@@ -26,7 +29,7 @@ public class Address {
         private String street;
         private String postalCode;
         private String tag;
-      //  private User user;
+        //  private User user;
 
         private AddressBuilder() {
         }
@@ -66,7 +69,7 @@ public class Address {
             address.setStreet(street);
             address.setPostalCode(postalCode);
             address.setTag(tag);
-        //    address.setUser(user);
+            //    address.setUser(user);
             return address;
         }
     }

@@ -12,18 +12,10 @@ public interface UserDao extends JpaRepository<User, Integer> {
 
     Optional<User> findByEmailAndPassword(String email, String password);
 
-  Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-   @org.springframework.data.jpa.repository.Query(value = "from  User where state='NOT_CONFIRMED'")
-   List<User> getListUserNoConfirm() ;
-
-  /*  public void confirmUser(User user) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.update(user);
-        transaction.commit();
-        session.close();
-    }*/
+    @org.springframework.data.jpa.repository.Query(value = "from  User where state='NOT_CONFIRMED'")
+    List<User> getListUserNoConfirm();
 
    /* public List<User> getListUserByCondition(UserType type, String email, String name, String family) {
         Session session = HibernateUtil.getSessionFactory().openSession();

@@ -3,8 +3,6 @@ package data.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,7 +28,7 @@ public class SubServices {
         private String subService;
         private double basePrice;
         private String description;
-       // private List<Expert> experts = new ArrayList<>();
+        // private List<Expert> experts = new ArrayList<>();
 
         private ServicesBuilder() {
         }
@@ -70,7 +68,7 @@ public class SubServices {
             subServices.setSubService(subService);
             subServices.setBasePrice(basePrice);
             subServices.setDescription(description);
-           // subServices.setExperts(experts);
+            // subServices.setExperts(experts);
             return subServices;
         }
     }

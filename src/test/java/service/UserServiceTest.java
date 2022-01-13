@@ -1,11 +1,5 @@
 package service;
 
-import config.SpringConfig;
-import data.model.User;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 public class UserServiceTest {
 
    /* @Test

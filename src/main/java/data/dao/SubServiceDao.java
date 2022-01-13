@@ -27,28 +27,4 @@ public interface SubServiceDao extends JpaRepository<SubServices, Integer> {
     List<SubServices> findAllByGroupName(String groupName);
 
     void deleteAllById(int id);
-    /*public void update(SubServices subServices) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        //TODO
-        Query query = session.createQuery("update SubServices u set u.experts =:experts where u.id in (select id from Expert )");
-        transaction.commit();
-        session.close();
-    }*/
-
-  /*  public SubServices addExpertToSubService(int subServiceId, int expertId) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from SubServices where id=:id");
-        query.setParameter("id", subServiceId);
-        SubServices subServices = null;
-        try {
-            subServices = (SubServices) query.getSingleResult();
-            transaction.commit();
-            session.close();
-        } catch (NoResultException e) {
-            e.printStackTrace();
-        }
-        return subServices;
-    }*/
 }

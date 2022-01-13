@@ -170,17 +170,17 @@ public class CustomerServiceTest {
     @Test
     void getListOfferBySortTest() {
         Orders orders = customerService.getListOrders("customer@email.com").get(0);
-        System.out.println(customerService.getListOffersSortByScoreOrPrice(orders,true,true));
+        System.out.println(customerService.getListOffersSortByScoreOrPrice(orders, true, true));
     }
 
     @Test
-    void addAddressToListAddressTest(){
-        Address address=Address.AddressBuilder.anAddress()
+    void addAddressToListAddressTest() {
+        Address address = Address.AddressBuilder.anAddress()
                 .withTag("25")
                 .withPostalCode("3453")
                 .withStreet("30metri")
                 .withCity("tehran")
                 .build();
-        customerService.addAddressToListAddresses(address,"sama@email.com");
+        customerService.addAddressToListAddresses(address, "sama@email.com");
     }
 }

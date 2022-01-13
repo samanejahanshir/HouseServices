@@ -11,19 +11,19 @@ import java.util.List;
 @Entity
 @Data
 public class Expert extends User {
-    @Column(columnDefinition = "BLOB",length = 300000)
+    @Column(columnDefinition = "BLOB", length = 300000)
     private byte[] image;
     @ManyToMany
     private List<SubServices> services = new ArrayList<>();
-    @OneToMany(mappedBy = "expert" ,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "expert", cascade = CascadeType.REMOVE)
     private List<Orders> orders = new ArrayList<>();
-    private  int score;
+    private int score;
    /* @OneToMany
     private List<Offer> offers;*/
 
     public static final class ExpertBuilder {
         private byte[] image;
-       private List<SubServices> services = new ArrayList<>();
+        private List<SubServices> services = new ArrayList<>();
         private String firstName;
         private String lastName;
         private String email;

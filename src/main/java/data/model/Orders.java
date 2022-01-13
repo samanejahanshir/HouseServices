@@ -5,9 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -52,7 +50,7 @@ public class Orders {
         private SubServices subServices;
         private Customer customer;
         private Expert expert;
-      //  private List<Offer> offers = new ArrayList<>();
+        //  private List<Offer> offers = new ArrayList<>();
         private String Comment;
 
         private OrdersBuilder() {
@@ -134,7 +132,7 @@ public class Orders {
             orders.setSubServices(subServices);
             orders.setCustomer(customer);
             orders.setExpert(expert);
-           // orders.setOffers(offers);
+            // orders.setOffers(offers);
             orders.setComment(Comment);
             return orders;
         }
