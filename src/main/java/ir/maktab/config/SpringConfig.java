@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(value = {HibernateUtil.class})
+@Import(value = {HibernateConfig.class})
 @ComponentScan(basePackages = {"ir.maktab"})
 public class SpringConfig {
 }

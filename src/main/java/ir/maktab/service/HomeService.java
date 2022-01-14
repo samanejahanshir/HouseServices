@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Data
 public class HomeService {
-    public void register(String name, String family, String email, String password, UserType type) {
+  /*  public void register(String name, String family, String email, String password, UserType type) {
         try {
             if (checkValidation(name, family, email, password)) {
                 User user = UserFactory.getUser(type, name, family, email, password);
@@ -33,7 +33,7 @@ public class HomeService {
         } catch (InvalidFormatNameException | InvalidFormatPasswordException | InvalidUserTypeException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     private boolean checkValidation(String name, String family, String email, String password) {
         boolean isValidName = CheckValidation.isUserNameValid(name);

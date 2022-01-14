@@ -1,8 +1,6 @@
 package ir.maktab.config;
 
 import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.annotation.RequiredTypes;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -23,9 +21,8 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @RequiredArgsConstructor
-public class HibernateUtil {
+public class HibernateConfig {
 
-    //@Autowired
     private final Environment environment;
 
     @Bean
@@ -56,7 +53,7 @@ public class HibernateUtil {
         jpaProperties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
         //jpaProperties.put("hibernate.ejb.naming_strategy", environment.getRequiredProperty("hibernate.ejb.naming_strategy"));
         jpaProperties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
-        //jpaProperties.put("hibernate.format_sql", environment.getRequiredProperty("hibernate.format_sql"));
+       // jpaProperties.put("hibernate.format_sql", environment.getRequiredProperty("hibernate.format_sql"));
         return jpaProperties;
     }
 

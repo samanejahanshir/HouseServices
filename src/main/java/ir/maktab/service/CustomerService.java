@@ -9,7 +9,6 @@ import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.mapper.OfferMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,7 +79,7 @@ public class CustomerService {
     }
 
     public int updatePassword(String email, String newPassword) {
-        return customerDao.UpdatePassword(email, newPassword);
+        return customerDao.updatePassword(email, newPassword);
     }
 
     public void saveOrder(Orders order) {

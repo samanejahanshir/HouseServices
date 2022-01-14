@@ -1,13 +1,17 @@
 package ir.maktab.data.model;
 
-import ir.maktab.data.enums.UserState;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Data
 public class Expert extends User {
@@ -21,7 +25,7 @@ public class Expert extends User {
    /* @OneToMany
     private List<Offer> offers;*/
 
-    public static final class ExpertBuilder {
+    /*public static final class ExpertBuilder {
         private byte[] image;
         private List<SubServices> services = new ArrayList<>();
         private String firstName;
@@ -32,8 +36,8 @@ public class Expert extends User {
         private Date registerDate;
         private long credit;
         private List<Address> addresses = new ArrayList<>();
-       /* @OneToMany(mappedBy = "expert")
-        private List<Orders> orders = new ArrayList<>();*/
+       *//* @OneToMany(mappedBy = "expert")
+        private List<Orders> orders = new ArrayList<>();*//*
 
         ExpertBuilder() {
         }
@@ -103,10 +107,9 @@ public class Expert extends User {
             expert.setState(state);
             expert.setRegisterDate(registerDate);
             expert.setCredit(credit);
-            expert.setAddresses(addresses);
             return expert;
         }
-    }
+    }*/
 
 
     @Override

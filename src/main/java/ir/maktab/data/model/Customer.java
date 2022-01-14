@@ -1,21 +1,27 @@
 package ir.maktab.data.model;
 
 import ir.maktab.data.enums.UserState;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import java.util.*;
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Data
 public class Customer extends User {
     @OneToMany(mappedBy = "customer")
     private List<Orders> orders = new ArrayList<>();
+    @OneToMany
+    private Set<Address> addresses = new HashSet<>();
 
-    public static final class CustomerBuilder {
+  /*  public static final class CustomerBuilder {
         private List<Orders> orders = new ArrayList<>();
         private String firstName;
         private String lastName;
@@ -24,7 +30,7 @@ public class Customer extends User {
         private UserState state;
         private Date registerDate;
         private long credit;
-        private List<Address> addresses = new ArrayList<>();
+        private Set<Address> addresses = new HashSet<>();
 
         CustomerBuilder() {
         }
@@ -73,7 +79,7 @@ public class Customer extends User {
             return this;
         }
 
-        public CustomerBuilder withAddresses(List<Address> addresses) {
+        public CustomerBuilder withAddresses(Set<Address> addresses) {
             this.addresses = addresses;
             return this;
         }
@@ -91,7 +97,7 @@ public class Customer extends User {
             customer.setAddresses(addresses);
             return customer;
         }
-    }
+    }*/
 
     @Override
     public String toString() {

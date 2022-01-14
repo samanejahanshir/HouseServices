@@ -1,15 +1,19 @@
 package ir.maktab.data.model;
 
 import ir.maktab.data.enums.UserState;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -28,12 +32,7 @@ public class User {
     @CreationTimestamp
     private Date registerDate;
     private double credit;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Address> addresses = new ArrayList<>();
 
-    public User() {
-
-    }
 
     @Override
     public String toString() {

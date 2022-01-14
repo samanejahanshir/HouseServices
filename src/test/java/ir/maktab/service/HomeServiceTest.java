@@ -23,7 +23,7 @@ public class HomeServiceTest {
     @Test
     void registerTest() {
         service = new HomeService();
-        service.register("reza", "rezaii", "reza@gmail.com", "rg456H543", UserType.EXPERT);
+       // service.register("reza", "rezaii", "reza@gmail.com", "rg456H543", UserType.EXPERT);
     }
 
     @Test

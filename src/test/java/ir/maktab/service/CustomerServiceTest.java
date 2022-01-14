@@ -5,7 +5,6 @@ import ir.maktab.data.dao.SubServiceDao;
 import ir.maktab.data.model.Address;
 import ir.maktab.data.model.Customer;
 import ir.maktab.data.model.Orders;
-import ir.maktab.service.CustomerService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,29 +24,29 @@ public class CustomerServiceTest {
 
     @Test
     void getCustomer_SaveToDb() {
-        Address address = Address.AddressBuilder.anAddress()
-                .withCity("semnan")
-                .withStreet("yas")
-                .withPostalCode("3424")
-                .withTag("34")
+        Address address = Address.builder()
+                .city("semnan")
+                .street("yas")
+                .postalCode("3424")
+                .tag("34")
                 .build();
-        Customer customer = Customer.CustomerBuilder.aCustomer()
-                .withFirstName("sama")
-                .withLastName("samaii")
-                .withPassword("a1234S454")
-                .withEmail("sama@email.com")
+        Customer customer = Customer.builder()
+                .firstName("sama")
+                .lastName("samaii")
+                .password("a1234S454")
+                .email("sama@email.com")
                 .build();
-        customer.getAddresses().add(address);
+     //   customer.getAddresses().add(address);
         customerService.saveCustomer(customer);
     }
 
     @Test
     void getCustomerDuplicate_SaveToDb_ThrowException() {
-        Customer customer = Customer.CustomerBuilder.aCustomer()
-                .withFirstName("customer")
-                .withLastName("Cfamily")
-                .withPassword("a1234S454")
-                .withEmail("customer@email.com")
+        Customer customer = Customer.builder()
+                .firstName("customer")
+                .lastName("Cfamily")
+                .password("a1234S454")
+                .email("customer@email.com")
                 .build();
         RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
                 customerService.saveCustomer(customer));
@@ -78,14 +77,13 @@ public class CustomerServiceTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Orders order = Orders.OrdersBuilder.anOrders()
-                .withOrderDoneDate(date)
-                .withOrderDoneTime(10)
-                .withCustomer(customer)
-                .withAddress(customer.getAddresses().get(0))
-                .withDescription("saat 10 sobh anjam shavad")
-                .withProposedPrice(3500)
-                .withSubServices(subServiceDao.getService("tasisat", "bargh").get())
+        Orders order = Orders.builder()
+                .orderDoingDate(date)
+                .orderDoingTime(10)
+                .customer(customer)
+                .description("saat 10 sobh anjam shavad")
+                .proposedPrice(3500)
+                .subServices(subServiceDao.findByNameAndGroupName("tasisat", "bargh").get())
                 .build();
         customerService.saveOrder(order);
     }
@@ -101,14 +99,13 @@ public class CustomerServiceTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Orders order = Orders.OrdersBuilder.anOrders()
-                .withOrderDoneDate(date)
-                .withOrderDoneTime(10)
-                .withCustomer(customer)
-                .withAddress(customer.getAddresses().get(0))
-                .withDescription("saat 10 sobh anjam shavad")
-                .withProposedPrice(1000)
-                .withSubServices(subServiceDao.getService("tasisat", "bargh").get())
+        Orders order = Orders.builder()
+                .orderDoingDate(date)
+                .orderDoingTime(10)
+                .customer(customer)
+                .description("saat 10 sobh anjam shavad")
+                .proposedPrice(1000)
+                .subServices(subServiceDao.findByNameAndGroupName("tasisat", "bargh").get())
                 .build();
 
         RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
@@ -176,11 +173,11 @@ public class CustomerServiceTest {
 
     @Test
     void addAddressToListAddressTest() {
-        Address address = Address.AddressBuilder.anAddress()
-                .withTag("25")
-                .withPostalCode("3453")
-                .withStreet("30metri")
-                .withCity("tehran")
+        Address address = Address.builder()
+                .tag("25")
+                .postalCode("3453")
+                .street("30metri")
+                .city("tehran")
                 .build();
         customerService.addAddressToListAddresses(address, "sama@email.com");
     }

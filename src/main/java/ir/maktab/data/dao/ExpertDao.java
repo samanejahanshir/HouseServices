@@ -18,13 +18,14 @@ public interface ExpertDao extends JpaRepository<Expert, Integer> {
 
     Optional<Expert> findByEmail(String email);
 
+//@transactional
     @Query(value = "from Expert e join fetch e.services where e.email=:email")
     Optional<Expert> getExpertByEmailJoinSubService(@Param("email") String email);
 
     @Query(value = "select e from Expert e join fetch e.services s where s.groupName=:groupName")
     List<Expert> getListExpertByGroupName(@Param("groupName") String groupName);
 
-    @Query(value = "select e from Expert e join fetch e.services s where s.subService=:subService")
+    @Query(value = "select e from Expert e join fetch e.services s where s.name=:subService")
     List<Expert> getListExpertBySubServiceName(@Param("subService") String subService);
 
     /*  public void UpdateExpertServicesByEmail(String email, SubServices subServices) {
@@ -43,7 +44,7 @@ public interface ExpertDao extends JpaRepository<Expert, Integer> {
               session.close();
           }*/
     @Modifying
-    @org.springframework.data.jpa.repository.Query(value = "update Expert set password=:password where email=:email")
+    @Query(value = "update Expert set password=:password where email=:email")
     int UpdatePassword(@Param("email") String email, @Param("password") String newPassword);
 
    /* public void deleteServiceFromExpert(String email, SubServices subServices) {

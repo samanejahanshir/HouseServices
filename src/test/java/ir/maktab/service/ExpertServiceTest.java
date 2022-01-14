@@ -4,6 +4,7 @@ import ir.maktab.config.SpringConfig;
 import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.Orders;
+import ir.maktab.data.model.SubServices;
 import ir.maktab.service.ExpertService;
 import ir.maktab.service.ManagerService;
 import org.junit.jupiter.api.Assertions;
@@ -30,24 +31,24 @@ public class ExpertServiceTest {
     @Test
     void getExpert_SaveToDb() {
 
-        //   SubServices subServices = managerService.getServicesDao().getSubServiceByName("bargh").get();
-        Expert expert = Expert.ExpertBuilder.anExpert()
-                .withFirstName("reza")
-                .withLastName("rezaii")
-                .withPassword("a1234S454")
-                .withEmail("reza@email.com")
+        SubServices subServices = managerService.getServicesDao().findByName("nama kari").get();
+        Expert expert = Expert.builder()
+                .firstName("farhad")
+                .lastName("rezaii")
+                .password("a1234S454")
+                .email("farhad@email.com")
                 .build();
-        // expert.getServices().add(subServices);
+        expert.getServices().add(subServices);
         expertService.saveExpert(expert);
     }
 
     @Test
     void getExpertDuplicate_SaveToDb_ThrowException() {
-        Expert expert = Expert.ExpertBuilder.anExpert()
-                .withFirstName("alireza")
-                .withLastName("alian")
-                .withPassword("a1234S454")
-                .withEmail("alireza@email.com")
+        Expert expert = Expert.builder()
+                .firstName("alireza")
+                .lastName("alian")
+                .password("a1234S454")
+                .email("alireza@email.com")
                 .build();
         RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
                 expertService.saveExpert(expert));

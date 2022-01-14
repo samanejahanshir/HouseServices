@@ -24,22 +24,22 @@ public class ManagerServiceTest {
 
     @Test
     void getService_SaveToDb() {
-        SubServices subServices = SubServices.ServicesBuilder.aServices()
-                .withBasePrice(3000)
-                .withGroupService("tasisat")
-                .withSubService("bargh")
-                .withDescription("bargh sakhteman va hale moshkele ")
+        SubServices subServices = SubServices.builder()
+                .basePrice(3000)
+                .groupName("sakhteman")
+                .name("nama kari")
+                .description("nama sakhteman ")
                 .build();
         managerService.addServicesToDb(subServices);
     }
 
     @Test
     void getServiceDuplicate_SaveToDb_ThrowException() {
-        SubServices subServices = SubServices.ServicesBuilder.aServices()
-                .withBasePrice(2000)
-                .withGroupService("tasisat")
-                .withSubService("bargh")
-                .withDescription("sim keshi sakhteman va hale moshkele bargh sakhteman")
+        SubServices subServices = SubServices.builder()
+                .basePrice(2000)
+                .groupName("tasisat")
+                .name("bargh")
+                .description("sim keshi sakhteman va hale moshkele bargh sakhteman")
                 .build();
         RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
                 managerService.addServicesToDb(subServices));
@@ -49,11 +49,11 @@ public class ManagerServiceTest {
 
     @Test
     void getServiceThatNotExistMainService_SaveToDb_ThrowException() {
-        SubServices subServices = SubServices.ServicesBuilder.aServices()
-                .withBasePrice(2000)
-                .withGroupService("lavazem khanegi")
-                .withSubService("yakhchal")
-                .withDescription("tamirate anva yakhchal")
+        SubServices subServices = SubServices.builder()
+                .basePrice(2000)
+                .groupName("lavazem khanegi")
+                .name("yakhchal")
+                .description("tamirate anva yakhchal")
                 .build();
 
         RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
@@ -65,7 +65,7 @@ public class ManagerServiceTest {
     @Test
     void save_MainServiceToDb() {
         MainServices mainServices = new MainServices();
-        mainServices.setGroupName("tasisat");
+        mainServices.setGroupName("sakhteman");
         managerService.saveMainServiceToDb(mainServices);
     }
 
@@ -109,9 +109,9 @@ public class ManagerServiceTest {
 
     @Test
     void saveManagerTest() {
-        Manager manager = Manager.ManagerBuilder.aManager()
-                .withUserName("admin")
-                .withPassword("1234sd34A")
+        Manager manager = Manager.builder()
+                .userName("admin")
+                .password("1234sd34A")
                 .build();
         managerService.saveManager(manager);
     }

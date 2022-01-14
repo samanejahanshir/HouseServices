@@ -103,14 +103,14 @@ public class ExpertService {
     @Transactional
     public List<Orders> getListOrdersOfSubServiceExpert(String email) {
         Expert expert = getExpertByEmail(email);
-        List<String> subServiceNames = expert.getServices().stream().map(subServices -> subServices.getSubService()).collect(Collectors.toList());
+        List<String> subServiceNames = expert.getServices().stream().map(subServices -> subServices.getName()).collect(Collectors.toList());
         return orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
     }
 
     @Transactional
     public void addSubServiceToExpertList(String email, String subService) {
         Expert expert = getExpertByEmail(email);
-        Optional<SubServices> subServicesOptional = subServiceDao.getSubServiceByName(subService);
+        Optional<SubServices> subServicesOptional = subServiceDao.findByName(subService);
         if (subServicesOptional.isPresent() && expert != null) {
             SubServices subServices = subServicesOptional.get();
             expert.getServices().add(subServices);
@@ -122,7 +122,7 @@ public class ExpertService {
 
     //TODO
     public void deleteSubServiceFromExpert(String email, String subService) {
-        Optional<SubServices> subServicesOptional = subServiceDao.getSubServiceByName(subService);
+        Optional<SubServices> subServicesOptional = subServiceDao.findByName(subService);
         Expert expert = getExpertByEmailJoinSubService(email);
         if (subServicesOptional.isPresent() && expert != null) {
             expert.getServices().remove(subServicesOptional.get());

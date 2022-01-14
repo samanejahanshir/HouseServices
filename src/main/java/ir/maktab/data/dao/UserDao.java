@@ -2,6 +2,7 @@ package ir.maktab.data.dao;
 
 import ir.maktab.data.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface UserDao extends JpaRepository<User, Integer> {
 
     Optional<User> findByEmail(String email);
 
-    @org.springframework.data.jpa.repository.Query(value = "from  User where state='NOT_CONFIRMED'")
+    @Query(value = "from  User where state='NOT_CONFIRMED'")
     List<User> getListUserNoConfirm();
 
    /* public List<User> getListUserByCondition(UserType type, String email, String name, String family) {

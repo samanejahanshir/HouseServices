@@ -2,6 +2,7 @@ package ir.maktab.data.dao;
 
 import ir.maktab.data.model.Offer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ import java.util.List;
 @Repository
 public interface OfferDao extends JpaRepository<Offer, Integer> {
     @Transactional
+    @Modifying
     void deleteByIdIn(List<Integer> ids);
 
     @Query(value = "from  Offer  o join fetch o.expert e where e.id=:id")

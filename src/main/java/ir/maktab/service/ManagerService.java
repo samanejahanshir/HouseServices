@@ -33,7 +33,7 @@ public class ManagerService {
     public void addServicesToDb(SubServices subServices) {
         try {
             if (mainServiceDao.findByGroupName(subServices.getGroupName()).isPresent()) {
-                if (servicesDao.getService(subServices.getGroupName(), subServices.getSubService()).isEmpty()) {
+                if (servicesDao.findByNameAndGroupName(subServices.getGroupName(), subServices.getName()).isEmpty()) {
                     servicesDao.save(subServices);
                 } else {
                     throw new RuntimeException("this services is exist .");
@@ -61,7 +61,7 @@ public class ManagerService {
     @Transactional
     public void deleteSubServices(String subServices) {
         //TODO delete from expert list
-        Optional<SubServices> subServiceOptional = servicesDao.getSubServiceByName(subServices);
+        Optional<SubServices> subServiceOptional = servicesDao.findByName(subServices);
         if (subServiceOptional.isPresent()) {
             SubServices subService = subServiceOptional.get();
             List<Expert> experts = expertDao.getListExpertBySubServiceName(subServices);
