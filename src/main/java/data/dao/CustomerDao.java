@@ -20,7 +20,7 @@ public interface CustomerDao extends JpaRepository<Customer, Integer> {
 
     @Transactional
     @Modifying
-    @org.springframework.data.jpa.repository.Query(value = "update Customer set password=:password where email=:email")
+    @Query(value = "update Customer set password=:password where email=:email")
     int UpdatePassword(@Param("email") String email, @Param("password") String newPassword);
 
     Optional<Customer> findByEmail(String email);

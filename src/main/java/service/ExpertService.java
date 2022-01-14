@@ -141,6 +141,7 @@ public class ExpertService {
             try {
                 if (CheckValidation.isValidTime(startTime)) {
                     List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
+                    //TODO
                     if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(orders.getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > startTime
                     ).findFirst().isEmpty()) {
                         if (price >= orders.getSubServices().getBasePrice()) {

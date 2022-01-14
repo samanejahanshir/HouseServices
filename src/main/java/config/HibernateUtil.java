@@ -1,5 +1,7 @@
 package config;
 
+import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.annotation.RequiredTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,18 +22,19 @@ import java.util.Properties;
 @PropertySource("classpath:database.properties")
 @Configuration
 @EnableTransactionManagement
+@RequiredArgsConstructor
 public class HibernateUtil {
 
-    @Autowired
-    private Environment environment;
+    //@Autowired
+    private final Environment environment;
 
     @Bean
     DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getProperty("db.driver"));
-        dataSource.setUrl(environment.getProperty("db.url"));
-        dataSource.setUsername(environment.getProperty("db.user"));
-        dataSource.setPassword(environment.getProperty("db.password"));
+        dataSource.setDriverClassName(environment.getRequiredProperty("db.driver"));
+        dataSource.setUrl(environment.getRequiredProperty("db.url"));
+        dataSource.setUsername(environment.getRequiredProperty("db.user"));
+        dataSource.setPassword(environment.getRequiredProperty("db.password"));
         return dataSource;
     }
 

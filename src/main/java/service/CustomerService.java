@@ -128,7 +128,8 @@ public class CustomerService {
         } else if (!byPrice && byScoreExpert) {
             return orderDao.getListOffersBySort(order.getId(), Sort.by("expert.score").descending());
         } else if (byPrice && byScoreExpert) {
-            return orderDao.getListOffersBySort(order.getId(), Sort.by("expert.score").descending().and(Sort.by("offerPrice").ascending()));
+            Sort offerPrice = Sort.by("expert.score").descending().and(Sort.by("offerPrice").ascending());
+            return orderDao.getListOffersBySort(order.getId(), offerPrice);
         } else {
             return getListOffers(order);
         }
@@ -138,6 +139,7 @@ public class CustomerService {
         Optional<Orders> orders = orderDao.findById(idOrder);
         if (orders.isPresent()) {
             Orders order = orders.get();
+
             Expert expert = expertDao.findById(idExpert).get();
             order.setExpert(expert);
             order.setState(OrderState.WAIT_EXPERT_COME);
