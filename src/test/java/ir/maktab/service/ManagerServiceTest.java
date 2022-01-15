@@ -2,11 +2,12 @@ package ir.maktab.service;
 
 import ir.maktab.config.SpringConfig;
 import ir.maktab.data.model.Customer;
-import ir.maktab.data.model.MainServices;
 import ir.maktab.data.model.Manager;
-import ir.maktab.data.model.SubServices;
-import ir.maktab.service.CustomerService;
-import ir.maktab.service.ManagerService;
+import ir.maktab.dto.MainServiceDto;
+import ir.maktab.dto.SubServiceDto;
+import ir.maktab.exceptions.MainServiceDuplicateException;
+import ir.maktab.exceptions.MainServiceNotFoundException;
+import ir.maktab.exceptions.SubServiceDuplicateException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,57 +25,55 @@ public class ManagerServiceTest {
 
     @Test
     void getService_SaveToDb() {
-        SubServices subServices = SubServices.builder()
+        SubServiceDto subServiceDto = SubServiceDto.builder()
                 .basePrice(3000)
                 .groupName("sakhteman")
                 .name("nama kari")
                 .description("nama sakhteman ")
                 .build();
-        managerService.addServicesToDb(subServices);
+        managerService.saveSubService(subServiceDto);
     }
 
     @Test
     void getServiceDuplicate_SaveToDb_ThrowException() {
-        SubServices subServices = SubServices.builder()
+        SubServiceDto subServiceDto = SubServiceDto.builder()
                 .basePrice(2000)
                 .groupName("tasisat")
                 .name("bargh")
                 .description("sim keshi sakhteman va hale moshkele bargh sakhteman")
                 .build();
-        RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
-                managerService.addServicesToDb(subServices));
+        SubServiceDuplicateException exp = Assertions.assertThrows(SubServiceDuplicateException.class, () ->
+                managerService.saveSubService(subServiceDto));
         System.out.println(exp.getMessage());
         Assertions.assertEquals("this services is exist .", exp.getMessage());
     }
 
     @Test
     void getServiceThatNotExistMainService_SaveToDb_ThrowException() {
-        SubServices subServices = SubServices.builder()
+        SubServiceDto subServiceDto = SubServiceDto.builder()
                 .basePrice(2000)
                 .groupName("lavazem khanegi")
                 .name("yakhchal")
                 .description("tamirate anva yakhchal")
                 .build();
 
-        RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
-                managerService.addServicesToDb(subServices));
+        MainServiceNotFoundException exp = Assertions.assertThrows(MainServiceNotFoundException.class, () ->
+                managerService.saveSubService(subServiceDto));
         System.out.println(exp.getMessage());
         Assertions.assertEquals("this Main service not exist", exp.getMessage());
     }
 
     @Test
     void save_MainServiceToDb() {
-        MainServices mainServices = new MainServices();
-        mainServices.setGroupName("sakhteman");
-        managerService.saveMainServiceToDb(mainServices);
+        MainServiceDto mainServiceDto =  MainServiceDto.builder().groupName("sakhteman").build();
+        managerService.saveMainServiceToDb(mainServiceDto);
     }
 
     @Test
     void saveDuplicate_MainServiceToDb_ThrowException() {
-        MainServices mainServices = new MainServices();
-        mainServices.setGroupName("lavazem khanegi");
-        RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
-                managerService.saveMainServiceToDb(mainServices));
+        MainServiceDto mainServiceDto =  MainServiceDto.builder().groupName("sakhteman").build();
+        MainServiceDuplicateException exp = Assertions.assertThrows(MainServiceDuplicateException.class, () ->
+                managerService.saveMainServiceToDb(mainServiceDto));
         System.out.println(exp.getMessage());
         Assertions.assertEquals("this mainService is exist", exp.getMessage());
     }

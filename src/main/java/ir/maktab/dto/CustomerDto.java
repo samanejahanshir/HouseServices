@@ -5,12 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
-@Builder
 @Data
-public class UserDto {
+@Builder
+public class CustomerDto {
     private Integer id;
     private String firstName;
     private String lastName;
     private String email;
     private Date registerDate;
+    private double credit;
+    private UserState state;
 }

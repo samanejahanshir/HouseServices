@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import java.util.*;
-@SuperBuilder
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -20,8 +22,18 @@ public class Customer extends User {
     private List<Orders> orders = new ArrayList<>();
     @OneToMany
     private Set<Address> addresses = new HashSet<>();
-
-  /*  public static final class CustomerBuilder {
+    private double credit;
+    @Enumerated(EnumType.STRING)
+    private UserState state;
+    @Builder
+    public Customer(Integer id, String firstName, String lastName, String email, String password, UserState state, Date registerDate, double credit, List<Orders> orders, Set<Address> addresses) {
+        super(id, firstName, lastName, email, password, registerDate);
+        this.orders = orders;
+        this.addresses = addresses;
+        this.credit=credit;
+        this.state=state;
+    }
+/*  public static final class CustomerBuilder {
         private List<Orders> orders = new ArrayList<>();
         private String firstName;
         private String lastName;

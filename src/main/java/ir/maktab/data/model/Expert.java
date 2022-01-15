@@ -1,15 +1,18 @@
 package ir.maktab.data.model;
 
+import ir.maktab.data.enums.UserState;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-@SuperBuilder
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -23,7 +26,18 @@ public class Expert extends User {
     private List<Orders> orders = new ArrayList<>();
     private int score;
    /* @OneToMany
-    private List<Offer> offers;*/
+    private List<Offer> offers=new ArrayList<>();*/
+
+    @Builder
+    public Expert(Integer id, String firstName, String lastName, String email, String password, Date registerDate, byte[] image, List<SubServices> services, List<Orders> orders, int score) {
+        super(id, firstName, lastName, email, password, registerDate);
+        this.image = image;
+        this.services = services;
+        this.orders = orders;
+        this.score = score;
+    }
+
+
 
     /*public static final class ExpertBuilder {
         private byte[] image;

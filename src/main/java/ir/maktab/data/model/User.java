@@ -2,6 +2,7 @@ package ir.maktab.data.model;
 
 import ir.maktab.data.enums.UserState;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -10,8 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
-
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -26,12 +26,9 @@ public class User {
     @Column(unique = true)
     private String email;
     private String password;
-    @Enumerated(EnumType.STRING)
-    private UserState state;
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date registerDate;
-    private double credit;
 
 
     @Override

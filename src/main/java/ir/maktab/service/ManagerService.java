@@ -3,15 +3,23 @@ package ir.maktab.service;
 import ir.maktab.data.dao.*;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.*;
+import ir.maktab.dto.MainServiceDto;
+import ir.maktab.dto.SubServiceDto;
+import ir.maktab.dto.mapper.MainServiceMapper;
+import ir.maktab.dto.mapper.SubServiceMapper;
+import ir.maktab.exceptions.MainServiceDuplicateException;
+import ir.maktab.exceptions.MainServiceNotFoundException;
+import ir.maktab.exceptions.SubServiceDuplicateException;
+import ir.maktab.exceptions.SubServiceNotFoundException;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@RequiredArgsConstructor
 @Service
 @Data
 public class ManagerService {
@@ -20,38 +28,32 @@ public class ManagerService {
     private final MainServiceDao mainServiceDao;
     private final ExpertDao expertDao;
     private final UserDao userDao;
+    private final SubServiceMapper subServiceMapper;
+    private final MainServiceMapper mainServiceMapper;
 
-    @Autowired
-    public ManagerService(ManagerDao managerDao, SubServiceDao servicesDao, MainServiceDao mainServiceDao, UserDao userDao, ExpertDao expertDao) {
-        this.managerDao = managerDao;
-        this.servicesDao = servicesDao;
-        this.mainServiceDao = mainServiceDao;
-        this.userDao = userDao;
-        this.expertDao = expertDao;
-    }
 
-    public void addServicesToDb(SubServices subServices) {
-        try {
-            if (mainServiceDao.findByGroupName(subServices.getGroupName()).isPresent()) {
-                if (servicesDao.findByNameAndGroupName(subServices.getGroupName(), subServices.getName()).isEmpty()) {
+    public void saveSubService(SubServiceDto subServiceDto) {
+            Optional<MainServices> mainServiceOptional = mainServiceDao.findByGroupName(subServiceDto.getGroupName());
+            if (mainServiceOptional.isPresent()) {
+                MainServices mainServices=mainServiceOptional.get();
+                if (servicesDao.findByName(subServiceDto.getName()).isEmpty()) {
+                   SubServices subServices=subServiceMapper.toEntity(subServiceDto);
+                   subServices.setMainServices(mainServices);
                     servicesDao.save(subServices);
                 } else {
-                    throw new RuntimeException("this services is exist .");
+                    throw new SubServiceDuplicateException();
                 }
             } else {
-                throw new RuntimeException("this Main service not exist");
+                throw new MainServiceNotFoundException();
             }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
     }
 
     @Transactional
     public void deleteMainServices(String groupName) {
-        List<SubServices> subServicesList = servicesDao.findAllByGroupName(groupName);
+        List<SubServices> subServicesList = servicesDao.findAllByMainServices_GroupName(groupName);
         List<Expert> experts = expertDao.getListExpertByGroupName(groupName);
         for (Expert expert : experts) {
-            expert.getServices().removeAll(expert.getServices().stream().filter(subServices -> subServices.getGroupName().equals(groupName)).collect(Collectors.toList()));
+            expert.getServices().removeAll(expert.getServices().stream().filter(subServices -> subServices.getMainServices().getGroupName().equals(groupName)).collect(Collectors.toList()));
         }
         expertDao.saveAll(experts);
         servicesDao.deleteAll(subServicesList);
@@ -71,20 +73,18 @@ public class ManagerService {
             expertDao.saveAll(experts);
             servicesDao.delete(subService);
         } else {
-            throw new RuntimeException("this subService not found");
+            throw new SubServiceNotFoundException();
         }
     }
 
-    public void saveMainServiceToDb(MainServices mainServices) {
-        try {
-            if (mainServiceDao.findByGroupName(mainServices.getGroupName()).isEmpty()) {
+    public void saveMainServiceToDb(MainServiceDto mainServiceDto) {
+            Optional<MainServices> mainServiceOptional = mainServiceDao.findByGroupName(mainServiceDto.getGroupName());
+            if (mainServiceOptional.isEmpty()) {
+                MainServices mainServices=mainServiceMapper.toEntity(mainServiceDto);
                 mainServiceDao.save(mainServices);
             } else {
-                throw new RuntimeException("this mainService is exist");
+                throw new MainServiceDuplicateException();
             }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
     }
 
     public List<User> getListUsers() {
@@ -100,9 +100,8 @@ public class ManagerService {
     public List<User> getListUserNoConfirm() {
         return userDao.getListUserNoConfirm();
     }
-
+//TODO customer confirm
     public void confirmUser(User user) {
-        user.setState(UserState.CONFIRMED);
         userDao.save(user);
     }
 

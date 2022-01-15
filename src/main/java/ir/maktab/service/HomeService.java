@@ -47,8 +47,8 @@ public class HomeService {
         }
     }
 
-    public boolean checkConfirmUser(User user) {
-        if (user.getState().equals(UserState.CONFIRMED)) {
+    public boolean checkConfirmUser(Customer customer) {
+        if (customer.getState().equals(UserState.CONFIRMED)) {
             return true;
         } else {
             return false;

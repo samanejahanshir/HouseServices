@@ -31,7 +31,7 @@ public class ExpertServiceTest {
     @Test
     void getExpert_SaveToDb() {
 
-        SubServices subServices = managerService.getServicesDao().findByName("nama kari").get();
+        SubServices subServices = managerService.getServicesDao().findByName("").get();
         Expert expert = Expert.builder()
                 .firstName("farhad")
                 .lastName("rezaii")

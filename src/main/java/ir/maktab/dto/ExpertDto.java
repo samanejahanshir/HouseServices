@@ -5,12 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
-@Builder
 @Data
-public class UserDto {
+@Builder
+public class ExpertDto {
     private Integer id;
     private String firstName;
     private String lastName;
     private String email;
     private Date registerDate;
+    private int score;
 }

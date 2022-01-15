@@ -1,4 +1,3 @@
-ir\maktab\data\model\Customer$CustomerBuilderImpl.class
 ir\maktab\dto\SubServiceDto.class
 ir\maktab\data\model\MainServices$MainServicesBuilder.class
 ir\maktab\data\enums\UserType.class
@@ -10,7 +9,6 @@ ir\maktab\exceptions\InvalidFormatNameException.class
 ir\maktab\data\model\Manager$ManagerBuilder.class
 ir\maktab\service\validation\CheckValidation.class
 ir\maktab\data\model\Expert.class
-ir\maktab\data\model\Expert$ExpertBuilderImpl.class
 ir\maktab\data\model\User.class
 ir\maktab\data\model\Address.class
 ir\maktab\exceptions\InvalidSizeImageException.class
@@ -21,12 +19,10 @@ ir\maktab\dto\mapper\CustomerMapper.class
 ir\maktab\dto\OrderDto$OrderDtoBuilder.class
 ir\maktab\dto\UserDto.class
 ir\maktab\data\dao\CustomerDao.class
-ir\maktab\data\model\User$UserBuilderImpl.class
 ir\maktab\dto\mapper\OrderMapper.class
 ir\maktab\data\dao\MainServiceDao.class
 ir\maktab\data\model\UserFactory.class
 ir\maktab\data\dao\UserDao.class
-ir\maktab\data\model\User$UserBuilder.class
 ir\maktab\service\CustomerService.class
 ir\maktab\data\model\Customer.class
 ir\maktab\data\dao\OrderDao.class

@@ -13,13 +13,12 @@ import java.util.Optional;
 @Repository
 public interface SubServiceDao extends JpaRepository<SubServices, Integer> {
 
-    int deleteByGroupName(String groupName);
+    int deleteByMainServices_GroupName(String groupName);
 
     @Modifying
-    @Query(value = "delete from SubServices where name=:subService")
-    int deleteOneSubServices(@Param("subService") String subService);
+    int deleteByName(String subService);
 
-    Optional<SubServices> findByNameAndGroupName(String name,String groupName);
+    //Optional<SubServices> findByNameAndGroupName(String name,String groupName);
 
     //@Query(value = "from SubServices where name=:subService")
     Optional<SubServices> findByName(String name);
@@ -27,7 +26,7 @@ public interface SubServiceDao extends JpaRepository<SubServices, Integer> {
 
     //Optional<SubServices> findByName(String name);
 
-    List<SubServices> findAllByGroupName(String groupName);
+    List<SubServices> findAllByMainServices_GroupName(String groupName);
 
     void deleteAllById(int id);
 }

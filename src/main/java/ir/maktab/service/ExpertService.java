@@ -11,6 +11,7 @@ import ir.maktab.exceptions.InvalidSizeImageException;
 import ir.maktab.exceptions.InvalidTimeException;
 import ir.maktab.service.validation.CheckValidation;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ import java.io.FileInputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@RequiredArgsConstructor
 @Service
 @Data
 public class ExpertService {
@@ -29,17 +30,16 @@ public class ExpertService {
     OfferDao offerDao;
     CustomerDao customerDao;
 
-    public ExpertService(ExpertDao expertDao, OrderDao orderDao, SubServiceDao subServiceDao, OfferDao offerDao, CustomerDao customerDao) {
+  /*  public ExpertService(ExpertDao expertDao, OrderDao orderDao, SubServiceDao subServiceDao, OfferDao offerDao, CustomerDao customerDao) {
         this.expertDao = expertDao;
         this.orderDao = orderDao;
         this.subServiceDao = subServiceDao;
         this.offerDao = offerDao;
         this.customerDao = customerDao;
     }
-
+*/
     public void saveExpert(Expert expert) {
         if (expertDao.findByEmail(expert.getEmail()).isEmpty()) {
-            expert.setState(UserState.NOT_CONFIRMED);
             expertDao.save(expert);
         } else {
             throw new RuntimeException("this expert by this email is exist .");
@@ -187,8 +187,6 @@ public class ExpertService {
                 if (order.getCustomer().getCredit() >= order.getProposedPrice()) {
                     order.getCustomer().setCredit(order.getCustomer().getCredit() - order.getProposedPrice());
                     customerDao.save(order.getCustomer());
-                    order.getExpert().setCredit(order.getExpert().getCredit() + order.getProposedPrice());
-                    expertDao.save(order.getExpert());
                     result = orderDao.updateOrderState(orderId, OrderState.PAID);
                 } else {
                     throw new RuntimeException("credit of customer is not enough.");

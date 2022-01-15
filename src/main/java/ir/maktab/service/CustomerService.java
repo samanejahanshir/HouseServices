@@ -98,7 +98,7 @@ public class CustomerService {
     }
 
     public List<SubServices> getListSubService(String groupName) {
-        return subServices.findAllByGroupName(groupName);
+        return subServices.findAllByMainServices_GroupName(groupName);
     }
 
     public List<Orders> getListOrders(String email) {

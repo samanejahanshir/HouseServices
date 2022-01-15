@@ -22,7 +22,7 @@ public interface ExpertDao extends JpaRepository<Expert, Integer> {
     @Query(value = "from Expert e join fetch e.services where e.email=:email")
     Optional<Expert> getExpertByEmailJoinSubService(@Param("email") String email);
 
-    @Query(value = "select e from Expert e join fetch e.services s where s.groupName=:groupName")
+    @Query(value = "select e from Expert e join fetch e.services s join fetch s.mainServices m where m.groupName=:groupName")
     List<Expert> getListExpertByGroupName(@Param("groupName") String groupName);
 
     @Query(value = "select e from Expert e join fetch e.services s where s.name=:subService")

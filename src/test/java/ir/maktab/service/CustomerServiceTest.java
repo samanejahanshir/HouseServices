@@ -36,7 +36,7 @@ public class CustomerServiceTest {
                 .password("a1234S454")
                 .email("sama@email.com")
                 .build();
-     //   customer.getAddresses().add(address);
+      //  customer.getAddresses().add(address);
         customerService.saveCustomer(customer);
     }
 
@@ -83,7 +83,7 @@ public class CustomerServiceTest {
                 .customer(customer)
                 .description("saat 10 sobh anjam shavad")
                 .proposedPrice(3500)
-                .subServices(subServiceDao.findByNameAndGroupName("tasisat", "bargh").get())
+                .subServices(subServiceDao.findByName("bargh").get())
                 .build();
         customerService.saveOrder(order);
     }
@@ -105,7 +105,7 @@ public class CustomerServiceTest {
                 .customer(customer)
                 .description("saat 10 sobh anjam shavad")
                 .proposedPrice(1000)
-                .subServices(subServiceDao.findByNameAndGroupName("tasisat", "bargh").get())
+                .subServices(subServiceDao.findByName( "bargh").get())
                 .build();
 
         RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->

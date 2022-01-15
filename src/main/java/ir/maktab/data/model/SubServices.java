@@ -17,11 +17,12 @@ public class SubServices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String groupName;
     @Column(unique = true)
     private String name;
     private double basePrice;
     private String description;
+    @ManyToOne
+    private MainServices mainServices;
    /* @ManyToMany(mappedBy = "services")
     private List<Expert> experts = new ArrayList<>();*/
 
@@ -29,7 +30,6 @@ public class SubServices {
     public String toString() {
         return "SubServices{" +
                 "id=" + id +
-                ", groupService='" + groupName + '\'' +
                 ", subService='" + name + '\'' +
                 ", basePrice=" + basePrice +
                 ", description='" + description + '\'' +
