@@ -1,6 +1,8 @@
 package ir.maktab.dto;
 
 import ir.maktab.data.enums.OrderState;
+import ir.maktab.data.model.Address;
+import ir.maktab.data.model.SubServices;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,5 +17,7 @@ public class OrderDto {
     private Date orderDoingDate;
     private int orderDoingTime;
     private OrderState state;
+    private Address address;
+    private SubServices subService;
 
 }

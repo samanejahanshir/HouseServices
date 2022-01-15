@@ -21,6 +21,7 @@ public class HomeService {
   /*  public void register(String name, String family, String email, String password, UserType type) {
         try {
             if (checkValidation(name, family, email, password)) {
+
                 User user = UserFactory.getUser(type, name, family, email, password);
                 if (user instanceof Customer) {
                     CustomerService customerService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(CustomerService.class);
@@ -47,11 +48,5 @@ public class HomeService {
         }
     }
 
-    public boolean checkConfirmUser(Customer customer) {
-        if (customer.getState().equals(UserState.CONFIRMED)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 }

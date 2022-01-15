@@ -16,6 +16,9 @@ public class OrderMapper {
                 .orderDoingTime(orders.getOrderDoingTime())
                 .orderRegisterDate(orders.getOrderRegisterDate())
                 .proposedPrice(orders.getProposedPrice())
+                .address(orders.getAddress())
+                .state(orders.getState())
+                .subService(orders.getSubServices())
                 .build();
     }
     public Orders toEntity(OrderDto orderDto){
@@ -26,6 +29,8 @@ public class OrderMapper {
                 .description(orderDto.getDescription())
                 .orderRegisterDate(orderDto.getOrderRegisterDate())
                 .proposedPrice(orderDto.getProposedPrice())
+                .address(orderDto.getAddress())
+                .subServices(orderDto.getSubService())
                 .build();
     }
 }

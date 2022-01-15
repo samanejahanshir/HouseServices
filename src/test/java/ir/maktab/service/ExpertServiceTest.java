@@ -5,8 +5,9 @@ import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.Orders;
 import ir.maktab.data.model.SubServices;
-import ir.maktab.service.ExpertService;
-import ir.maktab.service.ManagerService;
+import ir.maktab.dto.ExpertDto;
+import ir.maktab.dto.OfferDto;
+import ir.maktab.dto.OrderDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,14 @@ import java.util.List;
 public class ExpertServiceTest {
     static ExpertService expertService;
     static ManagerService managerService;
+    static OrderService orderService;
 
     @BeforeAll
     static void init() {
         expertService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(ExpertService.class);
         managerService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(ManagerService.class);
+        orderService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(OrderService.class);
+
     }
 
     @Test
@@ -58,27 +62,26 @@ public class ExpertServiceTest {
 
     @Test
     void getExpert_ByEmailAndPass() {
-        Expert expert = expertService.getExpertByEmailAndPass("expert@email.com", "a1234S454");
+        ExpertDto expert = expertService.findByEmailAndPass("expert@email.com", "a1234S454");
         Assertions.assertNotNull(expert);
 
     }
 
     @Test
     void getNewPass_UpdateExpertPass() {
-        int id = expertService.updatePassword("expert@email.com", "56A56745dd66");
-        Assertions.assertEquals(1, id);
+        expertService.updatePassword("expert@email.com", "56A56745dd66");
     }
 
     @Test
     void getListOrderTest() {
-        System.out.println(expertService.getListOrdersOfSubServiceExpert("ali@email.com"));
+        System.out.println(orderService.getListOrdersOfSubServiceExpert("ali@email.com"));
     }
 
-    @Test
+  /*  @Test
     void SetImageTest() {
         File file = new File("/res/img.jpg");
         expertService.setImage(file, "expert@email.com");
-    }
+    }*/
 
     @Test
     void addSubServicesTOExpertLiseTest() {
@@ -90,20 +93,6 @@ public class ExpertServiceTest {
         expertService.deleteSubServiceFromExpert("alireza@email.com", "bargh");
     }
 
-    @Test
-    void addOfferToOrder() {
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd")
-                    .parse("2022-02-03");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        List<Orders> orders = expertService.getListOrdersOfSubServiceExpert("ali@email.com");
-        if (!orders.isEmpty()) {
-            expertService.addOfferToOrder("ali@email.com", orders.get(0), 3000, 2, 14);
-        }
-    }
 
     @Test
     void addOfferToOrder_ThrowException() {
@@ -114,10 +103,15 @@ public class ExpertServiceTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        List<Orders> orders = expertService.getListOrdersOfSubServiceExpert("ali@email.com");
+        OfferDto offerDto=OfferDto.builder()
+                .offerPrice(3000)
+                .durationTime(2)
+                .startTime(14)
+                .build();
+        List<OrderDto> orders = orderService.getListOrdersOfSubServiceExpert("ali@email.com");
         if (!orders.isEmpty()) {
             RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
-                    expertService.addOfferToOrder("ali@email.com", orders.get(0), 3000, 2, 14));
+                    expertService.addOfferToOrder("ali@email.com", orders.get(0), offerDto));
             System.out.println(exp.getMessage());
             Assertions.assertEquals("there is a offer by this date and time", exp.getMessage());
 

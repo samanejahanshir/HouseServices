@@ -3,6 +3,7 @@ package ir.maktab.service;
 import ir.maktab.config.SpringConfig;
 import ir.maktab.data.model.Customer;
 import ir.maktab.data.model.Manager;
+import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.MainServiceDto;
 import ir.maktab.dto.SubServiceDto;
 import ir.maktab.exceptions.MainServiceDuplicateException;
@@ -91,13 +92,13 @@ public class ManagerServiceTest {
 
     @Test
     void getListUserNoConfirmTest() {
-        System.out.println(managerService.getListUserNoConfirm().size());
+        System.out.println(managerService.getListCustomerNoConfirm().size());
     }
 
     @Test
     void confirmUserTest() {
-        Customer customer = customerService.getCustomerByEmail("customer@email.com");
-        managerService.confirmUser(customer);
+        CustomerDto customerDto=CustomerDto.builder().email("sama@email.com").build();
+        managerService.confirmCustomer(customerDto);
     }
 
     @Test

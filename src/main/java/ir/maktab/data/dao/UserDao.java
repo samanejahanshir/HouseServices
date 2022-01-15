@@ -15,9 +15,6 @@ public interface UserDao extends JpaRepository<User, Integer> {
 
     Optional<User> findByEmail(String email);
 
-    @Query(value = "from  User where state='NOT_CONFIRMED'")
-    List<User> getListUserNoConfirm();
-
    /* public List<User> getListUserByCondition(UserType type, String email, String name, String family) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();

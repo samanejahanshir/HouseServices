@@ -1,9 +1,11 @@
 package ir.maktab.service;
 
 import ir.maktab.data.dao.UserDao;
+import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.Customer;
 import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.User;
+import ir.maktab.dto.CustomerDto;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,4 +32,12 @@ public class UserService {
         return userDao.getUserByEmail(email, password);
     }
 */
+public boolean checkConfirmUser(CustomerDto customerDto) {
+    Customer customer = customerService.getCustomerByEmail(customerDto.getEmail());
+    if (customer.getState().equals(UserState.CONFIRMED)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 }

@@ -18,11 +18,6 @@ public interface OrderDao extends JpaRepository<Orders, Integer> {
     @Query(value = "select o from Orders o inner  join o.subServices s where s.name in :list and o.state='WAIT_OFFER_EXPERTS' or o.state='WAIT_SELECT_EXPERT'")
     List<Orders> getListOrdersOfSubServiceExpert(@Param("list") List<String> subServices);
 
-    @Query(value = "select o from Offer o inner join o.expert e inner  join e.services s where o.orders.id=:id")
-    List<Offer> getListOffers(@Param("id") int ordersId);
-
-    @Query(value = "select o from Offer o inner join o.expert e inner  join e.services s where o.orders.id=:id")
-    List<Offer> getListOffersBySort(@Param("id") int ordersId, Sort sort);
 
     @Query(value = "from Orders o where o.expert.id=:id")
     List<Orders> getListOrdersForExpert(@Param("id") int expertId);
@@ -39,4 +34,7 @@ public interface OrderDao extends JpaRepository<Orders, Integer> {
 
     @Query(value = "select o from  Customer c inner join c.orders o  where o.customer.id=:id and o.state <> 'PAID'")
     List<Orders> findByCustomer_IdAndStateNotLike(@Param("id") int customerId);
+
+    @Query(value = "select o from  Customer c inner join c.orders o  where o.customer.id=:id and o.state <> 'PAID'")
+    List<Orders> getListOrdersThatNotFinished(@Param("id") int customerId);
 }

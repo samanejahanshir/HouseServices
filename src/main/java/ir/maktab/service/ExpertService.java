@@ -7,8 +7,16 @@ import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.Offer;
 import ir.maktab.data.model.Orders;
 import ir.maktab.data.model.SubServices;
+import ir.maktab.dto.ExpertDto;
+import ir.maktab.dto.OfferDto;
+import ir.maktab.dto.OrderDto;
+import ir.maktab.dto.mapper.ExpertMapper;
+import ir.maktab.dto.mapper.OfferMapper;
+import ir.maktab.dto.mapper.OrderMapper;
+import ir.maktab.exceptions.ExpertNotExistException;
 import ir.maktab.exceptions.InvalidSizeImageException;
 import ir.maktab.exceptions.InvalidTimeException;
+import ir.maktab.exceptions.UserByEmailExistException;
 import ir.maktab.service.validation.CheckValidation;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -20,38 +28,34 @@ import java.io.FileInputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 @Data
 public class ExpertService {
-    ExpertDao expertDao;
-    OrderDao orderDao;
-    SubServiceDao subServiceDao;
-    OfferDao offerDao;
-    CustomerDao customerDao;
-
-  /*  public ExpertService(ExpertDao expertDao, OrderDao orderDao, SubServiceDao subServiceDao, OfferDao offerDao, CustomerDao customerDao) {
-        this.expertDao = expertDao;
-        this.orderDao = orderDao;
-        this.subServiceDao = subServiceDao;
-        this.offerDao = offerDao;
-        this.customerDao = customerDao;
-    }
-*/
+    final ExpertDao expertDao;
+    final OrderDao orderDao;
+    final SubServiceDao subServiceDao;
+    final OfferDao offerDao;
+    final CustomerDao customerDao;
+    final ExpertMapper expertMapper;
+    final OfferMapper offerMapper;
+final OrderMapper orderMapper;
     public void saveExpert(Expert expert) {
         if (expertDao.findByEmail(expert.getEmail()).isEmpty()) {
             expertDao.save(expert);
         } else {
-            throw new RuntimeException("this expert by this email is exist .");
+            throw new UserByEmailExistException();
         }
     }
 
-    public Expert getExpertByEmailAndPass(String email, String password) {
+    public ExpertDto findByEmailAndPass(String email, String password) {
         Optional<Expert> expertOptional = expertDao.findByEmailAndPassword(email, password);
         if (expertOptional.isPresent()) {
-            return expertOptional.get();
+            Expert expert = expertOptional.get();
+            return expertMapper.toDto(expert);
         } else {
-            throw new RuntimeException("this expert by this email and pass not exist");
+            throw new ExpertNotExistException();
         }
     }
 
@@ -64,11 +68,13 @@ public class ExpertService {
         }
     }
 
-    public int updatePassword(String email, String newPassword) {
-        return expertDao.UpdatePassword(email, newPassword);
+    public void updatePassword(String email, String newPassword) {
+        Expert expert = getExpertByEmail(email);
+        expert.setPassword(newPassword);
+        expertDao.save(expert);
     }
 
-    public void setImage(File image, String email) {
+  /*  public void setImage(File image, String email) {
         int maxsize = 300000;
         byte[] imageFile = new byte[(int) image.length()];
         try {
@@ -85,7 +91,7 @@ public class ExpertService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public Expert getExpertByEmailJoinSubService(String email) {
         Optional<Expert> expertOptional = expertDao.getExpertByEmailJoinSubService(email);
@@ -100,12 +106,6 @@ public class ExpertService {
         expertDao.save(expert);
     }
 
-    @Transactional
-    public List<Orders> getListOrdersOfSubServiceExpert(String email) {
-        Expert expert = getExpertByEmail(email);
-        List<String> subServiceNames = expert.getServices().stream().map(subServices -> subServices.getName()).collect(Collectors.toList());
-        return orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
-    }
 
     @Transactional
     public void addSubServiceToExpertList(String email, String subService) {
@@ -133,34 +133,25 @@ public class ExpertService {
     }
 
     @Transactional
-    public void addOfferToOrder(String email, Orders orders, double price, int time, int startTime) {
+    public void addOfferToOrder(String email, OrderDto orderDto, OfferDto offerDto) {
         Expert expert = getExpertByEmail(email);
         if (expert != null) {
           /* Optional<Offer> offerOptional=offerDao.getOfferByCondition(orders.getOrderDoingDate(),startTime);
            if(offerOptional.isEmpty()){*/
             try {
-                if (CheckValidation.isValidTime(startTime)) {
-                    List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
-                    //TODO
-                    if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(orders.getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > startTime
-                    ).findFirst().isEmpty()) {
-                        if (price >= orders.getSubServices().getBasePrice()) {
-                            Offer offer = Offer.builder()
-                                    .offerPrice(price)
-                                    .durationTime(time)
-                                    .startTime(startTime)
-                                    .expert(expert)
-                                    .orders(orders)
-                                    .build();
-                            offerDao.save(offer);
-                            orders.setState(OrderState.WAIT_SELECT_EXPERT);
-                            orderDao.save(orders);
-                        } else {
-                            throw new RuntimeException("price should be bigger than basePrice of subService");
-                        }
+                List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
+                if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(orderDto.getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
+                ).findFirst().isEmpty()) {
+                    if (offerDto.getOfferPrice() >= orderDto.getSubService().getBasePrice()) {
+                        Offer offer = offerMapper.toEntity(offerDto);
+                        offerDao.save(offer);
+                        orderDto.setState(OrderState.WAIT_SELECT_EXPERT);
+                        orderDao.save(orderMapper.toEntity(orderDto));
                     } else {
-                        throw new RuntimeException("there is a offer by this date and time");
+                        throw new RuntimeException("price should be bigger than basePrice of subService");
                     }
+                } else {
+                    throw new RuntimeException("there is a offer by this date and time");
                 }
             } catch (InvalidTimeException e) {
                 e.printStackTrace();

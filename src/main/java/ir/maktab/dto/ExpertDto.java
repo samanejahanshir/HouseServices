@@ -14,4 +14,6 @@ public class ExpertDto {
     private String email;
     private Date registerDate;
     private int score;
+    private byte[] image;
+
 }

@@ -1,6 +1,7 @@
 package ir.maktab.data.dao;
 
 import ir.maktab.data.model.Offer;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,10 @@ public interface OfferDao extends JpaRepository<Offer, Integer> {
 
    /* @Query(value = "select o from Offer o join fetch o.orders order where order.orderDoingDate=:date and o.durationTime+o.startTime>:time")
     Optional<Offer> getOfferByCondition(@Param("date") Date date, @Param("time") int time);*/
+   @Query(value = "select o from Offer o inner join o.expert e inner  join e.services s where o.orders.id=:id")
+   List<Offer> getListOffers(@Param("id") int ordersId);
+
+    @Query(value = "select o from Offer o inner join o.expert e inner  join e.services s where o.orders.id=:id")
+    List<Offer> getListOffersBySort(@Param("id") int ordersId, Sort sort);
+
 }

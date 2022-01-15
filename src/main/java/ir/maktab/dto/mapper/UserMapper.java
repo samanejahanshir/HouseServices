@@ -17,11 +17,5 @@ public class UserMapper {
                 .registerDate(user.getRegisterDate())
                 .build();
     }
-    public User toEntity(UserDto userDto){
-        return  User.builder().firstName(userDto.getFirstName())
-                .lastName(userDto.getLastName())
-                .email(userDto.getEmail())
-                .registerDate(userDto.getRegisterDate())
-                .build();
-    }
+
 }

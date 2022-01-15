@@ -13,6 +13,7 @@ public class OfferMapper {
                 .offerPrice(offer.getOfferPrice())
                 .durationTime(offer.getDurationTime())
                 .startTime(offer.getStartTime())
+                .expert(offer.getExpert())
                 .build();
     }
     public Offer toEntity(OfferDto offerDto){
@@ -22,6 +23,8 @@ public class OfferMapper {
                 .id(offerDto.getId())
                 .offerCreateDate(offerDto.getOfferCreateDate())
                 .startTime(offerDto.getStartTime())
+                .expert(offerDto.getExpert())
                 .build();
+
     }
 }

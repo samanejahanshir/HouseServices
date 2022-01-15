@@ -1,7 +1,9 @@
 package ir.maktab.data.dao;
 
+import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.Customer;
 import ir.maktab.data.model.Orders;
+import ir.maktab.data.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,13 +31,13 @@ public interface CustomerDao extends JpaRepository<Customer, Integer> {
     @Query(value = "select o from  Customer c inner join c.orders o  where o.customer.id=:id")
     List<Orders> getAllOrders(@Param("id") int customerId);
 
-    @Query(value = "select o from  Customer c inner join c.orders o  where o.customer.id=:id and o.state <> 'PAID'")
-    List<Orders> getListOrdersThatNotFinished(@Param("id") int customerId);
-
     @Modifying
     @Query(value = "update Customer set credit=:amount where id=:id")
     int updateCredit(@Param("id") int customerId, @Param("amount") double amount);
 
     @Query(value = "from Customer c join c.addresses where c.email=:email")
     Optional<Customer> getCustomerByEmail(@Param("email") String email);
+
+    List<Customer> findByStateEquals(UserState state);
+
 }
