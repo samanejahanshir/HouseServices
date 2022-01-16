@@ -1,5 +1,6 @@
 package ir.maktab.dto;
 
+import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.model.Expert;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,9 @@ public class OfferDto {
     private double offerPrice;
     private int durationTime;
     private int startTime;
-    private Expert expert;
+    private ExpertDto expertDto;
+    private OrderDto orderDto;
+    private OfferState state;
 
   /*  public static final class OfferDtoBuilder {
         private Integer id;

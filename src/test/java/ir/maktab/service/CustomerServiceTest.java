@@ -1,19 +1,15 @@
 package ir.maktab.service;
 
 import ir.maktab.config.SpringConfig;
-import ir.maktab.data.dao.SubServiceDao;
 import ir.maktab.data.model.Address;
 import ir.maktab.data.model.Customer;
-import ir.maktab.data.model.Orders;
 import ir.maktab.dto.CustomerDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Set;
 
 public class CustomerServiceTest {
     static CustomerService customerService;
@@ -26,18 +22,19 @@ public class CustomerServiceTest {
     @Test
     void getCustomer_SaveToDb() {
         Address address = Address.builder()
-                .city("semnan")
+                .city("ghom")
                 .street("yas")
                 .postalCode("3424")
                 .tag("34")
                 .build();
         Customer customer = Customer.builder()
-                .firstName("sama")
+                .firstName("zahra")
                 .lastName("samaii")
                 .password("a1234S454")
-                .email("sama@email.com")
+                .email("zahra@email.com")
                 .build();
-      //  customer.getAddresses().add(address);
+        //  customer.getAddresses().add(address);
+        customer.setAddresses(Set.of(address));
         customerService.saveCustomer(customer);
     }
 
@@ -66,21 +63,10 @@ public class CustomerServiceTest {
         customerService.updatePassword("customer@email.com", "56A56745dd66");
     }
 
-
-
-
-
-
-
-
-
-
-
     @Test
     void incrementCreditTest() {
-        Customer customer = customerService.getCustomerByEmail("customer@email.com");
-        int result = customerService.incrementCredit(customer, 4000);
-        Assertions.assertEquals(1, result);
+        CustomerDto customerDto = CustomerDto.builder().email("samane@email.com").build();
+        customerService.incrementCredit(customerDto, 4000);
     }
 
    /* @Test
@@ -97,6 +83,6 @@ public class CustomerServiceTest {
                 .street("30metri")
                 .city("tehran")
                 .build();
-        customerService.addAddressToListAddresses(address, "sama@email.com");
+        customerService.addAddressToListAddresses(address, "samane@email.com");
     }
 }

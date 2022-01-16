@@ -24,11 +24,11 @@ public interface OrderDao extends JpaRepository<Orders, Integer> {
 
     @Modifying
     @Query(value = "update Orders o set o.state=:state where o.id=:id")
-    int updateOrderState(@Param("id") int idOrder, @Param("state") OrderState state);
+    void updateOrderState(@Param("id") int idOrder, @Param("state") OrderState state);
 
-    @Modifying
-    @Query(value = "update Orders o set o.Comment=:comment where o.id=:id")
-    int updateOrderComment(@Param("id") int orderId, @Param("comment") String comment);
+    /*@Modifying
+    @Query(value = "update Orders o  where o.id=:id")
+    int updateOrderComment(@Param("id") int orderId, @Param("comment") String comment);*/
 
     List<Orders> findByCustomer_Id(@Param("id") int customerId);
 

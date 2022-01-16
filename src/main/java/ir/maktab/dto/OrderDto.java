@@ -18,6 +18,8 @@ public class OrderDto {
     private int orderDoingTime;
     private OrderState state;
     private Address address;
-    private SubServices subService;
+    private SubServiceDto subServiceDto;
+    private ExpertDto expertDto;
+    private CustomerDto customerDto;
 
 }

@@ -3,15 +3,17 @@ package ir.maktab.service;
 import ir.maktab.data.dao.OfferDao;
 import ir.maktab.data.dao.OrderDao;
 import ir.maktab.data.dao.SubServiceDao;
+import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.enums.OrderState;
-import ir.maktab.data.model.Customer;
-import ir.maktab.data.model.Expert;
-import ir.maktab.data.model.Orders;
-import ir.maktab.data.model.SubServices;
+import ir.maktab.data.model.*;
+import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.SubServiceDto;
+import ir.maktab.dto.mapper.CustomerMapper;
 import ir.maktab.dto.mapper.OrderMapper;
+import ir.maktab.exceptions.CreditNotEnoughException;
 import ir.maktab.exceptions.ExpertNotExistException;
+import ir.maktab.exceptions.OrderNotFoundException;
 import ir.maktab.exceptions.SubServiceNotFoundException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -26,21 +28,24 @@ import java.util.stream.Collectors;
 @Service
 @Data
 public class OrderService {
-    private final OrderDao orderDao;
-    private final OrderMapper orderMapper;
-    private final SubServiceDao subServiceDao;
-    private final CustomerService customerService;
-    private final ExpertService expertService;
-    private final OfferDao offerDao;
+    final OrderDao orderDao;
+    final OrderMapper orderMapper;
+    final SubServiceDao subServiceDao;
+    final CustomerService customerService;
+    final ExpertService expertService;
+    final OfferDao offerDao;
+    final CustomerMapper customerMapper;
+    final CommendService commendService;
 
-    public void saveOrder(OrderDto orderDto, SubServiceDto subServiceDto, String email) {
+
+    public void saveOrder(OrderDto orderDto, String email) {
         Customer customer = customerService.getCustomerByEmail(email);
-        Optional<SubServices> subServicesOptional = subServiceDao.findByName(subServiceDto.getName());
-        if (subServicesOptional.isPresent()) {
+        Optional<SubServices> subServicesOptional = subServiceDao.findByName(orderDto.getSubServiceDto().getName());
+        if (subServicesOptional.isPresent() && customer != null) {
+            orderDto.setCustomerDto(customerMapper.toDto(customer));
             Orders orders = orderMapper.toEntity(orderDto);
-            orders.setSubServices(subServicesOptional.get());
             orders.setState(OrderState.WAIT_OFFER_EXPERTS);
-            orders.setCustomer(customer);
+            orders.setSubServices(subServicesOptional.get());
             orderDao.save(orders);
         } else {
             throw new SubServiceNotFoundException();
@@ -59,19 +64,35 @@ public class OrderService {
         return ordersList.stream().map(orderMapper::toDto).collect(Collectors.toList());
     }
 
-    public void selectOfferForOrder(int idExpert, int idOrder) {
-        Optional<Orders> orders = orderDao.findById(idOrder);
+    @Transactional
+    public void selectOfferForOrder(OfferDto offerDto) {
+        Optional<Orders> orders = orderDao.findById(offerDto.getOrderDto().getId());
         if (orders.isPresent()) {
             Orders order = orders.get();
-            Optional<Expert> expertOptional = expertService.expertDao.findById(idExpert);
-            if (expertOptional.isPresent()) {
-                Expert expert = expertOptional.get();
-                order.setExpert(expert);
+            Expert expert1 = expertService.getExpertByEmail(offerDto.getExpertDto().getEmail());
+            if (expert1 != null) {
+                order.setExpert(expert1);
                 order.setState(OrderState.WAIT_EXPERT_COME);
+                order.setProposedPrice(offerDto.getOfferPrice());
                 orderDao.save(order);
+                setStateOfferToReject(offerDto, order);
             } else {
                 throw new ExpertNotExistException();
             }
+        } else {
+            throw new OrderNotFoundException();
+        }
+    }
+
+    public void setStateOfferToReject(OfferDto offerDto, Orders order) {
+        Optional<Offer> offerOptional = offerDao.findById(offerDto.getId());
+        if (offerOptional.isPresent()) {
+            Offer offer = offerOptional.get();
+            offer.setState(OfferState.ACCEPT);
+            offerDao.save(offer);
+            List<Offer> offerListReject = offerDao.getListOfferThatNotSelected(OfferState.NEW, order.getId());
+            offerListReject.forEach(offer1 -> offer1.setState(OfferState.REJECT));
+            offerDao.saveAll(offerListReject);
         }
     }
 
@@ -84,15 +105,69 @@ public class OrderService {
         orderDao.deleteById(orderId);
     }
 
-    public int RegisterACommentToOrder(int orderId, String comment) {
+   /* public int RegisterACommentToOrder(int orderId, String comment) {
         return orderDao.updateOrderComment(orderId, comment);
+    }*/
+
+    //score 1 - 10
+    @Transactional
+    public void registerACommentToOrder(Commend commend, int orderId) {
+        Optional<Orders> ordersOptional = orderDao.findById(orderId);
+        if (ordersOptional.isPresent()) {
+            Orders orders = ordersOptional.get();
+            Expert expert = orders.getExpert();
+            expert.setScore(expert.getScore() + commend.getScore());
+            expertService.updateExpert(expert);
+            commendService.saveCommend(commend);
+            orders.setCommend(commend);
+            orderDao.save(orders);
+        } else {
+            throw new OrderNotFoundException();
+        }
     }
 
     @Transactional
     public List<OrderDto> getListOrdersOfSubServiceExpert(String email) {
         Expert expert = expertService.getExpertByEmail(email);
-        List<String> subServiceNames = expert.getServices().stream().map(subServices -> subServices.getName()).collect(Collectors.toList());
+        List<String> subServiceNames = expert.getServices().stream().map(SubServices::getName).collect(Collectors.toList());
         List<Orders> orders = orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
-        return  orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+        return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+    }
+
+    public List<OrderDto> getListOrdersForExpert(String email) {
+        Expert expert = expertService.getExpertByEmail(email);
+        if (expert != null) {
+            List<Orders> orders = orderDao.getListOrdersForExpert(expert.getId());
+            return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+        } else {
+            throw new ExpertNotExistException();
+        }
+    }
+
+    @Transactional
+    public void updateOrderStateToPaid(int orderId) {
+        Optional<Orders> orders = orderDao.findById(orderId);
+        if (orders.isPresent()) {
+            Orders order = orders.get();
+            if (order.getCustomer().getCredit() >= order.getProposedPrice()) {
+                Customer customer = order.getCustomer();
+                customer.setCredit(customer.getCredit() - order.getProposedPrice());
+                customerService.updateCustomer(customer);
+                orderDao.updateOrderState(orderId, OrderState.PAID);
+            } else {
+                throw new CreditNotEnoughException();
+            }
+        }
+    }
+
+    @Transactional
+    public int getScoreOrderForExpert(int orderId) {
+        Optional<Orders> order = orderDao.findById(orderId);
+        if(order.isPresent()){
+            return order.get().getCommend().getScore();
+        }
+        else {
+            throw new OrderNotFoundException();
+        }
     }
 }

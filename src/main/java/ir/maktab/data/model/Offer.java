@@ -1,5 +1,6 @@
 package ir.maktab.data.model;
 
+import ir.maktab.data.enums.OfferState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,9 +24,10 @@ public class Offer {
     private Date offerCreateDate;
     private double offerPrice;
     private int durationTime;
-
+    @Enumerated(EnumType.STRING)
+    private OfferState state;
     private int startTime;
-    @ManyToOne(fetch =FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Orders orders;
     @ManyToOne
     private Expert expert;

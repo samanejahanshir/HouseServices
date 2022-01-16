@@ -39,7 +39,8 @@ public class Orders {
     private Expert expert;
     /*@OneToMany(mappedBy = "orders",cascade = CascadeType.REMOVE)
     private List<Offer> offers = new ArrayList<>();*/
-    private String Comment;
+    @OneToOne
+    private Commend commend;
 
     @Override
     public String toString() {
@@ -55,7 +56,6 @@ public class Orders {
                 ", subServices=" + subServices +
                 ", customer=" + customer +
                 ", expert=" + expert +
-                ", Comment='" + Comment + '\'' +
                 '}';
     }
 }

@@ -1,6 +1,7 @@
 package ir.maktab.service;
 
 import ir.maktab.data.dao.*;
+import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.Expert;
@@ -13,10 +14,7 @@ import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.mapper.ExpertMapper;
 import ir.maktab.dto.mapper.OfferMapper;
 import ir.maktab.dto.mapper.OrderMapper;
-import ir.maktab.exceptions.ExpertNotExistException;
-import ir.maktab.exceptions.InvalidSizeImageException;
-import ir.maktab.exceptions.InvalidTimeException;
-import ir.maktab.exceptions.UserByEmailExistException;
+import ir.maktab.exceptions.*;
 import ir.maktab.service.validation.CheckValidation;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +38,9 @@ public class ExpertService {
     final CustomerDao customerDao;
     final ExpertMapper expertMapper;
     final OfferMapper offerMapper;
-final OrderMapper orderMapper;
+    // final OfferService offerService;
+    final OrderMapper orderMapper;
+
     public void saveExpert(Expert expert) {
         if (expertDao.findByEmail(expert.getEmail()).isEmpty()) {
             expertDao.save(expert);
@@ -64,7 +64,7 @@ final OrderMapper orderMapper;
         if (expertOptional.isPresent()) {
             return expertOptional.get();
         } else {
-            throw new RuntimeException("this expert by this email not exist");
+            throw new ExpertNotExistException();
         }
     }
 
@@ -103,7 +103,12 @@ final OrderMapper orderMapper;
     }
 
     public void updateExpert(Expert expert) {
-        expertDao.save(expert);
+        Expert expertByEmail = getExpertByEmail(expert.getEmail());
+        if (expertByEmail != null) {
+            expertDao.save(expert);
+        } else {
+            throw new ExpertNotExistException();
+        }
     }
 
 
@@ -116,76 +121,52 @@ final OrderMapper orderMapper;
             expert.getServices().add(subServices);
             expertDao.save(expert);
         } else {
-            throw new RuntimeException("this subService not found");
+            throw new SubServiceNotFoundException();
         }
     }
 
     //TODO
+    @Transactional
     public void deleteSubServiceFromExpert(String email, String subService) {
         Optional<SubServices> subServicesOptional = subServiceDao.findByName(subService);
-        Expert expert = getExpertByEmailJoinSubService(email);
+        Expert expert = getExpertByEmail(email);
         if (subServicesOptional.isPresent() && expert != null) {
             expert.getServices().remove(subServicesOptional.get());
             expertDao.save(expert);
         } else {
-            throw new RuntimeException("this subService not found");
+            throw new SubServiceNotFoundException();
         }
     }
 
     @Transactional
-    public void addOfferToOrder(String email, OrderDto orderDto, OfferDto offerDto) {
+    public void addOfferToOrder(String email, OfferDto offerDto) {
         Expert expert = getExpertByEmail(email);
         if (expert != null) {
-          /* Optional<Offer> offerOptional=offerDao.getOfferByCondition(orders.getOrderDoingDate(),startTime);
-           if(offerOptional.isEmpty()){*/
-            try {
-                List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
-                if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(orderDto.getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
-                ).findFirst().isEmpty()) {
-                    if (offerDto.getOfferPrice() >= orderDto.getSubService().getBasePrice()) {
-                        Offer offer = offerMapper.toEntity(offerDto);
-                        offerDao.save(offer);
-                        orderDto.setState(OrderState.WAIT_SELECT_EXPERT);
-                        orderDao.save(orderMapper.toEntity(orderDto));
-                    } else {
-                        throw new RuntimeException("price should be bigger than basePrice of subService");
-                    }
+            // Optional<Offer> offerOptional=offerDao.getOfferByCondition(offerDto.getOrderDto().getOrderDoingDate(),startTime);
+            // if(offerOptional.isEmpty()){
+            List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
+            if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(offerDto.getOrderDto().getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
+            ).findFirst().isEmpty()) {
+                if (offerDto.getOfferPrice() >= offerDto.getOrderDto().getSubServiceDto().getBasePrice()) {
+                    offerDto.setExpertDto(expertMapper.toDto(expert));
+                    Offer offer = offerMapper.toEntity(offerDto);
+                    offer.setState(OfferState.NEW);
+                    offerDao.save(offer);
+                    Orders order = orderMapper.toEntity(offerDto.getOrderDto());
+                    order.setState(OrderState.WAIT_SELECT_EXPERT);
+                    orderDao.save(order);
                 } else {
-                    throw new RuntimeException("there is a offer by this date and time");
+                    throw new InvalidPriceException();
                 }
-            } catch (InvalidTimeException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-    public List<Orders> getListOrdersForExpert(Expert expert) {
-        return orderDao.getListOrdersForExpert(expert.getId());
-    }
-
-    public int updateOrderState(int idOrder, OrderState state) {
-        return orderDao.updateOrderState(idOrder, state);
-    }
-
-    @Transactional
-    public int updateOrderStateToPaid(int orderId) {
-        Optional<Orders> orders = orderDao.findById(orderId);
-        int result = 0;
-        if (orders.isPresent()) {
-            Orders order = orders.get();
-            try {
-                if (order.getCustomer().getCredit() >= order.getProposedPrice()) {
-                    order.getCustomer().setCredit(order.getCustomer().getCredit() - order.getProposedPrice());
-                    customerDao.save(order.getCustomer());
-                    result = orderDao.updateOrderState(orderId, OrderState.PAID);
-                } else {
-                    throw new RuntimeException("credit of customer is not enough.");
-                }
-            } catch (RuntimeException e) {
-                e.printStackTrace();
+            } else {
+                throw new OfferConflictByOtherException();
             }
         }
-        return result;
     }
+
+    public void updateOrderState(int idOrder, OrderState state) {
+        orderDao.updateOrderState(idOrder, state);
+    }
+
+
 }

@@ -21,6 +21,7 @@ public class ExpertMapper {
     }
     public Expert toEntity(ExpertDto expertDto){
         return  Expert.builder()
+                .id(expertDto.getId())
                 .firstName(expertDto.getFirstName())
                 .lastName(expertDto.getLastName())
                 .email(expertDto.getEmail())

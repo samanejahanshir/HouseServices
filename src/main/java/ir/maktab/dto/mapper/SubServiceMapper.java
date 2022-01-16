@@ -18,6 +18,7 @@ public class SubServiceMapper {
 
     public SubServices toEntity(SubServiceDto subServiceDto) {
         return SubServices.builder()
+                .id(subServiceDto.getId())
                 .name(subServiceDto.getName())
                 .basePrice(subServiceDto.getBasePrice())
                 .description(subServiceDto.getDescription())

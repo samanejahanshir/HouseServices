@@ -17,15 +17,18 @@ public class CustomerMapper {
                 .registerDate(customer.getRegisterDate())
                 .credit(customer.getCredit())
                 .state(customer.getState())
+                .addresses(customer.getAddresses())
                 .build();
     }
     public Customer toEntity(CustomerDto customerDto){
         return  Customer.builder()
+                .id(customerDto.getId())
                 .firstName(customerDto.getFirstName())
                 .lastName(customerDto.getLastName())
                 .email(customerDto.getEmail())
                 .registerDate(customerDto.getRegisterDate())
                 .credit(customerDto.getCredit())
+                .addresses(customerDto.getAddresses())
                 .build();
     }
 }

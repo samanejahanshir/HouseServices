@@ -2,16 +2,20 @@ package ir.maktab.service;
 
 import ir.maktab.data.dao.OfferDao;
 import ir.maktab.data.dao.SubServiceDao;
+import ir.maktab.data.enums.OrderState;
+import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.Offer;
 import ir.maktab.data.model.Orders;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.mapper.OfferMapper;
 import ir.maktab.dto.mapper.OrderMapper;
+import ir.maktab.exceptions.InvalidPriceException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +25,12 @@ import java.util.stream.Collectors;
 @Service
 @Data
 public class OfferService {
-    private final SubServiceDao subServiceDao;
-    private final CustomerService customerService;
-    private final OfferMapper offerMapper;
-    private final OrderMapper orderMapper;
-    private final OfferDao offerDao;
+     final SubServiceDao subServiceDao;
+    final CustomerService customerService;
+    final OfferMapper offerMapper;
+     final OrderService orderService;
+     final OfferDao offerDao;
+     final ExpertService expertService;
 
     public List<OfferDto> getListOffers(OrderDto orderDto) {
         List<Offer> listOffers = offerDao.getListOffers(orderDto.getId());
@@ -46,6 +51,30 @@ public class OfferService {
             return listOffers.stream().map(offerMapper::toDto).collect(Collectors.toList());
         } else {
             return getListOffers(orderDto);
+        }
+    }
+
+    @Transactional
+    public void addOfferToOrder(String email, OfferDto offerDto) {
+        Expert expert =expertService.getExpertByEmail(email);
+        if (expert != null) {
+          /* Optional<Offer> offerOptional=offerDao.getOfferByCondition(orders.getOrderDoingDate(),startTime);
+           if(offerOptional.isEmpty()){*/
+            List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
+            if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(offerDto.getOrderDto().getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
+            ).findFirst().isEmpty()) {
+                if (offerDto.getOfferPrice() >=offerDto.getOrderDto().getSubServiceDto().getBasePrice()) {
+                    offerDto.setExpertDto(expertService.expertMapper.toDto(expert));
+                    Offer offer = offerMapper.toEntity(offerDto);
+                    offerDao.save(offer);
+                    offerDto.getOrderDto().setState(OrderState.WAIT_SELECT_EXPERT);
+                    orderService.orderDao.save(orderService.orderMapper.toEntity(offerDto.getOrderDto()));
+                } else {
+                    throw new InvalidPriceException();
+                }
+            } else {
+                throw new RuntimeException();
+            }
         }
     }
 }

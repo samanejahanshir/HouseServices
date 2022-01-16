@@ -5,6 +5,7 @@ import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.*;
 import ir.maktab.dto.CustomerDto;
+import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.mapper.CustomerMapper;
 import ir.maktab.dto.mapper.MainServiceMapper;
 import ir.maktab.dto.mapper.OfferMapper;
@@ -25,16 +26,18 @@ import java.util.stream.Collectors;
 @Service
 @Data
 public class CustomerService {
-    private final CustomerDao customerDao;
-  //  private final OrderDao orderDao;
+    final CustomerDao customerDao;
+  //  final OrderService orderService;
+  //  final OfferService offerService;
+    //  private final OrderDao orderDao;
 //    private final MainServiceDao mainServiceDao;
- //   private final SubServiceDao subServices;
-  //  private final ExpertDao expertDao;
-  //  private final OfferDao offerDao;
-  //  private final OfferMapper offerMapper;
-    private final CustomerMapper customerMapper;
-  //  private final MainServiceMapper mainServiceMapper;
-  //  private final SubServiceMapper subServiceMapper;
+    //   private final SubServiceDao subServices;
+    //  private final ExpertDao expertDao;
+    //  private final OfferDao offerDao;
+    //  private final OfferMapper offerMapper;
+    final CustomerMapper customerMapper;
+    //  private final MainServiceMapper mainServiceMapper;
+    //  private final SubServiceMapper subServiceMapper;
 
 
     public void saveCustomer(Customer customer) {
@@ -88,10 +91,13 @@ public class CustomerService {
     }
 
 
-
     @Transactional
-    public int incrementCredit(Customer customer, double amount) {
-        return customerDao.updateCredit(customer.getId(), customer.getCredit() + amount);
+    public void incrementCredit(CustomerDto customerDto, double amount) {
+        Customer customer = getCustomerByEmail(customerDto.getEmail());
+        if (customer != null) {
+            customer.setCredit(customer.getCredit() + amount);
+            customerDao.save(customer);
+        }
     }
 
     public Customer getCustomerByEmailWithFetchJoinAddress(String email) {
@@ -112,4 +118,23 @@ public class CustomerService {
             customerDao.save(customer);
         }
     }
+public void updateCustomer(Customer customer){
+    Customer customer1 = getCustomerByEmail(customer.getEmail());
+    if(customer1!=null){
+        customerDao.save(customer1);
+    }else {
+        throw  new CustomerNotExistException();
+    }
+}
+   /* public void saveOrder(OrderDto orderDto, String email) {
+        orderService.saveOrder(orderDto, email);
+    }
+
+    public List<OrderDto> getListOrders(String email) {
+        return orderService.getListOrders(email);
+    }
+
+    public List<OrderDto> getListOrdersThatNotFinished(String email) {
+        return orderService.getListOrdersThatNotFinished(email);
+    }*/
 }

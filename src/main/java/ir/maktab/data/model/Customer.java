@@ -7,10 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.*;
 
 @NoArgsConstructor
@@ -20,7 +17,7 @@ import java.util.*;
 public class Customer extends User {
     @OneToMany(mappedBy = "customer")
     private List<Orders> orders = new ArrayList<>();
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Address> addresses = new HashSet<>();
     private double credit;
     @Enumerated(EnumType.STRING)

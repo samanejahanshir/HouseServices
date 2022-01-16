@@ -14,10 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class ExpertServiceTest {
     static ExpertService expertService;
@@ -34,15 +37,26 @@ public class ExpertServiceTest {
 
     @Test
     void getExpert_SaveToDb() {
-
-        SubServices subServices = managerService.getServicesDao().findByName("").get();
+        File file = new File("/res/img.jpg");
+        byte[] imageFile = new byte[(int) file.length()];
+        try {
+                FileInputStream fileInputStream = new FileInputStream(file);
+                fileInputStream.read(imageFile);
+                fileInputStream.close();
+            } catch (IOException ioException) {
+            ioException.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        SubServices subServices = managerService.getServicesDao().findByName("nama kari").get();
         Expert expert = Expert.builder()
-                .firstName("farhad")
+                .firstName("ali")
                 .lastName("rezaii")
                 .password("a1234S454")
-                .email("farhad@email.com")
+                .email("ali@email.com")
                 .build();
-        expert.getServices().add(subServices);
+        expert.setServices(List.of(subServices));
+        expert.setImage(imageFile);
         expertService.saveExpert(expert);
     }
 
@@ -85,7 +99,7 @@ public class ExpertServiceTest {
 
     @Test
     void addSubServicesTOExpertLiseTest() {
-        expertService.addSubServiceToExpertList("reza@email.com", "bargh");
+        expertService.addSubServiceToExpertList("farhad@email.com", "bargh");
     }
 
     @Test
@@ -103,15 +117,16 @@ public class ExpertServiceTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        OfferDto offerDto=OfferDto.builder()
+        OfferDto offerDto = OfferDto.builder()
                 .offerPrice(3000)
                 .durationTime(2)
                 .startTime(14)
                 .build();
         List<OrderDto> orders = orderService.getListOrdersOfSubServiceExpert("ali@email.com");
         if (!orders.isEmpty()) {
+            offerDto.setOrderDto(orders.get(0));
             RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
-                    expertService.addOfferToOrder("ali@email.com", orders.get(0), offerDto));
+                    expertService.addOfferToOrder("ali@email.com", offerDto));
             System.out.println(exp.getMessage());
             Assertions.assertEquals("there is a offer by this date and time", exp.getMessage());
 
@@ -119,9 +134,25 @@ public class ExpertServiceTest {
     }
 
     @Test
-    void getOrdersWaitForSelectExpertTest() {
-        Expert expert = expertService.getExpertByEmail("expert@email.com");
-        System.out.println(expertService.getListOrdersForExpert(expert).get(0));
+    void addOfferToOrder() {
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd")
+                    .parse("2022-01-03");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        OfferDto offerDto = OfferDto.builder()
+                .offerPrice(3500)
+                .durationTime(2)
+                .startTime(18)
+                .build();
+        List<OrderDto> orders = orderService.getListOrdersOfSubServiceExpert("farhad@email.com");
+        if (!orders.isEmpty()) {
+            offerDto.setOrderDto(orders.get(1));
+            expertService.addOfferToOrder("farhad@email.com", offerDto);
+
+        }
     }
 
     @Test
@@ -129,17 +160,5 @@ public class ExpertServiceTest {
         expertService.updateOrderState(2, OrderState.DONE);
     }
 
-    @Test
-    void updateOrderStateToPaidTest_ThrowException() {
-        RuntimeException exp = Assertions.assertThrows(RuntimeException.class, () ->
-                expertService.updateOrderStateToPaid(2));
-        System.out.println(exp.getMessage());
-        Assertions.assertEquals("credit of customer is not enough.", exp.getMessage());
-    }
 
-    @Test
-    void updateOrderStateToPaidTest() {
-        int result = expertService.updateOrderStateToPaid(2);
-        Assertions.assertEquals(1, result);
-    }
 }

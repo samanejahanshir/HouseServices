@@ -28,9 +28,9 @@ public class ManagerServiceTest {
     void getService_SaveToDb() {
         SubServiceDto subServiceDto = SubServiceDto.builder()
                 .basePrice(3000)
-                .groupName("sakhteman")
-                .name("nama kari")
-                .description("nama sakhteman ")
+                .groupName("tasisat")
+                .name("bargh")
+                .description("bargh sakhteman va hale moshkel ")
                 .build();
         managerService.saveSubService(subServiceDto);
     }
@@ -66,7 +66,7 @@ public class ManagerServiceTest {
 
     @Test
     void save_MainServiceToDb() {
-        MainServiceDto mainServiceDto =  MainServiceDto.builder().groupName("sakhteman").build();
+        MainServiceDto mainServiceDto =  MainServiceDto.builder().groupName("tasisat").build();
         managerService.saveMainServiceToDb(mainServiceDto);
     }
 

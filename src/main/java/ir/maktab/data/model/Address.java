@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Objects;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,5 +36,18 @@ public class Address {
                 ", postalCode='" + postalCode + '\'' +
                 ", tag='" + tag + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Address)) return false;
+        Address address = (Address) o;
+        return city.equals(address.city) && street.equals(address.street) && postalCode.equals(address.postalCode) && tag.equals(address.tag);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(city, street, postalCode, tag);
     }
 }

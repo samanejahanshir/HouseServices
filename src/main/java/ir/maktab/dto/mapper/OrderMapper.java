@@ -4,10 +4,14 @@ import ir.maktab.data.model.Offer;
 import ir.maktab.data.model.Orders;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
+@RequiredArgsConstructor
 @Component
 public class OrderMapper {
+    private  final SubServiceMapper subServiceMapper;
+    private  final ExpertMapper expertMapper;
+    private final CustomerMapper customerMapper;
     public OrderDto toDto(Orders orders) {
         return OrderDto.builder()
                 .id(orders.getId())
@@ -18,7 +22,9 @@ public class OrderMapper {
                 .proposedPrice(orders.getProposedPrice())
                 .address(orders.getAddress())
                 .state(orders.getState())
-                .subService(orders.getSubServices())
+                .subServiceDto(subServiceMapper.toDto(orders.getSubServices()))
+              //  .expertDto(expertMapper.toDto(orders.getExpert()))
+                .customerDto(customerMapper.toDto(orders.getCustomer()))
                 .build();
     }
     public Orders toEntity(OrderDto orderDto){
@@ -30,7 +36,9 @@ public class OrderMapper {
                 .orderRegisterDate(orderDto.getOrderRegisterDate())
                 .proposedPrice(orderDto.getProposedPrice())
                 .address(orderDto.getAddress())
-                .subServices(orderDto.getSubService())
+                .subServices(subServiceMapper.toEntity(orderDto.getSubServiceDto()))
+                .customer(customerMapper.toEntity(orderDto.getCustomerDto()))
+               // .expert(expertMapper.toEntity(orderDto.getExpertDto()))
                 .build();
     }
 }
