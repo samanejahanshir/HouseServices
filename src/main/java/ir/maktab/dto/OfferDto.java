@@ -2,12 +2,16 @@ package ir.maktab.dto;
 
 import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.model.Expert;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OfferDto {
     private Integer id;
     private Date offerCreateDate;
