@@ -6,6 +6,10 @@ import ir.maktab.data.enums.UserType;
 import ir.maktab.data.model.Customer;
 import ir.maktab.data.model.Expert;
 import ir.maktab.dto.CustomerDto;
+import ir.maktab.dto.ExpertDto;
+import ir.maktab.dto.UserDto;
+import ir.maktab.dto.mapper.CustomerMapper;
+import ir.maktab.dto.mapper.ExpertMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,15 +21,18 @@ public class UserService {
     private final UserDao userDao;
     private final ExpertService expertService;
     private final CustomerService customerService;
+    private final ExpertMapper expertMapper;
+    private final CustomerMapper customerMapper;
 
-
-    public void saveExpert(Expert expert) {
-        expert.setRole(UserType.EXPERT);
+    public void saveExpert(ExpertDto expertDto, String password) {
+        Expert expert = expertMapper.toEntity(expertDto);
+        expert.setPassword(password);
         expertService.saveExpert(expert);
     }
 
-    public void saveCustomer(Customer customer) {
-        customer.setRole(UserType.CUSTOMER);
+    public void saveCustomer(CustomerDto customerDto, String password) {
+        Customer customer = customerMapper.toEntity(customerDto);
+        customer.setPassword(password);
         customerService.saveCustomer(customer);
     }
 

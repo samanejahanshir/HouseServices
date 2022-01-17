@@ -1,6 +1,7 @@
 package ir.maktab.dto;
 
 import ir.maktab.data.enums.UserState;
+import ir.maktab.data.enums.UserType;
 import ir.maktab.data.model.Address;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +21,6 @@ public class CustomerDto {
     private double credit;
     private UserState state;
     private Set<Address> addresses=new HashSet<>();
+    private UserType role;
+
 }

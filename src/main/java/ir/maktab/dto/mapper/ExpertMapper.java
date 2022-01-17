@@ -17,6 +17,7 @@ public class ExpertMapper {
                 .registerDate(expert.getRegisterDate())
                 .score(expert.getScore())
                 .image(expert.getImage())
+                .role(expert.getRole())
                 .build();
     }
     public Expert toEntity(ExpertDto expertDto){
@@ -27,6 +28,7 @@ public class ExpertMapper {
                 .email(expertDto.getEmail())
                 .registerDate(expertDto.getRegisterDate())
                 .image(expertDto.getImage())
+                .role(expertDto.getRole())
                 .build();
     }
 }

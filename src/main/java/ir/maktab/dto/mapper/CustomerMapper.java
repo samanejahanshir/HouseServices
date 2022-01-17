@@ -18,6 +18,7 @@ public class CustomerMapper {
                 .credit(customer.getCredit())
                 .state(customer.getState())
                 .addresses(customer.getAddresses())
+                .role(customer.getRole())
                 .build();
     }
     public Customer toEntity(CustomerDto customerDto){
@@ -29,6 +30,7 @@ public class CustomerMapper {
                 .registerDate(customerDto.getRegisterDate())
                 .credit(customerDto.getCredit())
                 .addresses(customerDto.getAddresses())
+                .role(customerDto.getRole())
                 .build();
     }
 }

@@ -1,6 +1,7 @@
 package ir.maktab.dto;
 
 import ir.maktab.data.enums.UserState;
+import ir.maktab.data.enums.UserType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,5 +16,6 @@ public class ExpertDto {
     private Date registerDate;
     private int score;
     private byte[] image;
+    private UserType role;
 
 }
