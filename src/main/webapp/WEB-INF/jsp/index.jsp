@@ -12,10 +12,11 @@
 <head>
     <title>Home</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+<link href="style.css" rel="stylesheet">
 </head>
-<body style="background-color: lemonchiffon ; justify-items: center;align-items: center">
-<div class="container">
-    <ul class="nav nav-pills">
+<body style="background-color: lemonchiffon">
+<div class="container align-items-center">
+    <ul class="nav nav-pills align-items-center">
         <li class="nav-item">
             <a href="#">Home</a>
         </li>
@@ -33,9 +34,16 @@
                 <a class="dropdown-item" href="/Signin/customer">Sign in customer</a>
             </div>
         </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Management</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/Signin/manager">Sign in manager</a>
+                <a class="dropdown-item" href="/Signup/manager">Sign up manager</a>
+            </div>
+        </li>
     </ul>
     <div class="container">
-        <img src="../../R.jpg" height=731 width=800>
+
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

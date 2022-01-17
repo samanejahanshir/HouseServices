@@ -1,5 +1,10 @@
 package ir.maktab.controller;
 
-public class ManagerController {
+import org.springframework.web.bind.annotation.RequestMapping;
 
+public class ManagerController {
+    @RequestMapping("/management")
+    public String displayManagementPage() {
+        return "";
+    }
 }

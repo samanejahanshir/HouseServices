@@ -17,7 +17,7 @@
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
 <body>
-
+<%--
 <div class="container">
     <form:form method="post" action="/SignUp" modelAttribute="userDto">
     first name: <form:input type="text" path="firstName"/>
@@ -50,8 +50,14 @@
 
 <input type="submit" value="register"/>
 </form:form>
-</div>
-
+</div>--%>
+<form:form  method="post" action="/SignUpManager" modelAttribute="manager">
+    Email: <form:input type="email" path="userName"/>
+    <br/>
+    Password: <form:input type="password" path="password"/>
+    <br/>
+   <input type="submit" value="register">
+</form:form>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
