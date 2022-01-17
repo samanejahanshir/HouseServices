@@ -18,7 +18,7 @@ import javax.persistence.Id;
 public class Commend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  int id;
+    private int id;
     private String commend;
     private int score;
 }

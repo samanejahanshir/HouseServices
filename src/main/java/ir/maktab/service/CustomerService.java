@@ -1,34 +1,27 @@
 package ir.maktab.service;
 
-import ir.maktab.data.dao.*;
-import ir.maktab.data.enums.OrderState;
+import ir.maktab.data.dao.CustomerDao;
 import ir.maktab.data.enums.UserState;
-import ir.maktab.data.model.*;
+import ir.maktab.data.model.Address;
+import ir.maktab.data.model.Customer;
 import ir.maktab.dto.CustomerDto;
-import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.mapper.CustomerMapper;
-import ir.maktab.dto.mapper.MainServiceMapper;
-import ir.maktab.dto.mapper.OfferMapper;
-import ir.maktab.dto.mapper.SubServiceMapper;
 import ir.maktab.exceptions.CustomerNotExistException;
 import ir.maktab.exceptions.UserByEmailExistException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 @Data
 public class CustomerService {
     final CustomerDao customerDao;
-  //  final OrderService orderService;
-  //  final OfferService offerService;
+    //  final OrderService orderService;
+    //  final OfferService offerService;
     //  private final OrderDao orderDao;
 //    private final MainServiceDao mainServiceDao;
     //   private final SubServiceDao subServices;
@@ -118,14 +111,15 @@ public class CustomerService {
             customerDao.save(customer);
         }
     }
-public void updateCustomer(Customer customer){
-    Customer customer1 = getCustomerByEmail(customer.getEmail());
-    if(customer1!=null){
-        customerDao.save(customer1);
-    }else {
-        throw  new CustomerNotExistException();
+
+    public void updateCustomer(Customer customer) {
+        Customer customer1 = getCustomerByEmail(customer.getEmail());
+        if (customer1 != null) {
+            customerDao.save(customer1);
+        } else {
+            throw new CustomerNotExistException();
+        }
     }
-}
    /* public void saveOrder(OrderDto orderDto, String email) {
         orderService.saveOrder(orderDto, email);
     }

@@ -1,16 +1,15 @@
 package ir.maktab.data.model;
 
-import ir.maktab.data.enums.UserState;
+import ir.maktab.data.enums.UserType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -28,7 +27,8 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date registerDate;
-
+    @Enumerated(EnumType.STRING)
+    private UserType role;
 
     @Override
     public String toString() {

@@ -5,11 +5,9 @@ import ir.maktab.data.dao.SubServiceDao;
 import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.Offer;
-import ir.maktab.data.model.Orders;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.mapper.OfferMapper;
-import ir.maktab.dto.mapper.OrderMapper;
 import ir.maktab.exceptions.InvalidPriceException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +23,12 @@ import java.util.stream.Collectors;
 @Service
 @Data
 public class OfferService {
-     final SubServiceDao subServiceDao;
+    final SubServiceDao subServiceDao;
     final CustomerService customerService;
     final OfferMapper offerMapper;
-     final OrderService orderService;
-     final OfferDao offerDao;
-     final ExpertService expertService;
+    final OrderService orderService;
+    final OfferDao offerDao;
+    final ExpertService expertService;
 
     public List<OfferDto> getListOffers(OrderDto orderDto) {
         List<Offer> listOffers = offerDao.getListOffers(orderDto.getId());
@@ -56,14 +54,14 @@ public class OfferService {
 
     @Transactional
     public void addOfferToOrder(String email, OfferDto offerDto) {
-        Expert expert =expertService.getExpertByEmail(email);
+        Expert expert = expertService.getExpertByEmail(email);
         if (expert != null) {
           /* Optional<Offer> offerOptional=offerDao.getOfferByCondition(orders.getOrderDoingDate(),startTime);
            if(offerOptional.isEmpty()){*/
             List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
             if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(offerDto.getOrderDto().getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
             ).findFirst().isEmpty()) {
-                if (offerDto.getOfferPrice() >=offerDto.getOrderDto().getSubServiceDto().getBasePrice()) {
+                if (offerDto.getOfferPrice() >= offerDto.getOrderDto().getSubServiceDto().getBasePrice()) {
                     offerDto.setExpertDto(expertService.expertMapper.toDto(expert));
                     Offer offer = offerMapper.toEntity(offerDto);
                     offerDao.save(offer);

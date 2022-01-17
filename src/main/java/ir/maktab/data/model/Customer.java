@@ -1,11 +1,11 @@
 package ir.maktab.data.model;
 
 import ir.maktab.data.enums.UserState;
+import ir.maktab.data.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.*;
@@ -17,18 +17,19 @@ import java.util.*;
 public class Customer extends User {
     @OneToMany(mappedBy = "customer")
     private List<Orders> orders = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Address> addresses = new HashSet<>();
     private double credit;
     @Enumerated(EnumType.STRING)
     private UserState state;
+
     @Builder
-    public Customer(Integer id, String firstName, String lastName, String email, String password, UserState state, Date registerDate, double credit, List<Orders> orders, Set<Address> addresses) {
-        super(id, firstName, lastName, email, password, registerDate);
+    public Customer(Integer id, String firstName, String lastName, String email, String password, UserState state, Date registerDate, double credit, List<Orders> orders, Set<Address> addresses, UserType role) {
+        super(id, firstName, lastName, email, password, registerDate, role);
         this.orders = orders;
         this.addresses = addresses;
-        this.credit=credit;
-        this.state=state;
+        this.credit = credit;
+        this.state = state;
     }
 /*  public static final class CustomerBuilder {
         private List<Orders> orders = new ArrayList<>();

@@ -8,7 +8,6 @@ import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.model.*;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
-import ir.maktab.dto.SubServiceDto;
 import ir.maktab.dto.mapper.CustomerMapper;
 import ir.maktab.dto.mapper.OrderMapper;
 import ir.maktab.exceptions.CreditNotEnoughException;
@@ -163,10 +162,9 @@ public class OrderService {
     @Transactional
     public int getScoreOrderForExpert(int orderId) {
         Optional<Orders> order = orderDao.findById(orderId);
-        if(order.isPresent()){
+        if (order.isPresent()) {
             return order.get().getCommend().getScore();
-        }
-        else {
+        } else {
             throw new OrderNotFoundException();
         }
     }

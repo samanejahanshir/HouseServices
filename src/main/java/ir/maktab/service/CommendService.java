@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 public class CommendService {
     final CommendDao commendDao;
 
-    public void saveCommend(Commend commend){
+    public void saveCommend(Commend commend) {
         commendDao.save(commend);
     }
 
-    public int getScoreCommend(){
-        return  0;
+    public int getScoreCommend() {
+        return 0;
     }
 }
