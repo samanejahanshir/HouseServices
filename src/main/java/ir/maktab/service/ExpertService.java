@@ -111,7 +111,11 @@ public class ExpertService {
         Optional<SubServices> subServicesOptional = subServiceDao.findByName(subService);
         if (subServicesOptional.isPresent() && expert != null) {
             SubServices subServices = subServicesOptional.get();
-            expert.getServices().add(subServices);
+            if(expert.getServices()!=null) {
+                expert.getServices().add(subServices);
+            }else{
+                expert.setServices(List.of(subServices));
+            }
             expertDao.save(expert);
         } else {
             throw new SubServiceNotFoundException();

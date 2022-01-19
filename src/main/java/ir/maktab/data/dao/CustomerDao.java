@@ -35,7 +35,7 @@ public interface CustomerDao extends JpaRepository<Customer, Integer> {
     @Query(value = "update Customer set credit=:amount where id=:id")
     int updateCredit(@Param("id") int customerId, @Param("amount") double amount);*/
 
-    @Query(value = "from Customer c join c.addresses where c.email=:email")
+    @Query(value = "from Customer c  where c.email=:email")
     Optional<Customer> getCustomerByEmail(@Param("email") String email);
 
     List<Customer> findByStateEquals(UserState state);

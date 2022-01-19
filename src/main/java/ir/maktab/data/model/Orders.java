@@ -27,7 +27,7 @@ public class Orders {
     @Temporal(TemporalType.DATE)
     private Date orderDoingDate;
     private int orderDoingTime;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Address address;
     @Enumerated(EnumType.STRING)
     private OrderState state;

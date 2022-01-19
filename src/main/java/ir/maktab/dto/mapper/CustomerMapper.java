@@ -17,7 +17,7 @@ public class CustomerMapper {
                 .registerDate(customer.getRegisterDate())
                 .credit(customer.getCredit())
                 .state(customer.getState())
-                .addresses(customer.getAddresses())
+             //   .addresses(customer.getAddresses())
                 .role(customer.getRole())
                 .build();
     }
@@ -29,7 +29,7 @@ public class CustomerMapper {
                 .email(customerDto.getEmail())
                 .registerDate(customerDto.getRegisterDate())
                 .credit(customerDto.getCredit())
-                .addresses(customerDto.getAddresses())
+              //  .addresses(customerDto.getAddresses())
                 .role(customerDto.getRole())
                 .build();
     }

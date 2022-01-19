@@ -47,14 +47,13 @@ static ExpertService expertService;
         SubServiceDto subServiceDto = SubServiceDto.builder()
                 .name("bargh").build();
         orderDto.setSubServiceDto(subServiceDto);
-        Customer customer = customerService.getCustomerByEmail("zahra@email.com");
         Address address = Address.builder()
                 .city("ghom")
                 .postalCode("3424")
                 .tag("34")
                 .street("yas")
                 .build();
-        orderDto.setAddress(customer.getAddresses().stream().filter(address1 -> address1.equals(address)).findFirst().get());
+        orderDto.setAddress(address);
         orderService.saveOrder(orderDto, "zahra@email.com");
     }
 

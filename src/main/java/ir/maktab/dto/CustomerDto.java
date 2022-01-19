@@ -29,7 +29,7 @@ public class CustomerDto {
     private Date registerDate;
     private double credit;
     private UserState state;
-    private Set<Address> addresses=new HashSet<>();
+   // private Set<Address> addresses=new HashSet<>();
     private UserType role;
 
 }

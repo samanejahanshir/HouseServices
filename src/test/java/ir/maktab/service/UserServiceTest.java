@@ -27,5 +27,4 @@ public class UserServiceTest {
         System.out.println(userByCondition.size());
         userByCondition.forEach(System.out::println);
     }
-
 }

@@ -25,6 +25,7 @@ ir\maktab\dto\OfferDto.class
 ir\maktab\exceptions\InvalidFormatPasswordException.class
 ir\maktab\exceptions\InvalidPriceException.class
 ir\maktab\dto\mapper\CustomerMapper.class
+ir\maktab\dto\ConditionSearch$ConditionSearchBuilder.class
 ir\maktab\service\OfferService.class
 ir\maktab\dto\OrderDto$OrderDtoBuilder.class
 ir\maktab\dto\CustomerDto.class
@@ -42,12 +43,14 @@ ir\maktab\data\dao\UserDao.class
 ir\maktab\service\SubServicesService.class
 ir\maktab\service\CustomerService.class
 ir\maktab\data\model\Customer.class
+ir\maktab\exceptions\UserNotFoundException.class
 ir\maktab\data\dao\OrderDao.class
 ir\maktab\dto\mapper\OfferMapper.class
 ir\maktab\data\dao\CommendDao.class
 ir\maktab\data\dao\OfferDao.class
 ir\maktab\data\enums\UserState.class
 ir\maktab\data\model\SubServices.class
+ir\maktab\dto\ConditionSearch.class
 ir\maktab\dto\mapper\SubServiceMapper.class
 ir\maktab\data\model\Offer$OfferBuilder.class
 ir\maktab\dto\OfferDto$OfferDtoBuilder.class

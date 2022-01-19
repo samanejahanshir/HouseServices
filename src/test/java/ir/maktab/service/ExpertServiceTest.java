@@ -53,7 +53,7 @@ public class ExpertServiceTest {
                 .password("a1234S454")
                 .email("ali@email.com")
                 .build();
-        expert.setServices(List.of(subServices));
+       // expert.setServices(List.of(subServices));
         expert.setImage(imageFile);
         expertService.saveExpert(expert);
     }
@@ -97,7 +97,7 @@ public class ExpertServiceTest {
 
     @Test
     void addSubServicesTOExpertLiseTest() {
-        expertService.addSubServiceToExpertList("farhad@email.com", "bargh");
+        expertService.addSubServiceToExpertList("ali@email.com", "shosteshuye nama sakhteman");
     }
 
     @Test

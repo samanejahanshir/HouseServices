@@ -94,7 +94,7 @@ public class HomeController {
 
     @RequestMapping(value = "/SignUpCustomer", method = RequestMethod.POST)
     public String customerRegister(@ModelAttribute("customerDto") CustomerDto customerDto, @ModelAttribute("address") Address address, Model model, @RequestParam("password") String password) {
-        customerDto.setAddresses(Set.of(address));
+       // customerDto.setAddresses(Set.of(address));
         userService.saveCustomer(customerDto, password);
         return "redirect:index";
     }
@@ -103,7 +103,7 @@ public class HomeController {
     public String saveUser(@ModelAttribute("role_user") String role_user, @ModelAttribute("userDto") UserDto userDto, @ModelAttribute("address") Address address, @RequestParam("password") String password, @RequestParam("image") byte[] image, Model model) {
         if (role_user.equals("customer")) {
             CustomerDto customerDto = userMapper.toCustomerDto(userDto);
-            customerDto.setAddresses(Set.of(address));
+           // customerDto.setAddresses(Set.of(address));
             userService.saveCustomer(customerDto, password);
             model.addAttribute("customerDto", customerDto);
         }

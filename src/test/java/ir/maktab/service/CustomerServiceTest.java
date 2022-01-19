@@ -21,12 +21,12 @@ public class CustomerServiceTest {
 
     @Test
     void getCustomer_SaveToDb() {
-        Address address = Address.builder()
+       /* Address address = Address.builder()
                 .city("ghom")
                 .street("yas")
                 .postalCode("3424")
                 .tag("34")
-                .build();
+                .build();*/
         Customer customer = Customer.builder()
                 .firstName("zahra")
                 .lastName("samaii")
@@ -34,7 +34,7 @@ public class CustomerServiceTest {
                 .email("zahra@email.com")
                 .build();
         //  customer.getAddresses().add(address);
-        customer.setAddresses(Set.of(address));
+      //  customer.setAddresses(Set.of(address));
         customerService.saveCustomer(customer);
     }
 
@@ -75,7 +75,7 @@ public class CustomerServiceTest {
         System.out.println(customerService.getListOffersSortByScoreOrPrice(orders, true, true));
     }*/
 
-    @Test
+   /* @Test
     void addAddressToListAddressTest() {
         Address address = Address.builder()
                 .tag("25")
@@ -84,5 +84,5 @@ public class CustomerServiceTest {
                 .city("tehran")
                 .build();
         customerService.addAddressToListAddresses(address, "samane@email.com");
-    }
+    }*/
 }

@@ -17,17 +17,17 @@ import java.util.*;
 public class Customer extends User {
     @OneToMany(mappedBy = "customer")
     private List<Orders> orders = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Address> addresses = new HashSet<>();
+   /* @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Address> addresses = new HashSet<>();*/
     private double credit;
     @Enumerated(EnumType.STRING)
     private UserState state;
 
     @Builder
-    public Customer(Integer id, String firstName, String lastName, String email, String password, UserState state, Date registerDate, double credit, List<Orders> orders, Set<Address> addresses, UserType role) {
+    public Customer(Integer id, String firstName, String lastName, String email, String password, UserState state, Date registerDate, double credit, List<Orders> orders, UserType role) {
         super(id, firstName, lastName, email, password, registerDate, role);
         this.orders = orders;
-        this.addresses = addresses;
+       // this.addresses = addresses;
         this.credit = credit;
         this.state = state;
     }

@@ -36,12 +36,14 @@ public class UserService {
     public void saveExpert(ExpertDto expertDto, String password) {
         Expert expert = expertMapper.toEntity(expertDto);
         expert.setPassword(password);
+        expert.setRole(UserType.EXPERT);
         expertService.saveExpert(expert);
     }
 
     public void saveCustomer(CustomerDto customerDto, String password) {
         Customer customer = customerMapper.toEntity(customerDto);
         customer.setPassword(password);
+        customer.setRole(UserType.CUSTOMER);
         customerService.saveCustomer(customer);
     }
 

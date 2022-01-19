@@ -42,16 +42,16 @@ public class CustomerService {
         }
     }
 
-    public void updateAddress(CustomerDto customerDto, Address address) {
+   /* public void updateAddress(CustomerDto customerDto, Address address) {
         Optional<Customer> customerOptional = customerDao.findByEmail(customerDto.getEmail());
         if (customerOptional.isPresent()) {
             Customer customer = customerOptional.get();
-            customer.getAddresses().add(address);
+          //  customer.getAddresses().add(address);
             customerDao.save(customer);
         } else {
             throw new CustomerNotExistException();
         }
-    }
+    }*/
 
     public CustomerDto findByEmailAndPass(String email, String password) {
         Optional<Customer> customerOptional = customerDao.findByEmailAndPassword(email, password);
@@ -93,7 +93,7 @@ public class CustomerService {
         }
     }
 
-    public Customer getCustomerByEmailWithFetchJoinAddress(String email) {
+   /* public Customer getCustomerByEmailWithFetchJoinAddress(String email) {
         Optional<Customer> customer = customerDao.getCustomerByEmail(email);
         if (customer.isPresent()) {
             return customer.get();
@@ -101,16 +101,16 @@ public class CustomerService {
             throw new RuntimeException("this customer by this email not exist.");
         }
     }
-
-    @Transactional
+*/
+  /*  @Transactional
     public void addAddressToListAddresses(Address address, String email) {
         Optional<Customer> customerOptional = customerDao.getCustomerByEmail(email);
         if (customerOptional.isPresent()) {
             Customer customer = customerOptional.get();
-            customer.getAddresses().add(address);
+           // customer.getAddresses().add(address);
             customerDao.save(customer);
         }
-    }
+    }*/
 
     public void updateCustomer(Customer customer) {
         Customer customer1 = getCustomerByEmail(customer.getEmail());
