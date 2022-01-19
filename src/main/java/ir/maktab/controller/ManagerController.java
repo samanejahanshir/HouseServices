@@ -1,6 +1,7 @@
 package ir.maktab.controller;
 
 import ir.maktab.dto.MainServiceDto;
+import ir.maktab.dto.SubServiceDto;
 import ir.maktab.dto.UserDto;
 import ir.maktab.service.ManagerService;
 import ir.maktab.service.UserService;
@@ -53,5 +54,26 @@ public class ManagerController {
           model.addAttribute("message","save saccessfully");
       }
       return "AddMainServices";
+    }
+    @RequestMapping("/addSubService")
+    public String addSubService(Model model){
+      //  model.addAttribute("message","");
+        model.addAttribute("subServiceDto", new SubServiceDto());
+        return "AddSubService";
+    }
+
+    @RequestMapping(value = "/saveSubService", method = RequestMethod.POST)
+    public String saveSubService(@ModelAttribute("subServiceDto")SubServiceDto subServiceDto,Model model) {
+        boolean error=false;
+        try {
+            managerService.saveSubService(subServiceDto);
+        }catch (RuntimeException e){
+            model.addAttribute("message",e.getMessage());
+            error=true;
+        }
+        if(!error){
+            model.addAttribute("message","save saccessfully");
+        }
+        return "AddSubService";
     }
 }
