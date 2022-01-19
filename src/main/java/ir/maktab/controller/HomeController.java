@@ -108,7 +108,7 @@ public class HomeController {
                 }
             } else {
                 if (managerService.getManagerByNameAndPass(email, password) != null) {
-                    return "Management";
+                    return "managerPage";
                 }
             }
         } catch (RuntimeException e) {
