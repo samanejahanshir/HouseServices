@@ -23,17 +23,6 @@
         <br/>
         password: <input type="password" name="password"/>
         <br/>
-        <form:form method="post" action="/SignUpCustomer" modelAttribute="address">
-            city: <form:input type="text" path="city"/>
-            <br/>
-            street: <form:input type="text" path="street"/>
-            <br/>
-            postal code: <form:input type="text" path="postalCode"/>
-            <br/>
-            tag: <form:input type="text" path="tag"/>
-            <br/>
-        </form:form>
-        <br/>
         <input type="submit" value="register"/>
     </form:form>
 </div>

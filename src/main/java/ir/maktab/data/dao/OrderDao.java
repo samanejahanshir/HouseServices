@@ -1,6 +1,7 @@
 package ir.maktab.data.dao;
 
 import ir.maktab.data.enums.OrderState;
+import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.Offer;
 import ir.maktab.data.model.Orders;
 import org.springframework.data.domain.Sort;
@@ -19,8 +20,10 @@ public interface OrderDao extends JpaRepository<Orders, Integer> {
     List<Orders> getListOrdersOfSubServiceExpert(@Param("list") List<String> subServices);
 
 
-    @Query(value = "from Orders o where o.expert.id=:id")
-    List<Orders> getListOrdersForExpert(@Param("id") int expertId);
+  /*  @Query(value = "from Orders o where o.expert.id=:id")
+    List<Orders> getListOrdersForExpert(@Param("id") int expertId);*/
+
+    List<Orders> findByExpertEquals(Expert expert);
 
     @Modifying
     @Query(value = "update Orders o set o.state=:state where o.id=:id")

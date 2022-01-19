@@ -128,15 +128,22 @@ public class OrderService {
     @Transactional
     public List<OrderDto> getListOrdersOfSubServiceExpert(String email) {
         Expert expert = expertService.getExpertByEmail(email);
-        List<String> subServiceNames = expert.getServices().stream().map(SubServices::getName).collect(Collectors.toList());
-        List<Orders> orders = orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
-        return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+        if(expert!=null) {
+            List<String> subServiceNames = expert.getServices().stream().map(SubServices::getName).collect(Collectors.toList());
+             List<Orders> orders = orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
+          //  List<Orders> orders = orderDao.findByStateEqualsOOrStateEqualsAndSubServicesIn(OrderState.WAIT_SELECT_EXPERT, OrderState.WAIT_OFFER_EXPERTS, expert.getServices());
+            return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+        }else {
+            throw  new ExpertNotExistException();
+        }
     }
 
     public List<OrderDto> getListOrdersForExpert(String email) {
         Expert expert = expertService.getExpertByEmail(email);
         if (expert != null) {
-            List<Orders> orders = orderDao.getListOrdersForExpert(expert.getId());
+            //List<Orders> orders = orderDao.getListOrdersForExpert(expert.getId());
+            List<Orders> orders = orderDao.findByExpertEquals(expert);
+
             return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
         } else {
             throw new ExpertNotExistException();

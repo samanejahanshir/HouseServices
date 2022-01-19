@@ -116,7 +116,7 @@ public class ExpertServiceTest {
             e.printStackTrace();
         }
         OfferDto offerDto = OfferDto.builder()
-                .offerPrice(3000)
+                .offerPrice(3200)
                 .durationTime(2)
                 .startTime(14)
                 .build();
@@ -145,10 +145,10 @@ public class ExpertServiceTest {
                 .durationTime(2)
                 .startTime(18)
                 .build();
-        List<OrderDto> orders = orderService.getListOrdersOfSubServiceExpert("farhad@email.com");
+        List<OrderDto> orders = orderService.getListOrdersOfSubServiceExpert("ali@email.com");
         if (!orders.isEmpty()) {
-            offerDto.setOrderDto(orders.get(1));
-            expertService.addOfferToOrder("farhad@email.com", offerDto);
+            offerDto.setOrderDto(orders.get(0));
+            expertService.addOfferToOrder("ali@email.com", offerDto);
 
         }
     }

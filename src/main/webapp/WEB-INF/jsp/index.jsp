@@ -35,13 +35,8 @@
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="/Signin/expert">Sign in expert</a>
                 <a class="dropdown-item" href="/Signin/customer">Sign in customer</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Management</a>
-            <div class="dropdown-menu">
                 <a class="dropdown-item" href="/Signin/manager">Sign in manager</a>
-                <a class="dropdown-item" href="/Signup/manager">Sign up manager</a>
+
             </div>
         </li>
     </ul>

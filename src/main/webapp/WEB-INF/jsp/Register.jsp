@@ -17,9 +17,8 @@
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
 <body style="background-color: #c3e7f8">
-<%--
 <div class="container">
-    <form:form method="post" action="/SignUp" modelAttribute="userDto">
+    <form:form method="post" action="/SignUpUser" modelAttribute="userDto">
     first name: <form:input type="text" path="firstName"/>
     <br/>
     last name: <form:input type="text" path="lastName"/>
@@ -29,35 +28,17 @@
     password: <input type="password" name="password"/>
     <br/>
     <c:if test="${role_user=='expert'}">
-        image : <input type="file" name="image"/>
+        image : <input type="file" name="image" id="image"/>
+        <% request.setAttribute("image","image");%>
+
     </c:if>
     <br/>
-    <c:if test="${role_user=='customer'}">
-    Address :
-    <br/>
-    <form:form  method="post" action="/SignUp" modelAttribute="address">
-        city: <form:input type="text" path="city"/>
-        <br/>
-        street: <form:input type="text" path="street"/>
-        <br/>
-        postal code: <form:input type="text" path="postalCode"/>
-        <br/>
-        tag: <form:input type="text" path="tag"/>
-        <br/>
-    </form:form>
+    <form:hidden path="role" value="${role_user.toUpperCase()}"/>
 </div>
-</c:if>
 
 <input type="submit" value="register"/>
 </form:form>
-</div>--%>
-<form:form  method="post" action="/SignUpManager" modelAttribute="manager">
-    Email: <form:input type="email" path="userName"/>
-    <br/>
-    Password: <form:input type="password" path="password"/>
-    <br/>
-   <input type="submit" value="register">
-</form:form>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

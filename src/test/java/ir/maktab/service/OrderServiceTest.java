@@ -94,7 +94,7 @@ static ExpertService expertService;
     }*/
     @Test
     void getListOrdersThatNotFinishedTest() {
-        System.out.println(orderService.getListOrdersThatNotFinished("sama@email.com"));
+        System.out.println(orderService.getListOrdersThatNotFinished("zahra@email.com"));
     }
 
     @Test
