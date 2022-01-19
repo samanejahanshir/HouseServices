@@ -1,11 +1,31 @@
 package ir.maktab.service;
 
-public class UserServiceTest {
+import ir.maktab.config.SpringConfig;
+import ir.maktab.dto.ConditionSearch;
+import ir.maktab.dto.UserDto;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-   /* @Test
-    void getUser_ByEmail() {
-        UserService userService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(UserService.class);
-        User user = userService.getUserByEmail("reza@email.com", "rg456H543");
-        Assertions.assertNotNull(user);
-    }*/
+import java.util.List;
+
+public class UserServiceTest {
+    static UserService userService;
+
+    @BeforeAll
+    static void init() {
+        userService = new AnnotationConfigApplicationContext(SpringConfig.class).getBean(UserService.class);
+
+    }
+
+    @Test
+    void getUsersByCondition() {
+        ConditionSearch condition = ConditionSearch.builder()
+                .firstName("ali")
+                .build();
+        List<UserDto> userByCondition = userService.getUserByCondition(condition);
+        System.out.println(userByCondition.size());
+        userByCondition.forEach(System.out::println);
+    }
+
 }

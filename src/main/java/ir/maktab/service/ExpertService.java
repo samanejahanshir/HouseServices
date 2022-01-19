@@ -3,10 +3,8 @@ package ir.maktab.service;
 import ir.maktab.data.dao.*;
 import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.enums.OrderState;
-import ir.maktab.data.model.Expert;
-import ir.maktab.data.model.Offer;
-import ir.maktab.data.model.Orders;
-import ir.maktab.data.model.SubServices;
+import ir.maktab.data.model.*;
+import ir.maktab.dto.ConditionSearch;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.mapper.ExpertMapper;
@@ -20,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -162,5 +161,13 @@ public class ExpertService {
         orderDao.updateOrderState(idOrder, state);
     }
 
+    public List<ExpertDto> getExpertsByCondition(ConditionSearch condition){
+        List<Expert> userList = expertDao.findAll(ExpertDao.selectByCondition(condition));
+        if (!(userList.isEmpty())) {
+            return userList.stream().map(expertMapper::toDto).collect(Collectors.toList());
+        } else {
+            throw new UserNotFoundException();
+        }
+    }
 
 }

@@ -12,24 +12,24 @@
 <head>
     <title>Title</title>
 </head>
-<body>
+<body style="background-color: #c3e7f8">
 <div class="container" >
     <form:form method="post" action="/SignUpExpert" modelAttribute="expertDto">
     first name: <form:input type="text" path="firstName"/>
-        <form:errors path="firstName" cssStyle="color: #ff0000;"/>
+        <form:errors path="firstName" />
     <br/>
     last name: <form:input type="text" path="lastName"/>
-        <form:errors path="lastName" cssStyle="color: #ff0000;"/>
+        <form:errors path="lastName"/>
 
         <br/>
     email: <form:input type="email" path="email"/>
-        <form:errors path="email" cssStyle="color: #ff0000;"/>
+        <form:errors path="email"/>
 
         <br/>
     password: <input type="password" name="password" id="password"/>
         <br/>
     image : <form:input type="file" path="image"/>
-        <form:errors path="image" cssStyle="color: #ff0000;"/>
+        <form:errors path="image" />
 
     <br/>
     <input type="submit" value="register"/>

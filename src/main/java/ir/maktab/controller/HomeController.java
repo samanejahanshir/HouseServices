@@ -87,7 +87,6 @@ public class HomeController {
         if (result.hasErrors()) {
             return "ExpertRegister";
         } else {
-            model.addAttribute("expertDto", expertDto);
             userService.saveExpert(expertDto, password);
             return "redirect:index";
         }

@@ -12,23 +12,8 @@
 <head>
     <title>Title</title>
 </head>
-<body>
+<body style="background-color: #c3e7f8">
 <p></p>
-<div class="container">
-<form:form method="post" action="/info" modelAttribute="expertDto">
-    first name: <form:input type="text" path="firstName"/>
-    <br/>
-    last name: <form:input type="text" path="lastName"/>
-    <br/>
-    email: <form:input type="email" path="email"/>
-    <br/>
-    password: <input type="password" name="password"/>
-    <br/>
-        image : <form:input type="file" path="image"/>
 
-    <br/>
-    <input type="submit" value="register"/>
-
-</form:form>
 </body>
 </html>

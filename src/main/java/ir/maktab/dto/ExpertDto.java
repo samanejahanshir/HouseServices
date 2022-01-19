@@ -30,7 +30,6 @@ public class ExpertDto {
     @Size(min = 3,message = "length should be bigger than 3")
     private String lastName;
     @NotNull(message = "email can't empty")
-    @NotEmpty
     private String email;
     private Date registerDate;
     private int score;

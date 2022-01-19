@@ -20,20 +20,20 @@ public interface CustomerDao extends JpaRepository<Customer, Integer> {
 
     Optional<Customer> findByEmailAndPassword(String email, String password);
 
-    @Transactional
+   /* @Transactional
     @Modifying
     @Query(value = "update Customer set password=:password where email=:email")
-    int updatePassword(@Param("email") String email, @Param("password") String newPassword);
+    int updatePassword(@Param("email") String email, @Param("password") String newPassword);*/
 
     Optional<Customer> findByEmail(String email);
 
-//TODO delete توی order  گذاشتم
+/*//TODO delete توی order  گذاشتم
     @Query(value = "select o from  Customer c inner join c.orders o  where o.customer.id=:id")
-    List<Orders> getAllOrders(@Param("id") int customerId);
+    List<Orders> getAllOrders(@Param("id") int customerId);*/
 
-    @Modifying
+   /* @Modifying
     @Query(value = "update Customer set credit=:amount where id=:id")
-    int updateCredit(@Param("id") int customerId, @Param("amount") double amount);
+    int updateCredit(@Param("id") int customerId, @Param("amount") double amount);*/
 
     @Query(value = "from Customer c join c.addresses where c.email=:email")
     Optional<Customer> getCustomerByEmail(@Param("email") String email);

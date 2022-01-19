@@ -12,7 +12,7 @@
 <head>
     <title>Title</title>
 </head>
-<body>
+<body style="background-color: #c3e7f8">
 <div class="container">
     <form:form method="post" action="/SignUpCustomer" modelAttribute="customerDto">
         first name: <form:input type="text" path="firstName"/>

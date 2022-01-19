@@ -5,9 +5,7 @@ import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.Orders;
 import ir.maktab.data.model.SubServices;
-import ir.maktab.dto.ExpertDto;
-import ir.maktab.dto.OfferDto;
-import ir.maktab.dto.OrderDto;
+import ir.maktab.dto.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -160,5 +158,14 @@ public class ExpertServiceTest {
         expertService.updateOrderState(2, OrderState.DONE);
     }
 
-
+    @Test
+    void getUsersByCondition_BySubServiceName() {
+        ConditionSearch condition = ConditionSearch.builder()
+                .subServiceName("nama kari")
+                .minScore(3)
+                .build();
+        List<ExpertDto> userByCondition = expertService.getExpertsByCondition(condition);
+        System.out.println(userByCondition.size());
+        userByCondition.forEach(System.out::println);
+    }
 }
