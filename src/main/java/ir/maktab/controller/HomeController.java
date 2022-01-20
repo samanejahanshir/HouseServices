@@ -8,16 +8,14 @@ import ir.maktab.service.CustomerService;
 import ir.maktab.service.ExpertService;
 import ir.maktab.service.ManagerService;
 import ir.maktab.service.UserService;
-import ir.maktab.service.validation.CustomerValidator;
-import ir.maktab.service.validation.ExpertValidator;
+import ir.maktab.service.validation.OnRegister;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Controller
@@ -27,8 +25,7 @@ public class HomeController {
     final ManagerService managerService;
     final CustomerService customerService;
     final ExpertService expertService;
-final ExpertValidator expertValidator;
-final CustomerValidator customerValidator;
+
     @RequestMapping("/index")
     public String displayHome() {
         return "index";
@@ -58,14 +55,12 @@ final CustomerValidator customerValidator;
 
 
     @RequestMapping(value = "/SignUpExpert", method = RequestMethod.POST)
-    public String expertRegister(@ModelAttribute("expertDto") ExpertDto expertDto, Model model, @RequestParam("password") String password, BindingResult result, HttpSession session) {
+    public String expertRegister(@ModelAttribute("expertDto") @Validated(OnRegister.class)ExpertDto expertDto, Model model, @RequestParam("password") String password, HttpSession session) {
         model.addAttribute("expertDto", expertDto);
         String message="";
         model.addAttribute("message",message);
-        expertValidator.validate(expertDto,result);
-        if (result.hasErrors()) {
-            return "ExpertRegister";
-        } else {
+       // expertValidator.validate(expertDto,result);
+
             try {
                 userService.saveExpert(expertDto, password);
                 session.setAttribute("email",expertDto.getEmail());
@@ -73,7 +68,7 @@ final CustomerValidator customerValidator;
                 message=e.getMessage();
             }
             return "ExpertPage";
-        }
+
     }
 
     @RequestMapping(value = "/SignUpCustomer", method = RequestMethod.POST)

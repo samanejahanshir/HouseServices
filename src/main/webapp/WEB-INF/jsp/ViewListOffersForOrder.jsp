@@ -10,11 +10,15 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Offers</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </head>
 <body>
 <P>${message}</P>
-<table border="2" width="70%" cellpadding="2" bgcolor="#f8f8ff">
+<div class="container m-1">
+<table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>createDate</th><th>price</th><th>Duration time</th><th>Start time</th><th>expert</th><th>state</th><th>select offer</th></tr>
     <c:forEach var="offer" items="${listOffers}" >
         <tr>
@@ -30,5 +34,6 @@
         </tr>
     </c:forEach>
 </table>
+</div>
 </body>
 </html>

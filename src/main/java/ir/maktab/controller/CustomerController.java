@@ -6,6 +6,7 @@ import ir.maktab.dto.UserDto;
 import ir.maktab.service.CustomerService;
 import ir.maktab.service.OfferService;
 import ir.maktab.service.OrderService;
+import ir.maktab.service.SubServicesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ public class CustomerController {
     final CustomerService customerService;
     final OrderService orderService;
     final OfferService offerService;
+    final SubServicesService subService;
 
     @RequestMapping("/allOrders")
     public String displayListOrders(Model model, HttpSession session) {
@@ -54,6 +56,12 @@ public class CustomerController {
         return "ViewListOffersForOrder";
     }
 
+    @RequestMapping("/viewListServices")
+    public String getListMainService(Model model, HttpSession session) {
+        model.addAttribute("role_user", "customer");
+        return "ViewListMainServiceManager";
+    }
+
     /////TODO click on subServiceDto on addnew order ......
     @RequestMapping("/addNewOrder")
     public String addNewOrder(Model model, HttpSession session) {
@@ -70,7 +78,7 @@ public class CustomerController {
             OrderDto orderDto = orderService.getOrderById(offerDto.getOrderDto().getId());
             List<OfferDto> listOffers = offerService.getListOffers(orderDto);
             model.addAttribute("listOffers", listOffers);
-            model.addAttribute("message","select offer successfuly");
+            model.addAttribute("message", "select offer successfuly");
         } catch (RuntimeException e) {
             model.addAttribute("message", e.getMessage());
         }

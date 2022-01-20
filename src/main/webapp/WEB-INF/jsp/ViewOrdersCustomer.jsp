@@ -10,10 +10,14 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Orders</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </head>
 <body>
-<table border="2" width="70%" cellpadding="2" bgcolor="#f8f8ff">
+<div class="container m-1">
+<table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>DoingDate</th><th>DoingTime</th><th>RegisterDate</th><th>Price</th><th>state</th><th>sub service</th></tr>
     <c:forEach var="order" items="${listOrdersDto}" >
         <tr>
@@ -24,10 +28,12 @@
             <td>${order.proposedPrice}</td>
             <td>${order.state}</td>
             <td>${order.subServiceDto.name}</td>
+            <c:if test="${order.state.equals('WAIT_OFFER_EXPERTS')}">
             <td><a href="/customer/viewListOffers/${order.id}">view Offers</a></td>
-
+            </c:if>
         </tr>
     </c:forEach>
 </table>
+</div>
 </body>
 </html>

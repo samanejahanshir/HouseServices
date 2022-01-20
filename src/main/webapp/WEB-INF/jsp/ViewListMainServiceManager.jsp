@@ -10,18 +10,25 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>MainService</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </head>
 <body>
-<table border="2" width="70%" cellpadding="2" bgcolor="#f8f8ff">
+<div class="container m-1">
+<table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>FirstName</th><th>SubServices</th></tr>
     <c:forEach var="service" items="${listMainServices}" >
         <tr>
             <td>${service.groupName}</td>
             <td><a href="/manager/viewListSubServices/${service.groupName}">view SubServices</a></td>
-
+<c:if test="${role_user.equals('customer')}">
+    <td><a></a></td>
+</c:if>
         </tr>
     </c:forEach>
 </table>
+</div>
 </body>
 </html>

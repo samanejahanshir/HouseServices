@@ -10,10 +10,14 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>SubService</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </head>
 <body>
-<table border="2" width="70%" cellpadding="2" bgcolor="#f8f8ff">
+<div class="container m-1">
+<table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>Name</th><th>Price</th><th>Description</th></tr>
     <c:forEach var="service" items="${listSubServices}" >
         <tr>
@@ -24,5 +28,6 @@
         </tr>
     </c:forEach>
 </table>
+</div>
 </body>
 </html>

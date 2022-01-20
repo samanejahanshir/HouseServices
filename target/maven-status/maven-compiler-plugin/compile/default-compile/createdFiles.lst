@@ -3,9 +3,11 @@ ir\maktab\dto\SubServiceDto.class
 ir\maktab\data\model\MainServices$MainServicesBuilder.class
 ir\maktab\data\enums\UserType.class
 ir\maktab\data\enums\OrderState.class
+ir\maktab\service\validation\OnRegister.class
 ir\maktab\config\SpringConfig.class
 ir\maktab\data\model\Customer$CustomerBuilder.class
 ir\maktab\dto\CustomerDto$CustomerDtoBuilder.class
+ir\maktab\exceptions\OfferNotFound.class
 ir\maktab\exceptions\OfferConflictByOtherException.class
 ir\maktab\data\dao\SubServiceDao.class
 ir\maktab\exceptions\SubServiceDuplicateException.class
@@ -23,6 +25,7 @@ ir\maktab\exceptions\MainServiceNotFoundException.class
 ir\maktab\service\ManagerService.class
 ir\maktab\dto\OfferDto.class
 ir\maktab\exceptions\InvalidFormatPasswordException.class
+ir\maktab\service\validation\OnLogin.class
 ir\maktab\exceptions\InvalidPriceException.class
 ir\maktab\dto\mapper\CustomerMapper.class
 ir\maktab\dto\ConditionSearch$ConditionSearchBuilder.class
@@ -30,7 +33,6 @@ ir\maktab\service\OfferService.class
 ir\maktab\dto\OrderDto$OrderDtoBuilder.class
 ir\maktab\dto\CustomerDto.class
 ir\maktab\dto\UserDto.class
-ir\maktab\service\validation\CustomerValidator.class
 ir\maktab\data\dao\CustomerDao.class
 ir\maktab\exceptions\UserByEmailExistException.class
 ir\maktab\dto\MainServiceDto$MainServiceDtoBuilder.class
@@ -63,11 +65,9 @@ ir\maktab\data\model\Orders.class
 ir\maktab\exceptions\InvalidTimeException.class
 ir\maktab\service\CommendService.class
 ir\maktab\data\enums\OfferState.class
-ir\maktab\service\validation\ExpertValidator.class
 ir\maktab\dto\mapper\ExpertMapper.class
 ir\maktab\controller\HomeController.class
 ir\maktab\service\MainServicesService.class
-ir\maktab\service\validation\PasswordValidator.class
 ir\maktab\data\model\Expert$ExpertBuilder.class
 ir\maktab\data\model\Commend.class
 ir\maktab\data\model\SubServices$SubServicesBuilder.class
