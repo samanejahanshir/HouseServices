@@ -16,17 +16,17 @@
 </head>
 <body style="background-color: #c3e7f8">
 <h1>Users List</h1>
-<c:forEach var="user" items="listUsers" >
+<%--<c:forEach var="user" items="listUsers" >
   <ul>
       <li>${user}</li>
   </ul>
 
-</c:forEach>
-<%--<table border="2" width="70%" cellpadding="2" bgcolor="#f8f8ff">
+</c:forEach>--%>
+<table border="2" width="70%" cellpadding="2" bgcolor="#f8f8ff">
     <tr><th>Id</th><th>FirstName</th><th>LastName</th><th>Email</th><th>Role</th><th>RegisterDate</th></tr>
-    <c:forEach var="user" items="listUsers" >
+    <c:forEach var="user" items="${listUsers}" >
         <tr>
-            <td>${user}</td>
+            <td>${user.id}</td>
             <td>${user.firstName}</td>
             <td>${user.lastName}</td>
             <td>${user.email}</td>
@@ -34,7 +34,7 @@
             <td>${user.registerDate}</td>
         </tr>
     </c:forEach>
-</table>--%>
+</table>
 <br/>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

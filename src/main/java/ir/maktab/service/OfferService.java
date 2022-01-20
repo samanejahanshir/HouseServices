@@ -9,6 +9,7 @@ import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.mapper.OfferMapper;
 import ir.maktab.exceptions.InvalidPriceException;
+import ir.maktab.exceptions.OfferNotFound;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -73,6 +75,15 @@ public class OfferService {
             } else {
                 throw new RuntimeException();
             }
+        }
+    }
+
+    public OfferDto findOfferById(int id) {
+        Optional<Offer> offerOptional = offerDao.findById(id);
+        if (offerOptional.isPresent()) {
+            return offerMapper.toDto(offerOptional.get());
+        } else {
+            throw new OfferNotFound();
         }
     }
 }

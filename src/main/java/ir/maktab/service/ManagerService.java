@@ -30,11 +30,12 @@ public class ManagerService {
     private final MainServiceDao mainServiceDao;
     private final ExpertDao expertDao;
     private final UserDao userDao;
-    private final CustomerDao customerDao;
+   // private final CustomerDao customerDao;
     private final SubServiceMapper subServiceMapper;
     private final MainServiceMapper mainServiceMapper;
     private final UserMapper userMapper;
     private final CustomerMapper customerMapper;
+    private final CustomerService customerService;
 
 
     public void saveSubService(SubServiceDto subServiceDto) {
@@ -103,16 +104,15 @@ public class ManagerService {
     }*/
 
     public List<CustomerDto> getListCustomerNoConfirm() {
-        List<Customer> customers = customerDao.findByStateEquals(UserState.NOT_CONFIRMED);
+        List<Customer> customers = customerService.getCustomerDao().findByStateEquals(UserState.NOT_CONFIRMED);
         return customers.stream().map(customerMapper::toDto).collect(Collectors.toList());
     }
 
     public void confirmCustomer(CustomerDto customerDto) {
-        Optional<Customer> customerOptional = customerDao.findByEmail(customerDto.getEmail());
-        if (customerOptional.isPresent()) {
-            Customer customer = customerOptional.get();
+        Customer customer = customerService.getCustomerByEmail(customerDto.getEmail());
+        if (customer!=null) {
             customer.setState(UserState.CONFIRMED);
-            customerDao.save(customer);
+            customerService.getCustomerDao().save(customer);
         } else {
             throw new CustomerNotExistException();
         }

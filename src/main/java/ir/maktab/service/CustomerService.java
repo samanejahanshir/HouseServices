@@ -131,4 +131,13 @@ public class CustomerService {
     public List<OrderDto> getListOrdersThatNotFinished(String email) {
         return orderService.getListOrdersThatNotFinished(email);
     }*/
+    public CustomerDto getCustomerById(int id){
+        Optional<Customer> customer = customerDao.findById(id);
+        if(customer.isPresent()){
+            return customerMapper.toDto(customer.get());
+        }
+        else {
+            throw new CustomerNotExistException();
+        }
+    }
 }

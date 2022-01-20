@@ -1,5 +1,6 @@
 package ir.maktab.controller;
 
+import ir.maktab.data.enums.UserState;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.mapper.UserMapper;
@@ -7,12 +8,15 @@ import ir.maktab.service.CustomerService;
 import ir.maktab.service.ExpertService;
 import ir.maktab.service.ManagerService;
 import ir.maktab.service.UserService;
+import ir.maktab.service.validation.CustomerValidator;
+import ir.maktab.service.validation.ExpertValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -23,7 +27,8 @@ public class HomeController {
     final ManagerService managerService;
     final CustomerService customerService;
     final ExpertService expertService;
-
+final ExpertValidator expertValidator;
+final CustomerValidator customerValidator;
     @RequestMapping("/index")
     public String displayHome() {
         return "index";
@@ -53,20 +58,29 @@ public class HomeController {
 
 
     @RequestMapping(value = "/SignUpExpert", method = RequestMethod.POST)
-    public String expertRegister(@Valid @ModelAttribute("expertDto") ExpertDto expertDto, Model model, @RequestParam("password") String password, BindingResult result) {
+    public String expertRegister(@ModelAttribute("expertDto") ExpertDto expertDto, Model model, @RequestParam("password") String password, BindingResult result, HttpSession session) {
         model.addAttribute("expertDto", expertDto);
+        String message="";
+        model.addAttribute("message",message);
+        expertValidator.validate(expertDto,result);
         if (result.hasErrors()) {
             return "ExpertRegister";
         } else {
-            userService.saveExpert(expertDto, password);
-            return "redirect:index";
+            try {
+                userService.saveExpert(expertDto, password);
+                session.setAttribute("email",expertDto.getEmail());
+            }catch (RuntimeException e){
+                message=e.getMessage();
+            }
+            return "ExpertPage";
         }
     }
 
     @RequestMapping(value = "/SignUpCustomer", method = RequestMethod.POST)
-    public String customerRegister(@ModelAttribute("customerDto") CustomerDto customerDto, Model model, @RequestParam("password") String password) {
+    public String customerRegister(@ModelAttribute("customerDto") CustomerDto customerDto, Model model, @RequestParam("password") String password,HttpSession session) {
         // customerDto.setAddresses(Set.of(address));
         userService.saveCustomer(customerDto, password);
+        session.setAttribute("email",customerDto.getEmail());
         return "redirect:index";
     }
 
@@ -95,19 +109,28 @@ public class HomeController {
     }
 
     @RequestMapping("/doLogin/{name}")
-    public String doLogin(@PathVariable String name, Model model, @RequestParam("email") String email, @RequestParam("password") String password) {
+    public String doLogin(@PathVariable String name, Model model, @RequestParam("email") String email, @RequestParam("password") String password,HttpSession session) {
         try {
             model.addAttribute("email", email);
             if (name.equals("expert")) {
                 if (expertService.findByEmailAndPass(email, password) != null) {
+                    session.setAttribute("email",email);
                     return "ExpertPage";
                 }
             } else if (name.equals("customer")) {
-                if (customerService.findByEmailAndPass(email, password) != null) {
-                    return "CustomerPage";
+                CustomerDto customerDto = customerService.findByEmailAndPass(email, password);
+                if (customerDto!=null) {
+                    if(customerDto.getState().equals(UserState.CONFIRMED)) {
+                        session.setAttribute("email", email);
+                        return "CustomerPage";
+                    }else{
+                        model.addAttribute("message","you are not confirm");
+                        return "index";
+                    }
                 }
             } else {
                 if (managerService.getManagerByNameAndPass(email, password) != null) {
+                    session.setAttribute("email",email);
                     return "managerPage";
                 }
             }

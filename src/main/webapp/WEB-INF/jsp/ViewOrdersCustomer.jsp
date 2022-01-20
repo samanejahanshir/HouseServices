@@ -13,6 +13,21 @@
     <title>Title</title>
 </head>
 <body>
-<c:set  var="email" value="${email}"/>
+<table border="2" width="70%" cellpadding="2" bgcolor="#f8f8ff">
+    <tr><th>Id</th><th>DoingDate</th><th>DoingTime</th><th>RegisterDate</th><th>Price</th><th>state</th><th>sub service</th></tr>
+    <c:forEach var="order" items="${listOrdersDto}" >
+        <tr>
+            <td>${order.id}</td>
+            <td>${order.orderDoingDate}</td>
+            <td>${order.orderDoingTime}</td>
+            <td>${order.orderRegisterDate}</td>
+            <td>${order.proposedPrice}</td>
+            <td>${order.state}</td>
+            <td>${order.subServiceDto.name}</td>
+            <td><a href="/customer/viewListOffers/${order.id}">view Offers</a></td>
+
+        </tr>
+    </c:forEach>
+</table>
 </body>
 </html>

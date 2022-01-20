@@ -19,8 +19,8 @@
             <li class="list-group-item"><a href="/manager/listUsers">List Users</a></li>
             <li class="list-group-item"><a href="/manager/addMainService">Add New MainService</a></li>
             <li class="list-group-item"><a href="/manager/addSubService">Add New SubService</a></li>
-            <li class="list-group-item"><a href="/viewListSubServices">View List SubServices</a></li>
-            <li class="list-group-item"><a href="/viewListMainServices">View List MainServices</a></li>
+            <li class="list-group-item"><a href="/manager/viewListMainServices">View List MainServices</a></li>
+            <li class="list-group-item"><a href="/manager/viewListNotConfirmCustomer">View List NotConfirm Customers</a></li>
             <li class="list-group-item"><a href="">Log Out</a></li>
 
         </ul>

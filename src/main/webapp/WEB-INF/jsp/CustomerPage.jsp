@@ -18,14 +18,14 @@
 <div class="container p-1">
     <div class="card" style="width: 18rem;">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="/customer/allOrders/${email}">View All Orders</a></li>
-            <li class="list-group-item"><a href="/customer/newOrders/${email}">View New Orders</a></li>
+            <li class="list-group-item"><a href="/customer/allOrders">View All Orders</a></li>
+            <li class="list-group-item"><a href="/customer/newOrders">View New Orders</a></li>
 <%--
             <li class="list-group-item"><a href="/customer/addNewOrder/${email}">Register New Order</a></li>
 --%>
-            <li class="list-group-item"><a href="/customer/viewListServices/${email}">View List SubServices</a></li>
-            <li class="list-group-item"><a href="/customer/incrementCredit/${email}">Increment Credit</a></li>
-            <li class="list-group-item"><a href="/customer/changePass/${email}">Change Password</a></li>
+            <li class="list-group-item"><a href="/customer/viewListServices">View List SubServices</a></li>
+            <li class="list-group-item"><a href="/customer/incrementCredit">Increment Credit</a></li>
+            <li class="list-group-item"><a href="/customer/changePass">Change Password</a></li>
             <li class="list-group-item"><a href="">Log Out</a></li>
 
         </ul>

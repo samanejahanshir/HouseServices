@@ -11,6 +11,7 @@
     <title>Title</title>
 </head>
 <body style="background-color: #c3e7f8">
+<p>${message}</p>
 
 </body>
 </html>

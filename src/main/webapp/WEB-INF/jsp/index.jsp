@@ -16,6 +16,7 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body style="background-color: #c3e7f8">
+<p>${message}</p>
 <div class="container align-items-center border border-primary " style="background-color: #adc4fc">
     <ul class="nav nav-pills align-items-center ">
         <li class="nav-item">
