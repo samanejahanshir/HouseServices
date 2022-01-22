@@ -34,5 +34,6 @@ public class ExpertDto {
     private int score;
     private byte[] image;
     private UserType role;
+    private String password;
 
 }

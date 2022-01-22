@@ -31,5 +31,6 @@ public class CustomerDto {
     private UserState state;
    // private Set<Address> addresses=new HashSet<>();
     private UserType role;
+    private String password;
 
 }

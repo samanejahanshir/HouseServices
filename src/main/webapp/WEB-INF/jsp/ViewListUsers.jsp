@@ -15,7 +15,7 @@
 
 </head>
 <body style="background-color: #c3e7f8">
-<div class="container m-1">
+
 
 <h1>Users List</h1>
 <%--<c:forEach var="user" items="listUsers" >
@@ -24,7 +24,57 @@
   </ul>
 
 </c:forEach>--%>
-<table class="table table-bordered table-striped table-primary text-dark">
+    <form:form cssClass="m-5 p-5 text-center" cssStyle="width: 1200px" modelAttribute="conditionSearch" action="/manager/search"  method="post">
+        <table class="table table-striped table-primary text-dark table-hover">
+            <tr>
+                <td>
+                    <form:input path="firstName" name="lastName" placeHolder="first  name"/>
+                </td>
+                <td>
+                    <form:input path="lastName" name="firstName" placeHolder="last name"/>
+                </td>
+                <td>
+                    <form:input path="email" name="email" placeHolder="email"/>
+                </td>
+                <td>
+                    <form:input path="role" name="role" placeHolder="role"/>
+                </td>
+                <td>
+                    <form:input path="maxScore" name="maxScore" placeHolder="max score"/>
+                </td>
+                <td>
+                    <form:input path="minScore" name="minScore" placeHolder="min score"/>
+                </td>
+                <td>
+                    <form:input path="subServiceName" name="subServiceName" placeHolder="subServiceName"/>
+                </td>
+                <td>
+                    <form:button name="search">Search</form:button>
+                </td>
+
+            </tr>
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Register Date</th>
+
+            </tr>
+            <c:forEach items="${listUserDto}" var="user">
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.firstName}</td>
+                    <td>${user.lastName}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>${user.registerDate}</td>
+                </tr>
+            </c:forEach>
+        </table>
+    </form:form>
+<%--<table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>FirstName</th><th>LastName</th><th>Email</th><th>Role</th><th>RegisterDate</th></tr>
     <c:forEach var="user" items="${listUsers}" >
         <tr>
@@ -36,9 +86,7 @@
             <td>${user.registerDate}</td>
         </tr>
     </c:forEach>
-</table>
-</div>
-
+</table>--%>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
 

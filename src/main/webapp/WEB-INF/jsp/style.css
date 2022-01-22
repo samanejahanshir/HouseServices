@@ -2,13 +2,7 @@ body,html{
     width: 100%;
     height: 100%;
     margin: 0px;
-    padding: 5px;
     background-color: antiquewhite;
-}
-.div_box{
-    justify-content: center;
     align-items: center;
-    background-image: url("../images/R.jpg");
-    width: 99%;
-    height: 99%;
+    justify-content: center;
 }

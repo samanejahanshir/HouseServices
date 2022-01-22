@@ -1,22 +1,15 @@
-package ir.maktab.controller;
+package ir.maktab.web;
 
-import ir.maktab.data.enums.UserState;
-import ir.maktab.dto.CustomerDto;
-import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.mapper.UserMapper;
 import ir.maktab.service.CustomerService;
 import ir.maktab.service.ExpertService;
 import ir.maktab.service.ManagerService;
 import ir.maktab.service.UserService;
-import ir.maktab.service.validation.OnRegister;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-
+@SessionAttributes({"role_user","customerDto","expertDto"})
 @RequiredArgsConstructor
 @Controller
 public class HomeController {
@@ -37,7 +30,7 @@ public class HomeController {
     }
 
 
-    @RequestMapping("/Signup/{name}")
+   /* @RequestMapping("/Signup/{name}")
     public String signUp(@PathVariable String name, Model model) {
         model.addAttribute("role_user", name);
         if (name.equals("customer")) {
@@ -47,14 +40,14 @@ public class HomeController {
             model.addAttribute("expertDto", new ExpertDto());
             return "ExpertRegister";
         }
-         /*else {
+         *//*else {
             model.addAttribute("manager", new Manager());
             return "Register";
-        }*/
-    }
+        }*//*
+    }*/
 
 
-    @RequestMapping(value = "/SignUpExpert", method = RequestMethod.POST)
+   /* @RequestMapping(value = "/SignUpExpert", method = RequestMethod.POST)
     public String expertRegister(@ModelAttribute("expertDto") @Validated(OnRegister.class)ExpertDto expertDto, Model model, @RequestParam("password") String password, HttpSession session) {
         model.addAttribute("expertDto", expertDto);
         String message="";
@@ -69,15 +62,15 @@ public class HomeController {
             }
             return "ExpertPage";
 
-    }
+    }*/
 
-    @RequestMapping(value = "/SignUpCustomer", method = RequestMethod.POST)
+   /* @RequestMapping(value = "/SignUpCustomer", method = RequestMethod.POST)
     public String customerRegister(@ModelAttribute("customerDto") CustomerDto customerDto, Model model, @RequestParam("password") String password,HttpSession session) {
         // customerDto.setAddresses(Set.of(address));
         userService.saveCustomer(customerDto, password);
         session.setAttribute("email",customerDto.getEmail());
         return "redirect:index";
-    }
+    }*/
 
     /* @RequestMapping(value = "/SignUp", method = RequestMethod.POST)
      public String saveUser(@ModelAttribute("role_user") String role_user, @ModelAttribute("userDto") UserDto userDto, @ModelAttribute("address") Address address, @RequestParam("password") String password,byte[] image, Model model) {
@@ -97,13 +90,13 @@ public class HomeController {
          model.addAttribute("userDto", role_user);
          return "index";
      }*/
-    @RequestMapping("/Signin/{name}")
+   /* @RequestMapping("/Signin/{name}")
     public String signIn(@PathVariable String name, Model model) {
         model.addAttribute("role_user", name);
         return "Login";
-    }
+    }*/
 
-    @RequestMapping("/doLogin/{name}")
+   /* @RequestMapping("/doLogin/{name}")
     public String doLogin(@PathVariable String name, Model model, @RequestParam("email") String email, @RequestParam("password") String password,HttpSession session) {
         try {
             model.addAttribute("email", email);
@@ -134,7 +127,7 @@ public class HomeController {
         }
         return "Login";
 
-    }
+    }*/
 
   /*  @RequestMapping("/SignUpManager")
     public String managerRegister(@ModelAttribute("manager") Manager manager) {

@@ -22,10 +22,15 @@
     <c:forEach var="service" items="${listMainServices}" >
         <tr>
             <td>${service.groupName}</td>
-            <td><a href="/manager/viewListSubServices/${service.groupName}">view SubServices</a></td>
-<c:if test="${role_user.equals('customer')}">
+            <td><c:if test="${role_user.equals('manager')}">
+                <a href="/manager/viewListSubServices/${service.groupName}">view SubServices</a>
+            </c:if>
+                <c:if test="${role_user.equals('customer')}">
+                    <a href="/customer/viewListSubServices/${service.groupName}">view SubServices</a>
+                </c:if></td>
+<%--<c:if test="${role_user.equals('manager')}">
     <td><a></a></td>
-</c:if>
+</c:if>--%>
         </tr>
     </c:forEach>
 </table>

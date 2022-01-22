@@ -1,9 +1,6 @@
-package ir.maktab.controller;
+package ir.maktab.web;
 
-import ir.maktab.dto.CustomerDto;
-import ir.maktab.dto.MainServiceDto;
-import ir.maktab.dto.SubServiceDto;
-import ir.maktab.dto.UserDto;
+import ir.maktab.dto.*;
 import ir.maktab.service.MainServicesService;
 import ir.maktab.service.ManagerService;
 import ir.maktab.service.SubServicesService;
@@ -11,43 +8,73 @@ import ir.maktab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
+@SessionAttributes({"email"})
+@RequestMapping("/manager")
 public class ManagerController {
     final ManagerService managerService;
     final UserService userService;
     final SubServicesService subServices;
     final MainServicesService mainServices;
 
+    @RequestMapping("/Signin")
+    public String signIn(Model model) {
+        model.addAttribute("role_user", "manager");
+        return "Login";
+    }
+
+    @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
+    public String dologin(Model model, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
+        if (managerService.getManagerByNameAndPass(email, password) != null) {
+            session.setAttribute("email", email);
+            return "managerPage";
+        } else {
+            return "index";
+        }
+    }
+
+
     @RequestMapping("/management")
     public String displayManagementPage() {
         return "";
     }
 
-    @RequestMapping("manager/listUsers")
+    @RequestMapping("/listUsers")
     public String viewListUsers(Model model) {
-        List<UserDto> listUsers = managerService.getListUsers();
-        listUsers.forEach(System.out::println);
-        model.addAttribute("listUsers", listUsers);
+        model.addAttribute("conditionSearch", new ConditionSearch());
         return "ViewListUsers";
     }
 
-    @RequestMapping("manager/addMainService")
+    @PostMapping("/search")
+    public String searchProducts(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch,Model model
+                                 ,HttpSession session) {
+        List<UserDto> userDtoList;
+        if((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName()==null) && conditionSearch.getMaxScore()==0 && conditionSearch.getMinScore()==0){
+            userDtoList = userService.getUserByCondition(conditionSearch);
+
+        }else {
+            userDtoList=userService.getExpertsByCondition(conditionSearch);
+
+        }
+      //  session.setAttribute("products", productDtos);
+        model.addAttribute("listUserDto",userDtoList);
+        return "ViewListUsers";
+    }
+
+    @RequestMapping("/addMainService")
     public String addMainService(Model model) {
         model.addAttribute("message", "");
         model.addAttribute("mainService", new MainServiceDto());
         return "AddMainServices";
     }
 
-    @RequestMapping(value = "manager/saveMainService", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveMainService", method = RequestMethod.POST)
     public String saveMainService(@ModelAttribute("mainService") MainServiceDto mainServiceDto, Model model) {
         boolean error = false;
         try {
@@ -62,14 +89,14 @@ public class ManagerController {
         return "AddMainServices";
     }
 
-    @RequestMapping("manager/addSubService")
+    @RequestMapping("/addSubService")
     public String addSubService(Model model) {
         //  model.addAttribute("message","");
         model.addAttribute("subServiceDto", new SubServiceDto());
         return "AddSubService";
     }
 
-    @RequestMapping(value = "manager/saveSubService", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveSubService", method = RequestMethod.POST)
     public String saveSubService(@ModelAttribute("subServiceDto") SubServiceDto subServiceDto, Model model) {
         boolean error = false;
         try {
@@ -84,29 +111,31 @@ public class ManagerController {
         return "AddSubService";
     }
 
-    @RequestMapping("manager/viewListMainServices")
+    @RequestMapping("/viewListMainServices")
     public String viewListMainServices(Model model) {
         List<MainServiceDto> listMainService = mainServices.getListMainService();
+        model.addAttribute("role_user","manager");
         model.addAttribute("listMainServices", listMainService);
         listMainService.forEach(System.out::println);
         return "ViewListMainServiceManager";
     }
 
-    @RequestMapping("manager/viewListSubServices/{groupName}")
+    @RequestMapping("/viewListSubServices/{groupName}")
     public String viewListSubServices(Model model, @PathVariable String groupName) {
         List<SubServiceDto> listSubService = subServices.getListSubService(groupName);
         model.addAttribute("listSubServices", listSubService);
+        model.addAttribute("role_user","manager");
         return "ViewListSubServiceManager";
     }
 
-    @RequestMapping("/manager/viewListNotConfirmCustomer")
+    @RequestMapping("/viewListNotConfirmCustomer")
     public String viewListNotConfirmUsers(Model model) {
         List<CustomerDto> customerNoConfirm = managerService.getListCustomerNoConfirm();
         model.addAttribute("listCustomer", customerNoConfirm);
         return "ViewNotConfirmCustomer";
     }
 
-    @RequestMapping("/manager/confirmCustomer/{id}")
+    @RequestMapping("/confirmCustomer/{id}")
     public String confirmCustomer(@PathVariable int id, Model model) {
         try {
             CustomerDto customerDto = managerService.getCustomerService().getCustomerById(id);
@@ -121,7 +150,7 @@ public class ManagerController {
     }
 
     //ToDo   parameter email not found
-    @RequestMapping("/manager/logout")
+    @RequestMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("email");
         return "redirect:index";

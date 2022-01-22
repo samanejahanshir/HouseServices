@@ -50,7 +50,7 @@ public interface UserDao extends JpaRepository<User, Integer> , JpaSpecification
         return users;
     }*/
    static Specification<User> selectByCondition(ConditionSearch condition) {
-       return (Specification<User>) (root, cq, cb) -> {
+       return (root, cq, cb) -> {
            List<Predicate> predicates = new ArrayList<>();
            if (condition.getFirstName() != null && !condition.getFirstName().equals("")) {
                predicates.add(cb.equal(root.get("firstName"),condition.getFirstName()));

@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 <head>
@@ -26,17 +27,17 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Sign
                 Up</a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="/Signup/expert">Sign Up expert</a>
-                <a class="dropdown-item" href="/Signup/customer">Sign Up customer</a>
+                <a class="dropdown-item" href="<c:url value="/expert/Signup"/>">Sign Up expert</a>
+                <a class="dropdown-item" href="<c:url value="/customer/Signup"/>">Sign Up customer</a>
             </div>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Sign
                 in</a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="/Signin/expert">Sign in expert</a>
-                <a class="dropdown-item" href="/Signin/customer">Sign in customer</a>
-                <a class="dropdown-item" href="/Signin/manager">Sign in manager</a>
+                <a class="dropdown-item" href="<c:url value="/expert/Signin"/>">Sign in expert</a>
+                <a class="dropdown-item" href="<c:url value="/customer/Signin"/>">Sign in customer</a>
+                <a class="dropdown-item" href="<c:url value="/manager/Signin"/>">Sign in manager</a>
 
             </div>
         </li>

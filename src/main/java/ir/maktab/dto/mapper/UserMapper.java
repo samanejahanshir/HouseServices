@@ -18,6 +18,7 @@ public class UserMapper {
                 .lastName(user.getLastName())
                 .registerDate(user.getRegisterDate())
                 .role(user.getRole())
+                .password(user.getPassword())
                 .build();
     }
 
@@ -26,6 +27,7 @@ public class UserMapper {
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
+                .password(userDto.getPassword())
                 .build();
     }
 
@@ -34,6 +36,19 @@ public class UserMapper {
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
+                .password(userDto.getPassword())
+                .build();
+    }
+
+    public UserDto expertDtoToUserDto(ExpertDto expertDto){
+        return UserDto.builder()
+                .id(expertDto.getId())
+                .password(expertDto.getPassword())
+                .firstName(expertDto.getFirstName())
+                .lastName(expertDto.getLastName())
+                .role(expertDto.getRole())
+                .email(expertDto.getEmail())
+                .registerDate(expertDto.getRegisterDate())
                 .build();
     }
 

@@ -16,8 +16,9 @@
 
 </head>
 <body style="background-color: #c3e7f8">
+
 <div class="container">
-    <form:form cssClass="p-1 my-5 mx-5" enctype="multipart/form-data" method="post" action="/SignUpExpert"
+    <form:form cssClass="p-1 my-5 mx-5" enctype="multipart/form-data" method="post" action="/customer/register"
                modelAttribute="customerDto">
         <h2 style="text-justify: distribute-center-last">Register Customer</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
@@ -71,7 +72,7 @@
                     <label>password :</label>
                 </td>
                 <td>
-                    <input type="password" name="password" id="password" placeHolder="password"/>
+                    <form:input type="password" path="password" placeHolder="password"/>
                 </td>
             </tr>
             <tr>

@@ -1,5 +1,6 @@
 package ir.maktab.service;
 
+import ir.maktab.data.dao.ExpertDao;
 import ir.maktab.data.dao.UserDao;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.enums.UserType;
@@ -33,16 +34,15 @@ public class UserService {
     private final CustomerMapper customerMapper;
     private final UserMapper userMapper;
 
-    public void saveExpert(ExpertDto expertDto, String password) {
+    public void saveExpert(ExpertDto expertDto) {
         Expert expert = expertMapper.toEntity(expertDto);
-        expert.setPassword(password);
+      //  expert.setPassword(password);
         expert.setRole(UserType.EXPERT);
         expertService.saveExpert(expert);
     }
 
-    public void saveCustomer(CustomerDto customerDto, String password) {
+    public void saveCustomer(CustomerDto customerDto) {
         Customer customer = customerMapper.toEntity(customerDto);
-        customer.setPassword(password);
         customer.setRole(UserType.CUSTOMER);
         customerService.saveCustomer(customer);
     }
@@ -69,5 +69,8 @@ public class UserService {
                 throw new UserNotFoundException();
             }
         }
-
+    public List<UserDto> getExpertsByCondition(ConditionSearch condition){
+        List<ExpertDto> expertDtoList = expertService.getExpertsByCondition(condition);
+       return expertDtoList.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
+    }
 }
