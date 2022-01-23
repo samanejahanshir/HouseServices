@@ -28,9 +28,13 @@
             <td>${order.proposedPrice}</td>
             <td>${order.state}</td>
             <td>${order.subServiceDto.name}</td>
-            <c:if test="${order.state.equals('WAIT_OFFER_EXPERTS')}">
-            <td><a href="/customer/viewListOffers/${order.id}">view Offers</a></td>
+<%--
+            <c:if test="${order.state.equals('WAIT_OFFER_EXPERTS') || order.state.equals('WAIT_SELECT_EXPERT')}">
+--%>
+            <td><a href="/offer//viewListOffers/${order.id}">view Offers</a></td>
+<%--
             </c:if>
+--%>
         </tr>
     </c:forEach>
 </table>

@@ -27,6 +27,9 @@
             </c:if>
                 <c:if test="${role_user.equals('customer')}">
                     <a href="/customer/viewListSubServices/${service.groupName}">view SubServices</a>
+                </c:if>
+                <c:if test="${role_user.equals('expert')}">
+                    <a href="/expert/viewListSubServices/${service.groupName}">view SubServices</a>
                 </c:if></td>
 <%--<c:if test="${role_user.equals('manager')}">
     <td><a></a></td>

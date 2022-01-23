@@ -57,6 +57,12 @@ final MainServicesService mainServices;
         }
     }
 
+    @RequestMapping(value = "/doLogin")
+    public String customerPage(Model model, @RequestParam("email") String email, HttpSession session) {
+
+                return "CustomerPage";
+    }
+
 //    @RequestMapping("/allOrders")
 //    public String displayListOrders(Model model, HttpSession session) {
 //        String email = (String) session.getAttribute("email");
@@ -126,4 +132,18 @@ final MainServicesService mainServices;
         return "ViewListOffersForOrder";
     }
 */
+   @RequestMapping("/changePass")
+   public String changePass(Model model) {
+       model.addAttribute("role_user", "customer");
+       String password = "";
+       model.addAttribute("newPass", password);
+       return "ChangePass";
+   }
+   @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
+   public String saveNewPassword(@RequestParam("password") String password, Model model, HttpSession session) {
+       String email = (String) session.getAttribute("email");
+       customerService.updatePassword(email, password);
+       model.addAttribute("message","change pass is successfuly");
+       return "CustomerPage";
+   }
 }

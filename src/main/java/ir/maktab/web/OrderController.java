@@ -8,8 +8,7 @@ import ir.maktab.service.SubServicesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -19,7 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
     final OrderService orderService;
-final SubServicesService service;
+    final SubServicesService service;
+
     @RequestMapping("/allOrders")
     public String displayListOrders(Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
@@ -40,15 +40,37 @@ final SubServicesService service;
 
     /////TODO click on subServiceDto on addnew order ......
     @RequestMapping("/addNewOrder/{name}")
-    public String addNewOrder(@PathVariable("name")String nameService, Model model, HttpSession session) {
+    public String addNewOrder(@PathVariable("name") String nameService, Model model, HttpSession session) {
         SubServiceDto subServiceDto = service.getSubServiceByName(nameService);
-        OrderDto orderDto = new OrderDto();
-        Object customerDto =(CustomerDto) session.getAttribute("customerDto");
-        orderDto.setSubServiceDto(subServiceDto);
-        //orderDto.setCustomerDto(customerDto);
+        // OrderDto orderDto = new OrderDto();
+        //Object customerDto =(CustomerDto) session.getAttribute("customerDto");
+        //  orderDto.setSubServiceDto(subServiceDto);
+        session.setAttribute("subService", nameService);
         String email = (String) session.getAttribute("email");
-        model.addAttribute("OrderDto",orderDto);
+        /*CustomerDto customerDto=new CustomerDto();
+        customerDto.setEmail(email);*/
+       /* orderDto.setCustomerDto(customerDto);
+        orderDto.setCustomerDto(customerDto);*/
+        model.addAttribute("OrderDto", new OrderDto());
 
         return "RegisterNewOrder";
+    }
+
+    @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
+    public String saveNewOrder(@ModelAttribute("OrderDto") OrderDto orderDto, HttpSession session, Model model) {
+        String email = (String) session.getAttribute("email");
+        String sub = (String) session.getAttribute("subService");
+        SubServiceDto subServiceDto = service.getSubServiceByName(sub);
+        orderDto.setSubServiceDto(subServiceDto);
+        orderService.saveOrder(orderDto, email);
+        return "CustomerPage";
+    }
+
+    @RequestMapping(value = "/allOrderExpert")
+    public String viewAllOrderOfExpert(Model model, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        List<OrderDto> orderDtos = orderService.getListOrdersOfSubServiceExpert(email);
+        model.addAttribute("listOrder", orderDtos);
+        return "ViewListOrdersForExpert";
     }
 }
