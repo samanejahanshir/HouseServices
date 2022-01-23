@@ -62,7 +62,7 @@ public class OrderController {
         return "RegisterNewOrder";
     }
 
-    @RequestMapping(value = "/addAddress", method = RequestMethod.POST)
+   /* @RequestMapping(value = "/addAddress", method = RequestMethod.POST)
     public String addAddressToOrder(@ModelAttribute("orderDto") OrderDto orderDto, @RequestParam("orderDate") String date, Model model, HttpSession session) throws ParseException {
         System.out.println(date);
         //SubServiceDto subServiceDto=SubServiceDto.builder().name(subService).build();
@@ -74,7 +74,7 @@ public class OrderController {
         model.addAttribute("address", new Address());
         return "AddAddress";
 
-    }
+    }*/
 
     @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
     public String saveNewOrder(@ModelAttribute("orderDto") OrderDto orderDto, @RequestParam("orderDate") String date,HttpSession session, Model model) throws ParseException {
@@ -95,6 +95,16 @@ public class OrderController {
         String email = (String) session.getAttribute("email");
         List<OrderDto> orderDtos = orderService.getListOrdersOfSubServiceExpert(email);
         model.addAttribute("listOrder", orderDtos);
+        model.addAttribute("typeList", "allOrders");
+        return "ViewListOrdersForExpert";
+    }
+
+    @RequestMapping(value = "/listWorks")
+    public String viewListWorkOfExpert(Model model, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        List<OrderDto> orderDtos = orderService.viewListWorkOfExpert(email);
+        model.addAttribute("listOrder", orderDtos);
+        model.addAttribute("typeList","workList");
         return "ViewListOrdersForExpert";
     }
 

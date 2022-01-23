@@ -29,8 +29,10 @@
                 <td>${order.state}</td>
                 <td>${order.subServiceDto.name}</td>
                 <td>${order.customerDto.firstName} ${order.customerDto.lastName}</td>
-                <td><a href="/expert/addOffer/${order.id}">add offer</a> </td>
-                    <%--
+               <c:if test="${typeList.equals('allOrders')}"> <td><a href="/order/allOrders">add offer</a> </td></c:if>
+                <c:if test="${typeList.equals('workList')}"> <td><a href="/order/listWorks">add offer</a> </td></c:if>
+
+            <%--
                                 <c:if test="${order.state.equals('WAIT_OFFER_EXPERTS') || order.state.equals('WAIT_SELECT_EXPERT')}">
                     --%>
                     <%--

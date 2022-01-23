@@ -19,19 +19,12 @@ public interface OrderDao extends JpaRepository<Orders, Integer> {
     @Query(value = "select o from Orders o inner  join o.subServices s where s.name in :list and o.state='WAIT_OFFER_EXPERTS' or o.state='WAIT_SELECT_EXPERT'")
     List<Orders> getListOrdersOfSubServiceExpert(@Param("list") List<String> subServices);
 
-
-  /*  @Query(value = "from Orders o where o.expert.id=:id")
-    List<Orders> getListOrdersForExpert(@Param("id") int expertId);*/
-
     List<Orders> findByExpertEquals(Expert expert);
+    List<Orders> findByExpertEqualsAndStateIsNotIn(Expert expert,List<OrderState> state);
 
     @Modifying
     @Query(value = "update Orders o set o.state=:state where o.id=:id")
     void updateOrderState(@Param("id") int idOrder, @Param("state") OrderState state);
-
-    /*@Modifying
-    @Query(value = "update Orders o  where o.id=:id")
-    int updateOrderComment(@Param("id") int orderId, @Param("comment") String comment);*/
 
     List<Orders> findByCustomer_Id(@Param("id") int customerId);
 

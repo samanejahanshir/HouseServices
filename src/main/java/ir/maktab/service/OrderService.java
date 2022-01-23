@@ -16,6 +16,7 @@ import ir.maktab.exceptions.OrderNotFoundException;
 import ir.maktab.exceptions.SubServiceNotFoundException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -186,6 +187,18 @@ public class OrderService {
         }
         else {
             throw new OrderNotFoundException();
+        }
+    }
+
+    @Transactional
+    public List<OrderDto> viewListWorkOfExpert(String email){
+        Expert expert = expertService.getExpertByEmail(email);
+        if(expert!=null) {
+            List<OrderState> workList = List.of(OrderState.WAIT_SELECT_EXPERT, OrderState.WAIT_OFFER_EXPERTS, OrderState.PAID);
+            List<Orders> ordersList = orderDao.findByExpertEqualsAndStateIsNotIn(expert, workList);
+           return ordersList.stream().map(orderMapper::toDto).collect(Collectors.toList());
+        }else{
+            throw new ExpertNotExistException();
         }
     }
 }
