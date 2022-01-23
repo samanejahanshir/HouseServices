@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import ir.maktab.data.model.Address;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.SubServiceDto;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RequestMapping("/order")
@@ -47,24 +51,42 @@ public class OrderController {
         // OrderDto orderDto = new OrderDto();
         //Object customerDto =(CustomerDto) session.getAttribute("customerDto");
         //  orderDto.setSubServiceDto(subServiceDto);
-        model.addAttribute("subservice",nameService);
+        session.setAttribute("subService", nameService);
         /*String email = (String) session.getAttribute("email");
-        *//*CustomerDto customerDto=new CustomerDto();
+         *//*CustomerDto customerDto=new CustomerDto();
         customerDto.setEmail(email);*//*
-       *//* orderDto.setCustomerDto(customerDto);
+         *//* orderDto.setCustomerDto(customerDto);
         orderDto.setCustomerDto(customerDto);*/
-        model.addAttribute("OrderDto", new OrderDto());
+        model.addAttribute("orderDto", new OrderDto());
 
         return "RegisterNewOrder";
     }
 
-    @RequestMapping(value = "/saveOrder/{subService}", method = RequestMethod.POST)
-    public String saveNewOrder(@PathVariable("subService")String subService,@ModelAttribute("OrderDto") OrderDto orderDto, HttpSession session, Model model) {
+    @RequestMapping(value = "/addAddress", method = RequestMethod.POST)
+    public String addAddressToOrder(@ModelAttribute("orderDto") OrderDto orderDto, @RequestParam("orderDate") String date, Model model, HttpSession session) throws ParseException {
+        System.out.println(date);
+        //SubServiceDto subServiceDto=SubServiceDto.builder().name(subService).build();
+        //orderDto.setSubServiceDto(subServiceDto);
+        SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-mm-dd");
+        Date dateParse = outSDF.parse(date);
+        orderDto.setOrderDoingDate(dateParse);
+        session.setAttribute("orderDto", orderDto);
+        model.addAttribute("address", new Address());
+        return "AddAddress";
+
+    }
+
+    @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
+    public String saveNewOrder(@ModelAttribute("orderDto") OrderDto orderDto, @RequestParam("orderDate") String date,HttpSession session, Model model) throws ParseException {
         String email = (String) session.getAttribute("email");
-        SubServiceDto subServiceDto = service.getSubServiceByName(subService);
+        String subService = (String) session.getAttribute("subService");
+        SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-mm-dd");
+        Date dateParse = outSDF.parse(date);
+        orderDto.setOrderDoingDate(dateParse);
+        SubServiceDto subServiceDto = SubServiceDto.builder().name(subService).build();
         orderDto.setSubServiceDto(subServiceDto);
         orderService.saveOrder(orderDto, email);
-        model.addAttribute("message","new order added");
+        model.addAttribute("message", "new order added");
         return "CustomerPage";
     }
 
@@ -75,9 +97,10 @@ public class OrderController {
         model.addAttribute("listOrder", orderDtos);
         return "ViewListOrdersForExpert";
     }
+
     @ExceptionHandler(RuntimeException.class)
-    public final String handleException(RuntimeException ex,Model model, WebRequest request) {
-        model.addAttribute("message",ex.getMessage());
+    public final String handleException(RuntimeException ex, Model model, WebRequest request) {
+        model.addAttribute("message", ex.getMessage());
         return "errorPage";
     }
 }

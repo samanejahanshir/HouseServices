@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
@@ -21,21 +22,13 @@
 --%>
 
 <div class="container">
-    <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/order/saveOrder/${subservice}"
-               modelAttribute="OrderDto">
+    <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/order/saveOrder"
+               modelAttribute="orderDto">
         <h2 style="text-justify: distribute-center-last">Add Order</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
             <tr>
                 <td>
-                    <form:label path="proposedPrice">proposedPrice :</form:label>
-                </td>
-                <td>
-                    <form:input type="number" path="proposedPrice" placeHolder="proposedPrice"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <form:label path="description">description :</form:label>
+                    description:
                 </td>
                 <td>
                     <form:input type="text" path="description" placeHolder="description"/>
@@ -43,10 +36,10 @@
             </tr>
             <tr>
                 <td>
-                    <form:label path="orderDoingDate">orderDoingDate :</form:label>
+                    orderDoingDate:
                 </td>
                 <td>
-                    <form:input type="date" path="orderDoingDate" placeHolder="yyyy-mm-dd"/>
+                    <input type="date" name="orderDate" placeHolder="yyyy-mm-dd"/>
                 </td>
             </tr>
             <tr>
@@ -57,6 +50,7 @@
                     <form:input type="number" path="orderDoingTime" placeHolder="orderDoingTime"/>
                 </td>
             </tr>
+
             <tr>
                 <td>
                     <form:label path="address.city">city:</form:label>
@@ -89,7 +83,7 @@
                     <form:input type="text" path="address.tag" placeHolder="tag"/>
                 </td>
             </tr>
-            <tr>
+           <tr>
                 <td>
                 </td>
                 <td>
