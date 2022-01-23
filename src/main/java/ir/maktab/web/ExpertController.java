@@ -1,17 +1,13 @@
 package ir.maktab.web;
 
-import ir.maktab.dto.ExpertDto;
-import ir.maktab.dto.MainServiceDto;
-import ir.maktab.dto.OfferDto;
-import ir.maktab.dto.SubServiceDto;
-import ir.maktab.service.ExpertService;
-import ir.maktab.service.MainServicesService;
-import ir.maktab.service.SubServicesService;
-import ir.maktab.service.UserService;
+import ir.maktab.data.model.Expert;
+import ir.maktab.dto.*;
+import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -25,7 +21,7 @@ public class ExpertController {
     final UserService userService;
     final SubServicesService subService;
     final MainServicesService mainServices;
-
+final OrderService orderService;
     @RequestMapping("/Signup")
     public String signUp(Model model) {
         model.addAttribute("expertDto", new ExpertDto());
@@ -34,12 +30,8 @@ public class ExpertController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String expertRegister(@ModelAttribute("expertDto") ExpertDto expertDto, Model model, HttpSession session) {
-        try {
             userService.saveExpert(expertDto);
             session.setAttribute("expertDto", expertDto);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
         return "ExpertPage";
 
     }
@@ -102,9 +94,32 @@ public class ExpertController {
         return "ExpertPage";
     }
 
-    /*@RequestMapping("/addOffer/{id}")
+    @RequestMapping("/addOffer/{id}")
     public String addOfferToOrder(@PathVariable("id")int id, Model model){
         model.addAttribute("offerDto",new OfferDto());
+        model.addAttribute("idOrder",id);
+        return "AddOfferToOrder";
+    }
 
-    }*/
+    @RequestMapping("/saveOffer/{orderId}")
+    public String saveOffer(@PathVariable("orderId")int orderId,@ModelAttribute("offerDto")OfferDto offerDto,HttpSession session,Model model){
+        OrderDto orderDto = orderService.getOrderById(orderId);
+        offerDto.setOrderDto(orderDto);
+        String email=(String) session.getAttribute("email");
+       expertService.addOfferToOrder(email,offerDto);
+       model.addAttribute("message","offer added successfuly");
+       return "ExpertPage";
+    }
+
+    @RequestMapping("/logout")
+    public String logOut(HttpSession session){
+        session.removeAttribute("email");
+        return "redirect:/index";
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public final String handleException(RuntimeException ex,Model model, WebRequest request) {
+        model.addAttribute("message",ex.getMessage());
+        return "errorPage";
+    }
 }

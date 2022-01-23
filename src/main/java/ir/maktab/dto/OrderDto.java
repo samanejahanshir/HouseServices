@@ -22,6 +22,7 @@ public class OrderDto {
     private int orderDoingTime;
     private OrderState state;
     private Address address;
+    private String uuid;
     private SubServiceDto subServiceDto;
     private ExpertDto expertDto;
     private CustomerDto customerDto;

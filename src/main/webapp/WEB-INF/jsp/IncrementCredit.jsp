@@ -14,5 +14,25 @@
 </head>
 <body>
 <c:set  var="email" value="${email}"/>
+<form method="post" action="/customer/saveCredit">
+    <h2 style="text-justify: distribute-center-last">increment credit</h2>
+    <table class="table table-bordered table-striped table-primary text-dark">
+        <tr>
+            <td>
+                amount :
+            </td>
+            <td>
+                <input type="number" name="amount" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <input type="submit" value="save">
+            </td>
+        </tr>
+    </table>
+</form>
 </body>
 </html>

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,6 +20,8 @@ public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(unique = true)
+    private String uuid;
     private double proposedPrice;
     private String description;
     @Temporal(TemporalType.TIMESTAMP)

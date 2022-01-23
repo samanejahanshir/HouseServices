@@ -21,24 +21,10 @@
 --%>
 
 <div class="container">
-    <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/order/saveOrder"
+    <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/order/saveOrder/${subservice}"
                modelAttribute="OrderDto">
         <h2 style="text-justify: distribute-center-last">Add Order</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
-           <%-- <tr>
-                <td>
-                </td>
-                <td>
-                    <form:hidden  path="customerDto"  />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                </td>
-                <td>
-                    <form:hidden  path="subServiceDto" />
-                </td>
-            </tr>--%>
             <tr>
                 <td>
                     <form:label path="proposedPrice">proposedPrice :</form:label>

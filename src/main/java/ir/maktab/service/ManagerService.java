@@ -30,7 +30,7 @@ public class ManagerService {
     private final MainServiceDao mainServiceDao;
     private final ExpertDao expertDao;
     private final UserDao userDao;
-   // private final CustomerDao customerDao;
+    // private final CustomerDao customerDao;
     private final SubServiceMapper subServiceMapper;
     private final MainServiceMapper mainServiceMapper;
     private final UserMapper userMapper;
@@ -110,7 +110,7 @@ public class ManagerService {
 
     public void confirmCustomer(CustomerDto customerDto) {
         Customer customer = customerService.getCustomerByEmail(customerDto.getEmail());
-        if (customer!=null) {
+        if (customer != null) {
             customer.setState(UserState.CONFIRMED);
             customerService.getCustomerDao().save(customer);
         } else {
@@ -130,5 +130,17 @@ public class ManagerService {
 
     public void saveManager(Manager manager) {
         managerDao.save(manager);
+    }
+
+    public void updatePassword(String email, String newPassword) {
+        Optional<Manager> optionalManager = managerDao.findByUserName(email);
+        if(optionalManager.isPresent()){
+            Manager manager = optionalManager.get();
+            manager.setPassword(newPassword);
+            managerDao.save(manager);
+        }
+      else {
+          throw  new ManagerNotFoundException();
+        }
     }
 }

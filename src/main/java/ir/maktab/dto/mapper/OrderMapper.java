@@ -22,6 +22,7 @@ public class OrderMapper {
                 .proposedPrice(orders.getProposedPrice())
                 .address(orders.getAddress())
                 .state(orders.getState())
+                .uuid(orders.getUuid())
                 .subServiceDto(subServiceMapper.toDto(orders.getSubServices()))
               //  .expertDto(expertMapper.toDto(orders.getExpert()))
                 .customerDto(customerMapper.toDto(orders.getCustomer()))

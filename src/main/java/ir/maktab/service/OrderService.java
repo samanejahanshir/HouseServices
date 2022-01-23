@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -43,6 +44,7 @@ public class OrderService {
         if (subServicesOptional.isPresent() && customer != null) {
             orderDto.setCustomerDto(customerMapper.toDto(customer));
             Orders orders = orderMapper.toEntity(orderDto);
+            orders.setUuid(UUID.randomUUID().toString());
             orders.setState(OrderState.WAIT_OFFER_EXPERTS);
             orders.setSubServices(subServicesOptional.get());
             orderDao.save(orders);

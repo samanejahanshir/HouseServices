@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/customer")
@@ -17,11 +19,12 @@ import java.util.List;
 //@SessionAttributes({"email"})
 public class CustomerController {
     final CustomerService customerService;
-   // final OrderService orderService;
-   // final OfferService offerService;
+    // final OrderService orderService;
+    // final OfferService offerService;
     final SubServicesService subService;
-final UserService userService;
-final MainServicesService mainServices;
+    final UserService userService;
+    final MainServicesService mainServices;
+
     @RequestMapping("/Signup")
     public String signUp(Model model) {
         model.addAttribute("customerDto", new CustomerDto());
@@ -29,9 +32,9 @@ final MainServicesService mainServices;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String customerRegister(@ModelAttribute("customerDto") CustomerDto customerDto, Model model,HttpSession session) {
+    public String customerRegister(@ModelAttribute("customerDto") CustomerDto customerDto, Model model, HttpSession session) {
         userService.saveCustomer(customerDto);
-        session.setAttribute("customerDto",customerDto);
+        session.setAttribute("customerDto", customerDto);
         return "redirect:/index";
     }
 
@@ -60,7 +63,7 @@ final MainServicesService mainServices;
     @RequestMapping(value = "/doLogin")
     public String customerPage(Model model, @RequestParam("email") String email, HttpSession session) {
 
-                return "CustomerPage";
+        return "CustomerPage";
     }
 
 //    @RequestMapping("/allOrders")
@@ -98,7 +101,7 @@ final MainServicesService mainServices;
     public String getListMainService(Model model, HttpSession session) {
         model.addAttribute("role_user", "customer");
         List<MainServiceDto> listMainServices = mainServices.getListMainService();
-        model.addAttribute("listMainServices",listMainServices);
+        model.addAttribute("listMainServices", listMainServices);
         return "ViewListMainServiceManager";
     }
 
@@ -106,7 +109,7 @@ final MainServicesService mainServices;
     public String viewListSubServices(Model model, @PathVariable String groupName) {
         List<SubServiceDto> listSubService = subService.getListSubService(groupName);
         model.addAttribute("listSubServices", listSubService);
-        model.addAttribute("role_user","customer");
+        model.addAttribute("role_user", "customer");
         return "ViewListSubServiceManager";
     }
    /* /////TODO click on subServiceDto on addnew order ......
@@ -117,33 +120,59 @@ final MainServicesService mainServices;
         return "RegisterNewOrder";
     }*/
 
-   /* @RequestMapping("/selectOffer/{id}")
-    public String selectOffer(@PathVariable int id, Model model, HttpSession session) {
-        try {
-            OfferDto offerDto = offerService.findOfferById(id);
-            orderService.selectOfferForOrder(offerDto);
-            OrderDto orderDto = orderService.getOrderById(offerDto.getOrderDto().getId());
-            List<OfferDto> listOffers = offerService.getListOffers(orderDto);
-            model.addAttribute("listOffers", listOffers);
-            model.addAttribute("message", "select offer successfuly");
-        } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
-        }
-        return "ViewListOffersForOrder";
+    /* @RequestMapping("/selectOffer/{id}")
+     public String selectOffer(@PathVariable int id, Model model, HttpSession session) {
+         try {
+             OfferDto offerDto = offerService.findOfferById(id);
+             orderService.selectOfferForOrder(offerDto);
+             OrderDto orderDto = orderService.getOrderById(offerDto.getOrderDto().getId());
+             List<OfferDto> listOffers = offerService.getListOffers(orderDto);
+             model.addAttribute("listOffers", listOffers);
+             model.addAttribute("message", "select offer successfuly");
+         } catch (RuntimeException e) {
+             model.addAttribute("message", e.getMessage());
+         }
+         return "ViewListOffersForOrder";
+     }
+ */
+    @RequestMapping("/changePass")
+    public String changePass(Model model) {
+        model.addAttribute("role_user", "customer");
+        String password = "";
+        model.addAttribute("newPass", password);
+        return "ChangePass";
     }
-*/
-   @RequestMapping("/changePass")
-   public String changePass(Model model) {
-       model.addAttribute("role_user", "customer");
-       String password = "";
-       model.addAttribute("newPass", password);
-       return "ChangePass";
-   }
-   @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
-   public String saveNewPassword(@RequestParam("password") String password, Model model, HttpSession session) {
-       String email = (String) session.getAttribute("email");
-       customerService.updatePassword(email, password);
-       model.addAttribute("message","change pass is successfuly");
-       return "CustomerPage";
-   }
+
+    @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
+    public String saveNewPassword(@RequestParam("password") String password, Model model, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        customerService.updatePassword(email, password);
+        model.addAttribute("message", "change pass is successfuly");
+        return "CustomerPage";
+    }
+
+    @RequestMapping("/incrementCredit")
+    public String incrementCredit() {
+        return "IncrementCredit";
+    }
+
+    @RequestMapping(value = "/saveCredit", method = RequestMethod.POST)
+    public String saveCredit(Model model, @RequestParam("amount") int amount, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        CustomerDto customerDto = customerService.getCustomerMapper().toDto(customerService.getCustomerByEmail(email));
+        customerService.incrementCredit(customerDto,amount);
+        model.addAttribute("message","credit incremented");
+        return "CustomerPage";
+    }
+    @RequestMapping("/logout")
+    public String logOut(HttpSession session){
+        session.removeAttribute("email");
+        return "redirect:/index";
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public final String handleException(RuntimeException ex,Model model, WebRequest request) {
+        model.addAttribute("message",ex.getMessage());
+        return "errorPage";
+    }
 }

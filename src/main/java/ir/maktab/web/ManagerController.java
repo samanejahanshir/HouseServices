@@ -9,13 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
-@SessionAttributes({"email"})
 @RequestMapping("/manager")
 public class ManagerController {
     final ManagerService managerService;
@@ -52,7 +52,7 @@ public class ManagerController {
     }
 
     @PostMapping("/search")
-    public String searchProducts(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch,Model model
+    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch,Model model
                                  ,HttpSession session) {
         List<UserDto> userDtoList;
         if((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName()==null) && conditionSearch.getMaxScore()==0 && conditionSearch.getMinScore()==0){
@@ -77,15 +77,8 @@ public class ManagerController {
     @RequestMapping(value = "/saveMainService", method = RequestMethod.POST)
     public String saveMainService(@ModelAttribute("mainService") MainServiceDto mainServiceDto, Model model) {
         boolean error = false;
-        try {
             managerService.saveMainServiceToDb(mainServiceDto);
-        } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
-            error = true;
-        }
-        if (!error) {
             model.addAttribute("message", "save saccessfully");
-        }
         return "AddMainServices";
     }
 
@@ -99,15 +92,8 @@ public class ManagerController {
     @RequestMapping(value = "/saveSubService", method = RequestMethod.POST)
     public String saveSubService(@ModelAttribute("subServiceDto") SubServiceDto subServiceDto, Model model) {
         boolean error = false;
-        try {
             managerService.saveSubService(subServiceDto);
-        } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
-            error = true;
-        }
-        if (!error) {
             model.addAttribute("message", "save saccessfully");
-        }
         return "AddSubService";
     }
 
@@ -137,22 +123,39 @@ public class ManagerController {
 
     @RequestMapping("/confirmCustomer/{id}")
     public String confirmCustomer(@PathVariable int id, Model model) {
-        try {
             CustomerDto customerDto = managerService.getCustomerService().getCustomerById(id);
             managerService.confirmCustomer(customerDto);
             model.addAttribute("message", "confirm is successfully");
             List<CustomerDto> customerNoConfirm = managerService.getListCustomerNoConfirm();
             model.addAttribute("listCustomer", customerNoConfirm);
-        } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
-        }
+
         return "ViewNotConfirmCustomer";
     }
 
-    //ToDo   parameter email not found
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("email");
-        return "redirect:index";
+        return "redirect:/index";
     }
+
+    @RequestMapping("/changePass")
+    public String changePass(Model model) {
+        model.addAttribute("role_user", "manager");
+        return "ChangePass";
+    }
+
+    @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
+    public String saveNewPassword(@RequestParam("password") String password, Model model, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        managerService.updatePassword(email, password);
+        model.addAttribute("message","change pass is successfuly");
+        return "managerPage";
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public final String handleException(RuntimeException ex,Model model, WebRequest request) {
+        model.addAttribute("message",ex.getMessage());
+        return "errorPage";
+    }
+
 }

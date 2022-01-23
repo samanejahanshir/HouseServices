@@ -7,8 +7,10 @@ import ir.maktab.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -23,29 +25,26 @@ public class OfferController {
     @RequestMapping("/viewListOffers/{id}")
     public String displayListOffers(@PathVariable int id, Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
-        try {
             OrderDto orderDto = orderService.getOrderById(id);
             List<OfferDto> listOffers = offerService.getListOffers(orderDto);
             model.addAttribute("listOffers", listOffers);
-        } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
-        }
         return "ViewListOffersForOrder";
     }
 
     @RequestMapping("/selectOffer/{id}")
     public String selectOffer(@PathVariable int id, Model model, HttpSession session) {
-        try {
             OfferDto offerDto = offerService.findOfferById(id);
             orderService.selectOfferForOrder(offerDto);
             OrderDto orderDto = orderService.getOrderById(offerDto.getOrderDto().getId());
             List<OfferDto> listOffers = offerService.getListOffers(orderDto);
             model.addAttribute("listOffers", listOffers);
             model.addAttribute("message", "select offer successfuly");
-        } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
-        }
         return "ViewListOffersForOrder";
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public final String handleException(RuntimeException ex,Model model, WebRequest request) {
+        model.addAttribute("message",ex.getMessage());
+        return "errorPage";
+    }
 }

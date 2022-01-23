@@ -20,6 +20,9 @@
         <c:if test="${role_user.equals('customer')}">
         <form cssClass="p-1 my-5 mx-5"  method="post" action="/customer/saveNewPass">
             </c:if>
+                <c:if test="${role_user.equals('manager')}">
+                <form cssClass="p-1 my-5 mx-5"  method="post" action="/manager/saveNewPass">
+                    </c:if>
     <h2 style="text-justify: distribute-center-last">Register Customer</h2>
     <table class="table table-bordered table-striped table-primary text-dark">
     <tr>
