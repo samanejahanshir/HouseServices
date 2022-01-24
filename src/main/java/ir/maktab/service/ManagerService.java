@@ -30,7 +30,6 @@ public class ManagerService {
     private final MainServiceDao mainServiceDao;
     private final ExpertDao expertDao;
     private final UserDao userDao;
-    // private final CustomerDao customerDao;
     private final SubServiceMapper subServiceMapper;
     private final MainServiceMapper mainServiceMapper;
     private final UserMapper userMapper;
@@ -98,11 +97,6 @@ public class ManagerService {
         return users.stream().map(userMapper::toDto).collect(Collectors.toList());
     }
 
-   /* public List<User> getListUsersByCondition(UserType type, String email, String name, String family) {
-        return userDao.getListUserByCondition(type, email, name, family);
-
-    }*/
-
     public List<CustomerDto> getListCustomerNoConfirm() {
         List<Customer> customers = customerService.getCustomerDao().findByStateEquals(UserState.NOT_CONFIRMED);
         return customers.stream().map(customerMapper::toDto).collect(Collectors.toList());
@@ -134,13 +128,12 @@ public class ManagerService {
 
     public void updatePassword(String email, String newPassword) {
         Optional<Manager> optionalManager = managerDao.findByUserName(email);
-        if(optionalManager.isPresent()){
+        if (optionalManager.isPresent()) {
             Manager manager = optionalManager.get();
             manager.setPassword(newPassword);
             managerDao.save(manager);
-        }
-      else {
-          throw  new ManagerNotFoundException();
+        } else {
+            throw new ManagerNotFoundException();
         }
     }
 }

@@ -24,13 +24,13 @@ public class SubServicesService {
         List<SubServices> subServices = this.subServices.findAllByMainServices_GroupName(groupName);
         return subServices.stream().map(subServiceMapper::toDto).collect(Collectors.toList());
     }
-    public SubServiceDto getSubServiceByName(String name){
+
+    public SubServiceDto getSubServiceByName(String name) {
         Optional<SubServices> services = subServices.findByName(name);
-        if(services.isPresent()){
+        if (services.isPresent()) {
             return subServiceMapper.toDto(services.get());
-        }
-        else {
-            throw  new SubServiceNotFoundException();
+        } else {
+            throw new SubServiceNotFoundException();
         }
     }
 }

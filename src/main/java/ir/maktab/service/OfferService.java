@@ -56,12 +56,10 @@ public class OfferService {
         }
     }
 
-    @Transactional
+   /* @Transactional
     public void addOfferToOrder(String email, OfferDto offerDto) {
         Expert expert = expertService.getExpertByEmail(email);
         if (expert != null) {
-          /* Optional<Offer> offerOptional=offerDao.getOfferByCondition(orders.getOrderDoingDate(),startTime);
-           if(offerOptional.isEmpty()){*/
             List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
             if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(offerDto.getOrderDto().getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
             ).findFirst().isEmpty()) {
@@ -78,7 +76,7 @@ public class OfferService {
                 throw new RuntimeException();
             }
         }
-    }
+    }*/
 
     public OfferDto findOfferById(int id) {
         Optional<Offer> offerOptional = offerDao.findById(id);

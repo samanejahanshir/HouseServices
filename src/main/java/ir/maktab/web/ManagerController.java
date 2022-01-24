@@ -1,10 +1,7 @@
 package ir.maktab.web;
 
 import ir.maktab.dto.*;
-import ir.maktab.service.MainServicesService;
-import ir.maktab.service.ManagerService;
-import ir.maktab.service.SubServicesService;
-import ir.maktab.service.UserService;
+import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +19,7 @@ public class ManagerController {
     final UserService userService;
     final SubServicesService subServices;
     final MainServicesService mainServices;
+    final ExpertService expertService;
 
     @RequestMapping("/Signin")
     public String signIn(Model model) {
@@ -52,18 +50,18 @@ public class ManagerController {
     }
 
     @PostMapping("/search")
-    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch,Model model
-                                 ,HttpSession session) {
+    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch, Model model
+            , HttpSession session) {
         List<UserDto> userDtoList;
-        if((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName()==null) && conditionSearch.getMaxScore()==0 && conditionSearch.getMinScore()==0){
+        if ((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName() == null) && conditionSearch.getMaxScore() == 0 && conditionSearch.getMinScore() == 0) {
             userDtoList = userService.getUserByCondition(conditionSearch);
 
-        }else {
-            userDtoList=userService.getExpertsByCondition(conditionSearch);
+        } else {
+            userDtoList = userService.getExpertsByCondition(conditionSearch);
 
         }
-      //  session.setAttribute("products", productDtos);
-        model.addAttribute("listUserDto",userDtoList);
+        //  session.setAttribute("products", productDtos);
+        model.addAttribute("listUserDto", userDtoList);
         return "ViewListUsers";
     }
 
@@ -77,8 +75,8 @@ public class ManagerController {
     @RequestMapping(value = "/saveMainService", method = RequestMethod.POST)
     public String saveMainService(@ModelAttribute("mainService") MainServiceDto mainServiceDto, Model model) {
         boolean error = false;
-            managerService.saveMainServiceToDb(mainServiceDto);
-            model.addAttribute("message", "save saccessfully");
+        managerService.saveMainServiceToDb(mainServiceDto);
+        model.addAttribute("message", "save saccessfully");
         return "AddMainServices";
     }
 
@@ -92,15 +90,15 @@ public class ManagerController {
     @RequestMapping(value = "/saveSubService", method = RequestMethod.POST)
     public String saveSubService(@ModelAttribute("subServiceDto") SubServiceDto subServiceDto, Model model) {
         boolean error = false;
-            managerService.saveSubService(subServiceDto);
-            model.addAttribute("message", "save saccessfully");
+        managerService.saveSubService(subServiceDto);
+        model.addAttribute("message", "save saccessfully");
         return "AddSubService";
     }
 
     @RequestMapping("/viewListMainServices")
     public String viewListMainServices(Model model) {
         List<MainServiceDto> listMainService = mainServices.getListMainService();
-        model.addAttribute("role_user","manager");
+        model.addAttribute("role_user", "manager");
         model.addAttribute("listMainServices", listMainService);
         listMainService.forEach(System.out::println);
         return "ViewListMainServiceManager";
@@ -110,8 +108,21 @@ public class ManagerController {
     public String viewListSubServices(Model model, @PathVariable String groupName) {
         List<SubServiceDto> listSubService = subServices.getListSubService(groupName);
         model.addAttribute("listSubServices", listSubService);
-        model.addAttribute("role_user","manager");
+        model.addAttribute("role_user", "manager");
         return "ViewListSubServiceManager";
+    }
+
+    @RequestMapping("/addExpertToServices/{service}")
+    public String addExpertToServices(@PathVariable("service") String service, Model model) {
+        model.addAttribute("service", service);
+        return "AddExpertToSubService";
+    }
+
+    @RequestMapping(value = "/saveExpertToServices/{service}",method = RequestMethod.POST)
+    public String saveExpertToServices(@PathVariable("service") String service, Model model, @RequestParam("expertEmail") String expertEmail) {
+        expertService.addSubServiceToExpertList(expertEmail, service);
+        model.addAttribute("message","expert added to list services");
+        return "managerPage";
     }
 
     @RequestMapping("/viewListNotConfirmCustomer")
@@ -123,11 +134,11 @@ public class ManagerController {
 
     @RequestMapping("/confirmCustomer/{id}")
     public String confirmCustomer(@PathVariable int id, Model model) {
-            CustomerDto customerDto = managerService.getCustomerService().getCustomerById(id);
-            managerService.confirmCustomer(customerDto);
-            model.addAttribute("message", "confirm is successfully");
-            List<CustomerDto> customerNoConfirm = managerService.getListCustomerNoConfirm();
-            model.addAttribute("listCustomer", customerNoConfirm);
+        CustomerDto customerDto = managerService.getCustomerService().getCustomerById(id);
+        managerService.confirmCustomer(customerDto);
+        model.addAttribute("message", "confirm is successfully");
+        List<CustomerDto> customerNoConfirm = managerService.getListCustomerNoConfirm();
+        model.addAttribute("listCustomer", customerNoConfirm);
 
         return "ViewNotConfirmCustomer";
     }
@@ -148,13 +159,13 @@ public class ManagerController {
     public String saveNewPassword(@RequestParam("password") String password, Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
         managerService.updatePassword(email, password);
-        model.addAttribute("message","change pass is successfuly");
+        model.addAttribute("message", "change pass is successfuly");
         return "managerPage";
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public final String handleException(RuntimeException ex,Model model, WebRequest request) {
-        model.addAttribute("message",ex.getMessage());
+    public final String handleException(RuntimeException ex, Model model, WebRequest request) {
+        model.addAttribute("message", ex.getMessage());
         return "errorPage";
     }
 

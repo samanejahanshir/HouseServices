@@ -25,12 +25,12 @@ public class MainServicesService {
         return mainServices.stream().map(mainServiceMapper::toDto).collect(Collectors.toList());
     }
 
-    public MainServiceDto getByName(String name){
+    public MainServiceDto getByName(String name) {
         Optional<MainServices> services = mainServiceDao.findByGroupName(name);
-        if (services.isPresent()){
+        if (services.isPresent()) {
             return mainServiceMapper.toDto(services.get());
-        }else {
-            throw  new MainServiceNotFoundException();
+        } else {
+            throw new MainServiceNotFoundException();
         }
     }
 }

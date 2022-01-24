@@ -3,7 +3,10 @@ package ir.maktab.service;
 import ir.maktab.data.dao.*;
 import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.enums.OrderState;
-import ir.maktab.data.model.*;
+import ir.maktab.data.model.Expert;
+import ir.maktab.data.model.Offer;
+import ir.maktab.data.model.Orders;
+import ir.maktab.data.model.SubServices;
 import ir.maktab.dto.ConditionSearch;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.OfferDto;
@@ -33,7 +36,6 @@ public class ExpertService {
     final CustomerDao customerDao;
     final ExpertMapper expertMapper;
     final OfferMapper offerMapper;
-    // final OfferService offerService;
     final OrderMapper orderMapper;
     final SubServiceMapper subServiceMapper;
 
@@ -70,25 +72,6 @@ public class ExpertService {
         expertDao.save(expert);
     }
 
-  /*  public void setImage(File image, String email) {
-        int maxsize = 300000;
-        byte[] imageFile = new byte[(int) image.length()];
-        try {
-            if (imageFile.length <= maxsize) {
-                FileInputStream fileInputStream = new FileInputStream(image);
-                fileInputStream.read(imageFile);
-                fileInputStream.close();
-                Expert expert = getExpertByEmail(email);
-                expert.setImage(imageFile);
-                expertDao.save(expert);
-            } else {
-                throw new InvalidSizeImageException("this image is big please upload anyImage");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
     public Expert getExpertByEmailJoinSubService(String email) {
         Optional<Expert> expertOptional = expertDao.getExpertByEmailJoinSubService(email);
         if (expertOptional.isPresent()) {
@@ -107,7 +90,6 @@ public class ExpertService {
         }
     }
 
-
     @Transactional
     public void addSubServiceToExpertList(String email, String subService) {
         Expert expert = getExpertByEmail(email);
@@ -115,7 +97,11 @@ public class ExpertService {
         if (subServicesOptional.isPresent() && expert != null) {
             SubServices subServices = subServicesOptional.get();
             if (expert.getServices() != null) {
-                expert.getServices().add(subServices);
+               if(expert.getServices().stream().anyMatch(subServices1 -> subServices1.getName().equalsIgnoreCase(subService))){
+                   throw new SubServiceDuplicateException();
+               }else {
+                   expert.getServices().add(subServices);
+               }
             } else {
                 expert.setServices(List.of(subServices));
             }
@@ -142,8 +128,6 @@ public class ExpertService {
     public void addOfferToOrder(String email, OfferDto offerDto) {
         Expert expert = getExpertByEmail(email);
         if (expert != null) {
-            // Optional<Offer> offerOptional=offerDao.getOfferByCondition(offerDto.getOrderDto().getOrderDoingDate(),startTime);
-            // if(offerOptional.isEmpty()){
             List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
             if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(offerDto.getOrderDto().getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
             ).findFirst().isEmpty()) {

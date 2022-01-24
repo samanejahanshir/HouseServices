@@ -16,12 +16,8 @@ import ir.maktab.exceptions.OrderNotFoundException;
 import ir.maktab.exceptions.SubServiceNotFoundException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -109,10 +105,6 @@ public class OrderService {
         }
         orderDao.deleteById(orderId);
     }
-
-   /* public int RegisterACommentToOrder(int orderId, String comment) {
-        return orderDao.updateOrderComment(orderId, comment);
-    }*/
 
     //score 1 - 10
     @Transactional
@@ -210,13 +202,13 @@ public class OrderService {
     }
 
     @Transactional
-    public List<OrderDto> getHistoryWorksOfExpert(String email){
+    public List<OrderDto> getHistoryWorksOfExpert(String email) {
         Expert expert = expertService.getExpertByEmail(email);
-        if(expert!=null){
+        if (expert != null) {
             List<Orders> orders = orderDao.findByStateEqualsAndExpert(OrderState.PAID, expert);
             return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
 
-        }else {
+        } else {
             throw new ExpertNotExistException();
         }
     }

@@ -32,7 +32,7 @@
                 <td><a href="/expert/addSubServiceToList/${service.name}">add to my list subservice</a> </td>
             </c:if>
             <c:if test="${role_user.equals('manager')}">
-
+                <td><a href="/manager/addExpertToServices/${service.name}">add expert to subservice</a> </td>
             </c:if>
 
         </tr>
