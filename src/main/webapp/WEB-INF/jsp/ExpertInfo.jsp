@@ -11,13 +11,14 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Info</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
-<body>
+<body style="background-color: #c3e7f8">
 <%--<p>${message}</p>--%>
+<div class="container col-12">
 <form:form modelAttribute="expertDto">
     <table class="table table-bordered table-striped table-primary text-dark">
         <tr>
@@ -41,5 +42,6 @@
 
     </table>
 </form:form>
+</div>
 </body>
 </html>

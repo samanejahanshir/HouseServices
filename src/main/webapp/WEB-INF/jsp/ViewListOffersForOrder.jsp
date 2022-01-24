@@ -15,9 +15,9 @@
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
-<body>
+<body style="background-color: #c3e7f8">
 <P>${message}</P>
-<div class="container m-1">
+<div class="container col-12">
 <table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>createDate</th><th>price</th><th>Duration time</th><th>Start time</th><th>expert</th><th>state</th><th>select offer</th></tr>
     <c:forEach var="offer" items="${listOffers}" >

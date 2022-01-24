@@ -11,9 +11,13 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Change pass</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </head>
-<body>
+<body style="background-color: #c3e7f8">
+<div class="container col-12">
 <c:if test="${role_user.equals('expert')}">
 <form cssClass="p-1 my-5 mx-5"  method="post" action="/expert/saveNewPass">
     </c:if>
@@ -42,5 +46,6 @@
         </tr>
     </table>
 </form>
+</div>
 </body>
 </html>

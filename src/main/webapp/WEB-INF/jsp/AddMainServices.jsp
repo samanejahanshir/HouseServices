@@ -15,7 +15,7 @@
 </head>
 <body style="background-color: #c3e7f8">
 <p>${message}</p>
-<div class="container m-1">
+<div class="container col-12">
 <form:form modelAttribute="mainService" action="/manager/saveMainService">
 <h2 style="text-justify: distribute-center-last">Add MainService</h2>
 <table class="table table-bordered table-striped table-primary text-dark">

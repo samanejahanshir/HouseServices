@@ -10,10 +10,10 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Add Offer</title>
 </head>
 <body>
-<div class="container">
+<div class="container col-12">
     <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/expert/saveOffer/${idOrder}"
                modelAttribute="offerDto">
         <h2 style="text-justify: distribute-center-last">Add Order</h2>

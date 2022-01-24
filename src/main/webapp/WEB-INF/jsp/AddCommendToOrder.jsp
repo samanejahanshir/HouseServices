@@ -15,9 +15,9 @@
 
 </head>
 <body style="background-color: #c3e7f8">
-<div class="container m-1">
+<div class="container col-12">
     <form:form modelAttribute="commend" action="/commend/saveCommend">
-        <h2 style="text-justify: distribute-center-last">Add MainService</h2>
+        <h2 style="text-justify: distribute-center-last">Add Commend</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
             <tr>
                 <td>

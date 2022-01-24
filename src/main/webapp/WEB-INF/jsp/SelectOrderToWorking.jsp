@@ -15,8 +15,9 @@
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
-<body>
+<body style="background-color: #c3e7f8">
 <p>${message}</p>
+<div class="container col-12">
 <form:form modelAttribute="orderDto">
 <table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>DoingDate</th><th>DoingTime</th><th>RegisterDate</th>
@@ -40,5 +41,6 @@
 
 </table>
 </form:form>
+</div>
 </body>
 </html>

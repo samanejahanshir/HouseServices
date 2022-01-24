@@ -10,9 +10,13 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Increment credit</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </head>
-<body>
+<body style="background-color: #c3e7f8">
+<div class="container col-12">
 <c:set  var="email" value="${email}"/>
 <form method="post" action="/customer/saveCredit">
     <h2 style="text-justify: distribute-center-last">increment credit</h2>
@@ -34,5 +38,6 @@
         </tr>
     </table>
 </form>
+</div>
 </body>
 </html>

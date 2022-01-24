@@ -10,7 +10,7 @@
 <head>
     <titl>error</titl></title>
 </head>
-<body>
-<p>${message}</p>
+<body style="background-color: #c3e7f8">
+<p style="color: #26266b">${message}</p>
 </body>
 </html>

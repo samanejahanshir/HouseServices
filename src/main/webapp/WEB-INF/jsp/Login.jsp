@@ -10,13 +10,13 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Log in</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
 <body style="background-color: #c3e7f8">
 <p>${message}</p>
-<div class="container m-1">
+<div class="container col-12">
     <c:if test="${role_user.equals('customer')}">
     <form method="post" action="<c:url value="/customer/doLogin"/>">
         </c:if>

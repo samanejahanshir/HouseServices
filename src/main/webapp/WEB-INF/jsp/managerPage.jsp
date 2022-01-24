@@ -13,7 +13,7 @@
 
 </head>
 <body style="background-color: #c3e7f8">
-<div class="container p-1">
+<div class="container col-12">
     <div class="card" style="width: 18rem;">
         <ul class="list-group list-group-flush">
             <li class="list-group-item"><a href="/manager/listUsers">List Users</a></li>

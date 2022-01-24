@@ -15,8 +15,8 @@
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
-<body>
-<div class="container m-1">
+<body style="background-color: #c3e7f8">
+<div class="container col-12">
 <table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>DoingDate</th><th>DoingTime</th><th>RegisterDate</th><th>Price</th><th>state</th><th>sub service</th></tr>
     <c:forEach var="order" items="${listOrdersDto}" >

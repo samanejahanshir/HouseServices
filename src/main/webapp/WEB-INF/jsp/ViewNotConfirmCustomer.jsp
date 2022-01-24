@@ -10,14 +10,14 @@
 
 <html>
 <head>
-    <title>Customer</title>
+    <title> Confirm Customer</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
-<body>
+<body style="background-color: #c3e7f8">
 <p>${message}</p>
-<div class="container m-1">
+<div class="container col-12">
 <table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>FirstName</th><th>LastName</th><th>Email</th><th>Role</th><th>RegisterDate</th></tr>
     <c:forEach var="user" items="${listCustomer}" >
