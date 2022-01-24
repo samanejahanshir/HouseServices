@@ -60,6 +60,14 @@ public class CustomerController {
         }
     }
 
+    @RequestMapping("/viewInformation")
+    public String viewInformation(Model model, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        CustomerDto customerDto = customerService.getInformation(email);
+        model.addAttribute("customerDto", customerDto);
+        return "CustomerInfo";
+    }
+
     @RequestMapping(value = "/doLogin")
     public String customerPage(Model model, @RequestParam("email") String email, HttpSession session) {
 
@@ -160,19 +168,20 @@ public class CustomerController {
     public String saveCredit(Model model, @RequestParam("amount") int amount, HttpSession session) {
         String email = (String) session.getAttribute("email");
         CustomerDto customerDto = customerService.getCustomerMapper().toDto(customerService.getCustomerByEmail(email));
-        customerService.incrementCredit(customerDto,amount);
-        model.addAttribute("message","credit incremented");
+        customerService.incrementCredit(customerDto, amount);
+        model.addAttribute("message", "credit incremented");
         return "CustomerPage";
     }
+
     @RequestMapping("/logout")
-    public String logOut(HttpSession session){
+    public String logOut(HttpSession session) {
         session.removeAttribute("email");
         return "redirect:/index";
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public final String handleException(RuntimeException ex,Model model, WebRequest request) {
-        model.addAttribute("message",ex.getMessage());
+    public final String handleException(RuntimeException ex, Model model, WebRequest request) {
+        model.addAttribute("message", ex.getMessage());
         return "errorPage";
     }
 }

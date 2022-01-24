@@ -29,7 +29,7 @@
             <td>${offer.startTime}</td>
             <td>${offer.expertDto.firstName} ${offer.expertDto.lastName}</td>
             <td>${offer.state}</td>
-            <td><a href="/customer/selectOffer/${offer.id}">select</a></td>
+            <td><a href="/offer/selectOffer/${offer.id}">select</a></td>
 
         </tr>
     </c:forEach>

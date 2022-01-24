@@ -209,4 +209,15 @@ public class OrderService {
         orderDao.updateOrderState(idOrder, state);
     }
 
+    @Transactional
+    public List<OrderDto> getHistoryWorksOfExpert(String email){
+        Expert expert = expertService.getExpertByEmail(email);
+        if(expert!=null){
+            List<Orders> orders = orderDao.findByStateEqualsAndExpert(OrderState.PAID, expert);
+            return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+
+        }else {
+            throw new ExpertNotExistException();
+        }
+    }
 }

@@ -4,7 +4,10 @@ import ir.maktab.data.dao.CustomerDao;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.Address;
 import ir.maktab.data.model.Customer;
+import ir.maktab.data.model.Expert;
 import ir.maktab.dto.CustomerDto;
+import ir.maktab.dto.ExpertDto;
+import ir.maktab.dto.SubServiceDto;
 import ir.maktab.dto.mapper.CustomerMapper;
 import ir.maktab.exceptions.CustomerNotExistException;
 import ir.maktab.exceptions.UserByEmailExistException;
@@ -13,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -139,5 +144,12 @@ public class CustomerService {
         else {
             throw new CustomerNotExistException();
         }
+    }
+
+    @Transactional
+    public CustomerDto getInformation(String email) {
+        Customer customer = getCustomerByEmail(email);
+        CustomerDto customerDto = customerMapper.toDto(customer);
+        return customerDto;
     }
 }

@@ -110,23 +110,64 @@ public class OrderController {
     }
 
     @RequestMapping("/select/{orderId}")
-    public String selectWorkByExpert(@PathVariable("orderId") int orderId, Model model) {
+    public String selectWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         OrderDto orderDto = orderService.getOrderById(orderId);
+        String message = "";
+        if (session.getAttribute("messageSuccess") != null) {
+            message = (String) session.getAttribute("message");
+            session.removeAttribute("messageSuccess");
+        }
         model.addAttribute("orderDto", orderDto);
-        model.addAttribute("message","");
+        model.addAttribute("message", message);
         return "SelectOrderToWorking";
     }
 
     @RequestMapping("/startWork/{orderId}")
-    public String startWorkByExpert(@PathVariable("orderId") int orderId, Model model) {
+    public String startWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         orderService.updateOrderState(orderId, OrderState.STARTED);
-        model.addAttribute("message","work started");
-        return "redirect:/order/select/"+orderId;
+        session.setAttribute("messageSuccess", "work started");
+        return "redirect:/order/select/" + orderId;
+    }
+
+    @RequestMapping("/endWork/{orderId}")
+    public String endWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
+        orderService.updateOrderState(orderId, OrderState.DONE);
+        session.setAttribute("messageSuccess", "work done.");
+        return "redirect:/order/select/" + orderId;
+    }
+
+    @RequestMapping("/paymentCustomer/{orderId}")
+    public String paymentForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
+        orderService.updateOrderStateToPaid(orderId);
+        session.setAttribute("messageSuccess", "The payment was success.");
+        return "redirect:/order/select/" + orderId;
+    }
+
+    @RequestMapping("/showScore/{orderId}")
+    public String showScoreOrderForExpert(@PathVariable("orderId") int orderId, HttpSession session) {
+        int score = orderService.getScoreOrderForExpert(orderId);
+        session.setAttribute("scoreExpert",Integer.toString(score));
+        return "redirect:/order/historyWorks";
     }
 
     @ExceptionHandler(RuntimeException.class)
     public final String handleException(RuntimeException ex, Model model, WebRequest request) {
         model.addAttribute("message", ex.getMessage());
         return "errorPage";
+    }
+
+    @RequestMapping("/historyWorks")
+    public String showHistoryWorks(Model model,HttpSession session){
+        String email=(String) session.getAttribute("email");
+        List<OrderDto> orderDtoList = orderService.getHistoryWorksOfExpert(email);
+        model.addAttribute("typeList","historyList");
+        model.addAttribute("listOrder",orderDtoList);
+        String score="";
+        if(session.getAttribute("scoreExpert")!=null){
+            score=(String) session.getAttribute("scoreExpert");
+            session.removeAttribute("scoreExpert");
+        }
+        model.addAttribute("score",score);
+        return "ViewListOrdersForExpert";
     }
 }

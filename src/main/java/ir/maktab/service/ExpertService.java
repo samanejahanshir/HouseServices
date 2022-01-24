@@ -7,9 +7,11 @@ import ir.maktab.data.model.*;
 import ir.maktab.dto.ConditionSearch;
 import ir.maktab.dto.ExpertDto;
 import ir.maktab.dto.OfferDto;
+import ir.maktab.dto.SubServiceDto;
 import ir.maktab.dto.mapper.ExpertMapper;
 import ir.maktab.dto.mapper.OfferMapper;
 import ir.maktab.dto.mapper.OrderMapper;
+import ir.maktab.dto.mapper.SubServiceMapper;
 import ir.maktab.exceptions.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class ExpertService {
     final OfferMapper offerMapper;
     // final OfferService offerService;
     final OrderMapper orderMapper;
+    final SubServiceMapper subServiceMapper;
 
     public void saveExpert(Expert expert) {
         if (expertDao.findByEmail(expert.getEmail()).isEmpty()) {
@@ -111,9 +114,9 @@ public class ExpertService {
         Optional<SubServices> subServicesOptional = subServiceDao.findByName(subService);
         if (subServicesOptional.isPresent() && expert != null) {
             SubServices subServices = subServicesOptional.get();
-            if(expert.getServices()!=null) {
+            if (expert.getServices() != null) {
                 expert.getServices().add(subServices);
-            }else{
+            } else {
                 expert.setServices(List.of(subServices));
             }
             expertDao.save(expert);
@@ -165,7 +168,7 @@ public class ExpertService {
         orderDao.updateOrderState(idOrder, state);
     }
 
-    public List<ExpertDto> getExpertsByCondition(ConditionSearch condition){
+    public List<ExpertDto> getExpertsByCondition(ConditionSearch condition) {
         List<Expert> userList = expertDao.findAll(ExpertDao.selectByCondition(condition));
         if (!(userList.isEmpty())) {
             return userList.stream().map(expertMapper::toDto).collect(Collectors.toList());
@@ -174,4 +177,12 @@ public class ExpertService {
         }
     }
 
+    @Transactional
+    public ExpertDto getInformation(String email) {
+        Expert expert = getExpertByEmail(email);
+        ExpertDto expertDto = expertMapper.toDto(expert);
+        List<SubServiceDto> serviceDtos = expert.getServices().stream().map(subServiceMapper::toDto).collect(Collectors.toList());
+        expertDto.setSubServiceDto(serviceDtos);
+        return expertDto;
+    }
 }

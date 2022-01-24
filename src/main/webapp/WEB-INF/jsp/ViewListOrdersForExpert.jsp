@@ -18,8 +18,17 @@
 <body>
 <div class="container m-1">
     <table class="table table-bordered table-striped table-primary text-dark">
-        <tr><th>Id</th><th>DoingDate</th><th>DoingTime</th><th>RegisterDate</th><th>Price</th><th>state</th><th>sub service</th><th>customer</th></tr>
-        <c:forEach var="order" items="${listOrder}" >
+        <tr>
+            <th>Id</th>
+            <th>DoingDate</th>
+            <th>DoingTime</th>
+            <th>RegisterDate</th>
+            <th>Price</th>
+            <th>state</th>
+            <th>sub service</th>
+            <th>customer</th>
+        </tr>
+        <c:forEach var="order" items="${listOrder}">
             <tr>
                 <td>${order.id}</td>
                 <td>${order.orderDoingDate}</td>
@@ -29,17 +38,16 @@
                 <td>${order.state}</td>
                 <td>${order.subServiceDto.name}</td>
                 <td>${order.customerDto.firstName} ${order.customerDto.lastName}</td>
-               <c:if test="${typeList.equals('allOrders')}"> <td><a href="expert/addOffer/${order.id}">add offer</a> </td></c:if>
-                <c:if test="${typeList.equals('workList')}">
-                    <td><a href="/order/select/${order.id}">select</a> </td>
+                <c:if test="${typeList=='allOrders'}">
+                    <td><a href="/expert/addOffer/${order.id}">add offer</a></td>
                 </c:if>
-
-            <%--
-                                <c:if test="${order.state.equals('WAIT_OFFER_EXPERTS') || order.state.equals('WAIT_SELECT_EXPERT')}">
-                    --%>
-                    <%--
-                                </c:if>
-                    --%>
+                <c:if test="${typeList=='workList'}">
+                    <td><a href="/order/select/${order.id}">select</a></td>
+                </c:if>
+                <c:if test="${typeList=='historyList'}">
+                    <td><a href="/order/showScore/${order.id}">show score</a></td>
+                    <td><p>${score}</p></td>
+                </c:if>
             </tr>
         </c:forEach>
     </table>

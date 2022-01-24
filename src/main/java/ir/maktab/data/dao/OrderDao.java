@@ -33,4 +33,7 @@ public interface OrderDao extends JpaRepository<Orders, Integer> {
 
     @Query(value = "select o from  Customer c inner join c.orders o  where o.customer.id=:id and o.state <> 'PAID'")
     List<Orders> getListOrdersThatNotFinished(@Param("id") int customerId);
+
+    List<Orders> findByStateEqualsAndExpert(OrderState state,Expert expert);
+
 }

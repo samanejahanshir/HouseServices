@@ -54,6 +54,14 @@ final OrderService orderService;
 
     }
 
+    @RequestMapping("/viewInformation")
+    public String viewInformation(Model model,HttpSession session){
+        String email=(String)session.getAttribute("email");
+        ExpertDto expertDto = expertService.getInformation(email);
+        model.addAttribute("expertDto",expertDto);
+        return "ExpertInfo";
+    }
+
     @RequestMapping("/addServiceToList")
     public String addSubServiceToExpertList(Model model) {
         List<MainServiceDto> listMainServices = mainServices.getListMainService();
@@ -122,4 +130,5 @@ final OrderService orderService;
         model.addAttribute("message",ex.getMessage());
         return "errorPage";
     }
+
 }

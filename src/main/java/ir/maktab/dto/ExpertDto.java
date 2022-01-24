@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Date;
+import java.util.*;
 
 @Data
 @Builder
@@ -35,5 +35,6 @@ public class ExpertDto {
     private byte[] image;
     private UserType role;
     private String password;
+    private List<SubServiceDto> subServiceDto=new ArrayList<>();
 
 }

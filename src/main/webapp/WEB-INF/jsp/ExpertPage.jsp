@@ -21,7 +21,9 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item"><a href="/expert/addServiceToList">Add a subService to my list</a></li>
             <li class="list-group-item"><a href="/expert/changePass">Change password</a></li>
+            <li class="list-group-item"><a href="/expert/viewInformation">view information</a></li>
             <li class="list-group-item"><a href="/order/allOrdersExpert">view all orders</a></li>
+            <li class="list-group-item"><a href="/order/historyWorks">view history works</a></li>
             <li class="list-group-item"><a href="/order/listWorks">List works</a></li>
             <li class="list-group-item"><a href="/expert/logout">Log Out</a></li>
 
