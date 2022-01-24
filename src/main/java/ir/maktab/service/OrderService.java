@@ -19,6 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -184,21 +187,26 @@ public class OrderService {
         Optional<Orders> orders = orderDao.findById(id);
         if (orders.isPresent()) {
             return orderMapper.toDto(orders.get());
-        }
-        else {
+        } else {
             throw new OrderNotFoundException();
         }
     }
 
     @Transactional
-    public List<OrderDto> viewListWorkOfExpert(String email){
+    public List<OrderDto> viewListWorkOfExpert(String email) {
         Expert expert = expertService.getExpertByEmail(email);
-        if(expert!=null) {
+        if (expert != null) {
             List<OrderState> workList = List.of(OrderState.WAIT_SELECT_EXPERT, OrderState.WAIT_OFFER_EXPERTS, OrderState.PAID);
             List<Orders> ordersList = orderDao.findByExpertEqualsAndStateIsNotIn(expert, workList);
-           return ordersList.stream().map(orderMapper::toDto).collect(Collectors.toList());
-        }else{
+            return ordersList.stream().map(orderMapper::toDto).collect(Collectors.toList());
+        } else {
             throw new ExpertNotExistException();
         }
     }
+
+    @Transactional
+    public void updateOrderState(int idOrder, OrderState state) {
+        orderDao.updateOrderState(idOrder, state);
+    }
+
 }

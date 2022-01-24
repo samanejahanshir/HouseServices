@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.model.Address;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.OrderDto;
@@ -77,7 +78,7 @@ public class OrderController {
     }*/
 
     @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
-    public String saveNewOrder(@ModelAttribute("orderDto") OrderDto orderDto, @RequestParam("orderDate") String date,HttpSession session, Model model) throws ParseException {
+    public String saveNewOrder(@ModelAttribute("orderDto") OrderDto orderDto, @RequestParam("orderDate") String date, HttpSession session, Model model) throws ParseException {
         String email = (String) session.getAttribute("email");
         String subService = (String) session.getAttribute("subService");
         SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-mm-dd");
@@ -104,8 +105,23 @@ public class OrderController {
         String email = (String) session.getAttribute("email");
         List<OrderDto> orderDtos = orderService.viewListWorkOfExpert(email);
         model.addAttribute("listOrder", orderDtos);
-        model.addAttribute("typeList","workList");
+        model.addAttribute("typeList", "workList");
         return "ViewListOrdersForExpert";
+    }
+
+    @RequestMapping("/select/{orderId}")
+    public String selectWorkByExpert(@PathVariable("orderId") int orderId, Model model) {
+        OrderDto orderDto = orderService.getOrderById(orderId);
+        model.addAttribute("orderDto", orderDto);
+        model.addAttribute("message","");
+        return "SelectOrderToWorking";
+    }
+
+    @RequestMapping("/startWork/{orderId}")
+    public String startWorkByExpert(@PathVariable("orderId") int orderId, Model model) {
+        orderService.updateOrderState(orderId, OrderState.STARTED);
+        model.addAttribute("message","work started");
+        return "redirect:/order/select/"+orderId;
     }
 
     @ExceptionHandler(RuntimeException.class)
