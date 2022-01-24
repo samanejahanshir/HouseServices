@@ -3,13 +3,17 @@ package ir.maktab.web;
 import ir.maktab.data.model.Expert;
 import ir.maktab.dto.*;
 import ir.maktab.service.*;
+import ir.maktab.service.validation.OnRegister;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/expert")
@@ -29,9 +33,13 @@ final OrderService orderService;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String expertRegister(@ModelAttribute("expertDto") ExpertDto expertDto, Model model, HttpSession session) {
+    public String expertRegister(@ModelAttribute("expertDto")ExpertDto expertDto, Model model, HttpSession session) {
+        /*if (bindingResult.hasErrors()) {
+            bindingResult.getFieldErrors().forEach(error -> model.addAttribute(error.getField(), error.getDefaultMessage()));
+            return "ExpertRegister";
+        }*/
             userService.saveExpert(expertDto);
-            session.setAttribute("expertDto", expertDto);
+            session.setAttribute("email", expertDto.getEmail());
         return "ExpertPage";
 
     }

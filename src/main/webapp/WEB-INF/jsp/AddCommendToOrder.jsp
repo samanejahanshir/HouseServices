@@ -28,7 +28,7 @@
             </tr>
             <tr>
                 <td>
-                    <form:label path="score">Commend :</form:label>
+                    <form:label path="score">Score :</form:label>
                 </td>
                 <td>
                     <ul>
@@ -37,7 +37,7 @@
                             <form:option type="number" value="2">2</form:option>
                             <form:option type="number" value="3">3</form:option>
                             <form:option type="number" value="4">4</form:option>
-                            <form:option type="number" value="5">4</form:option>
+                            <form:option type="number" value="5">5</form:option>
 
                         </form:select>
                     </ul>

@@ -20,13 +20,13 @@ import java.util.*;
 @AllArgsConstructor
 public class ExpertDto {
     private Integer id;
-    @NotBlank(message = "should not be empty", groups = {OnLogin.class, OnRegister.class})
+    @NotBlank(message = "should not be empty")
     @Pattern(regexp = "^[a-zA-Z]{3,20}", message = "format firstName not valid")
     private String firstName;
-    @NotBlank(message = "should not be empty", groups = {OnLogin.class, OnRegister.class})
+    @NotBlank(message = "should not be empty")
     @Pattern(regexp = "^[a-zA-Z]{3,20}", message = "format lastName not valid")
     private String lastName;
-    @NotBlank(message = "should not be empty", groups = {OnLogin.class, OnRegister.class})
+    @NotBlank(message = "should not be empty")
     @Pattern(regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*" +
             "@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", message = "format email not valid")
     private String email;
@@ -34,6 +34,7 @@ public class ExpertDto {
     private int score;
     private byte[] image;
     private UserType role;
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",message = "password length should >8 and a-z and A-z")
     private String password;
     private List<SubServiceDto> subServiceDto=new ArrayList<>();
 

@@ -103,7 +103,7 @@ public class OrderService {
 
     public void deleteOrder(int orderId) {
         //offerDao.deleteOffersOfAOrder(orderId);
-        List<Integer> offersId = offerDao.getListOffers(orderId).stream().map(offer -> offer.getId()).collect(Collectors.toList());
+        List<Integer> offersId = offerDao.findByOrders_Id(orderId).stream().map(Offer::getId).collect(Collectors.toList());
         if (!offersId.isEmpty()) {
             offerDao.deleteByIdIn(offersId);
         }

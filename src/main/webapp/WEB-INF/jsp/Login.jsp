@@ -46,7 +46,6 @@
                     </tr>
                     <tr>
                         <td>
-                            <label> Password:</label>
                         </td>
                         <td>
                             <input type="submit" value="Login">

@@ -32,22 +32,24 @@ public class OfferService {
     final OfferDao offerDao;
     final ExpertService expertService;
 
+    @Transactional
     public List<OfferDto> getListOffers(OrderDto orderDto) {
-        List<Offer> listOffers = offerDao.getListOffers(orderDto.getId());
+        List<Offer> listOffers = offerDao.findByOrders_Id(orderDto.getId());
         return listOffers.stream().map(offerMapper::toDto).collect(Collectors.toList());
     }
 
+    @Transactional
     public List<OfferDto> getListOffersSortByScoreOrPrice(OrderDto orderDto, boolean byPrice, boolean byScoreExpert) {
         List<Offer> listOffers = new ArrayList<>();
         if (byPrice && !byScoreExpert) {
-            listOffers = offerDao.getListOffersBySort(orderDto.getId(), Sort.by("offerPrice").ascending());
+            listOffers = offerDao.findByOrders_Id(orderDto.getId(), Sort.by("offerPrice").ascending());
             return listOffers.stream().map(offerMapper::toDto).collect(Collectors.toList());
         } else if (!byPrice && byScoreExpert) {
-            listOffers = offerDao.getListOffersBySort(orderDto.getId(), Sort.by("expert.score").descending());
+            listOffers = offerDao.findByOrders_Id(orderDto.getId(), Sort.by("expert.score").descending());
             return listOffers.stream().map(offerMapper::toDto).collect(Collectors.toList());
         } else if (byPrice && byScoreExpert) {
             Sort offerPriceAndScore = Sort.by("expert.score").descending().and(Sort.by("offerPrice").ascending());
-            listOffers = offerDao.getListOffersBySort(orderDto.getId(), offerPriceAndScore);
+            listOffers = offerDao.findByOrders_Id(orderDto.getId(), offerPriceAndScore);
             return listOffers.stream().map(offerMapper::toDto).collect(Collectors.toList());
         } else {
             return getListOffers(orderDto);

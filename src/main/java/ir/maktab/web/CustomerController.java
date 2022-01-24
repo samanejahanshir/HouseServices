@@ -1,8 +1,13 @@
 package ir.maktab.web;
 
 import ir.maktab.data.enums.UserState;
-import ir.maktab.dto.*;
-import ir.maktab.service.*;
+import ir.maktab.dto.CustomerDto;
+import ir.maktab.dto.MainServiceDto;
+import ir.maktab.dto.SubServiceDto;
+import ir.maktab.service.CustomerService;
+import ir.maktab.service.MainServicesService;
+import ir.maktab.service.SubServicesService;
+import ir.maktab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/customer")
@@ -19,8 +23,6 @@ import java.util.List;
 //@SessionAttributes({"email"})
 public class CustomerController {
     final CustomerService customerService;
-    // final OrderService orderService;
-    // final OfferService offerService;
     final SubServicesService subService;
     final UserService userService;
     final MainServicesService mainServices;
@@ -68,43 +70,6 @@ public class CustomerController {
         return "CustomerInfo";
     }
 
-    @RequestMapping(value = "/doLogin")
-    public String customerPage(Model model, @RequestParam("email") String email, HttpSession session) {
-
-        return "CustomerPage";
-    }
-
-//    @RequestMapping("/allOrders")
-//    public String displayListOrders(Model model, HttpSession session) {
-//        String email = (String) session.getAttribute("email");
-//        List<OrderDto> orderDtoList = orderService.getListOrders(email);
-//        model.addAttribute("listOrdersDto", orderDtoList);
-//        orderDtoList.forEach(System.out::println);
-//        return "ViewOrdersCustomer";
-//    }
-
-   /* @RequestMapping("/newOrders")
-    public String displayNewOrders(Model model, HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        List<OrderDto> orderDtoList = orderService.getListOrdersThatNotFinished(email);
-        model.addAttribute("listOrdersDto", orderDtoList);
-        orderDtoList.forEach(System.out::println);
-        return "ViewOrdersCustomer";
-    }*/
-
-   /* @RequestMapping("/viewListOffers/{id}")
-    public String displayListOffers(@PathVariable int id, Model model, HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        try {
-            OrderDto orderDto = orderService.getOrderById(id);
-            List<OfferDto> listOffers = offerService.getListOffers(orderDto);
-            model.addAttribute("listOffers", listOffers);
-        } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
-        }
-        return "ViewListOffersForOrder";
-    }*/
-
     @RequestMapping("/viewListServices")
     public String getListMainService(Model model, HttpSession session) {
         model.addAttribute("role_user", "customer");
@@ -120,29 +85,7 @@ public class CustomerController {
         model.addAttribute("role_user", "customer");
         return "ViewListSubServiceManager";
     }
-   /* /////TODO click on subServiceDto on addnew order ......
-    @RequestMapping("/addNewOrder")
-    public String addNewOrder(Model model, HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        model.addAttribute("OrderDto", new OrderDto());
-        return "RegisterNewOrder";
-    }*/
 
-    /* @RequestMapping("/selectOffer/{id}")
-     public String selectOffer(@PathVariable int id, Model model, HttpSession session) {
-         try {
-             OfferDto offerDto = offerService.findOfferById(id);
-             orderService.selectOfferForOrder(offerDto);
-             OrderDto orderDto = orderService.getOrderById(offerDto.getOrderDto().getId());
-             List<OfferDto> listOffers = offerService.getListOffers(orderDto);
-             model.addAttribute("listOffers", listOffers);
-             model.addAttribute("message", "select offer successfuly");
-         } catch (RuntimeException e) {
-             model.addAttribute("message", e.getMessage());
-         }
-         return "ViewListOffersForOrder";
-     }
- */
     @RequestMapping("/changePass")
     public String changePass(Model model) {
         model.addAttribute("role_user", "customer");

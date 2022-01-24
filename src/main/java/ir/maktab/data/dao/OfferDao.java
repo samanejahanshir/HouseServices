@@ -21,15 +21,10 @@ public interface OfferDao extends JpaRepository<Offer, Integer> {
     @Query(value = "from  Offer  o join fetch o.expert e where e.id=:id")
     List<Offer> getListOfferByExpertId(@Param("id") int expertId);
 
-    /* @Query(value = "select o from Offer o join fetch o.orders order where order.orderDoingDate=:date and o.durationTime+o.startTime>:time")
-     Optional<Offer> getOfferByCondition(@Param("date") Date date, @Param("time") int time);*/
-    @Query(value = "select o from Offer o inner join o.expert e inner  join e.services s where o.orders.id=:id")
-    List<Offer> getListOffers(@Param("id") int ordersId);
-
-    @Query(value = "select o from Offer o inner join o.expert e inner  join e.services s where o.orders.id=:id")
-    List<Offer> getListOffersBySort(@Param("id") int ordersId, Sort sort);
+    List<Offer> findByOrders_Id(int orders_Id);
 
     @Query(value = "select o from Offer o where o.state=:state and o.orders.id=:id")
     List<Offer> getListOfferThatNotSelected(@Param("state") OfferState state, @Param("id") int OrderId);
 
+    List<Offer> findByOrders_Id(int orders_Id,Sort sort);
 }

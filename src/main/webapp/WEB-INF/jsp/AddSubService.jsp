@@ -50,7 +50,7 @@
             <form:label path="description"> Description :</form:label>
         </td>
         <td>
-            : <form:textarea path="description" />
+             <form:textarea path="description" />
         </td>
     </tr>
 
