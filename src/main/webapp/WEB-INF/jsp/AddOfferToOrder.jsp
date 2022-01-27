@@ -15,6 +15,13 @@
 
 </head>
 <body>
+<p>${message}</p>
+<br>
+<form action="/expert/home">
+    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+            style="margin: 2vh 2vw">Dashboard
+    </button>
+</form>
 <div class="container col-12">
     <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/expert/saveOffer/${idOrder}"
                modelAttribute="offerDto">

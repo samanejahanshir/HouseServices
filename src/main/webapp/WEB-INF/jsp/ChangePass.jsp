@@ -17,35 +17,58 @@
 
 </head>
 <body style="background-color: #c3e7f8">
-<div class="container col-12">
-<c:if test="${role_user.equals('expert')}">
-<form cssClass="p-1 my-5 mx-5"  method="post" action="/expert/saveNewPass">
+<p>${message}</p>
+<br>
+<c:if test="${role_user.equals('manager')}">
+<form action="/manager/home">
     </c:if>
+    <c:if test="${role_user.equals('expert')}">
+    <form action="/expert/home">
+        </c:if>
         <c:if test="${role_user.equals('customer')}">
-        <form cssClass="p-1 my-5 mx-5"  method="post" action="/customer/saveNewPass">
+        <form action="/customer/home">
             </c:if>
-                <c:if test="${role_user.equals('manager')}">
-                <form cssClass="p-1 my-5 mx-5"  method="post" action="/manager/saveNewPass">
+            <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+                    style="margin: 2vh 2vw">Dashboard
+            </button>
+        </form>
+        <div class="container col-12">
+            <c:if test="${role_user.equals('expert')}">
+            <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/saveNewPass">
+                </c:if>
+                <c:if test="${role_user.equals('customer')}">
+                <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/saveNewPass">
                     </c:if>
-    <h2 style="text-justify: distribute-center-last">Register Customer</h2>
-    <table class="table table-bordered table-striped table-primary text-dark">
-    <tr>
-    <td>
-        Password:
-    </td>
-    <td>
-        <input type="password" name="password">
-    </td>
-    </tr>
-        <tr>
-            <td>
-            </td>
-            <td>
-                <input type="submit" value="change password">
-            </td>
-        </tr>
-    </table>
-</form>
-</div>
+                    <c:if test="${role_user.equals('manager')}">
+                    <form cssClass="p-1 my-5 mx-5" method="post" action="/manager/saveNewPass">
+                        </c:if>
+                        <h2 style="text-justify: distribute-center-last">Register Customer</h2>
+                        <table class="table table-bordered table-striped table-primary text-dark">
+                            <tr>
+                                <td>
+                                    Email:
+                                </td>
+                                <td>
+                                    <input type="email" name="email">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   New Password:
+                                </td>
+                                <td>
+                                    <input type="password" name="password">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                    <input type="submit" value="change password">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+        </div>
 </body>
 </html>

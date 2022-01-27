@@ -16,6 +16,13 @@
 
 </head>
 <body style="background-color: #c3e7f8">
+<p>${message}</p>
+<br>
+<form action="/customer/home">
+    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+            style="margin: 2vh 2vw">Dashboard
+    </button>
+</form>
 <div class="container col-12">
 <table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>DoingDate</th><th>DoingTime</th><th>RegisterDate</th><th>Price</th><th>state</th><th>sub service</th></tr>

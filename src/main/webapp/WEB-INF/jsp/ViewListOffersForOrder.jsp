@@ -17,8 +17,13 @@
 
 </head>
 <body style="background-color: #c3e7f8">
-<P>${message}</P>
-
+<p>${message}</p>
+<br>
+<form action="/customer/home">
+    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+            style="margin: 2vh 2vw">Dashboard
+    </button>
+</form>
 <div class="container col-12">
     <h1>Users List</h1>
 

@@ -29,6 +29,11 @@ public class ExpertController {
         return "ExpertRegister";
     }
 
+    @RequestMapping("/home")
+    public String homePageManager(Model model) {
+        return "ExpertPage";
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String expertRegister(@ModelAttribute("expertDto") ExpertDto expertDto, Model model, HttpSession session) {
         /*if (bindingResult.hasErrors()) {

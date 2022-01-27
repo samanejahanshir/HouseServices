@@ -15,6 +15,13 @@
 
 </head>
 <body style="background-color: #c3e7f8">
+<p>${message}</p>
+<br>
+<form action="/customer/home">
+    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+            style="margin: 2vh 2vw">Dashboard
+    </button>
+</form>
 <div class="container col-12">
     <form:form modelAttribute="commend" action="/commend/saveCommend">
         <h2 style="text-justify: distribute-center-last">Add Commend</h2>

@@ -17,6 +17,13 @@
 
 </head>
 <body style="background-color: #c3e7f8">
+<p>${message}</p>
+<br>
+<form action="/customer/home">
+    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+            style="margin: 2vh 2vw">Dashboard
+    </button>
+</form>
 <%--
 <c:set  var="email" value="${email}"/>
 --%>

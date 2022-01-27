@@ -27,6 +27,11 @@ public class CustomerController {
     final UserService userService;
     final MainServicesService mainServices;
 
+    @RequestMapping("/home")
+    public String homePageManager(Model model) {
+        return "CustomerPage";
+    }
+
     @RequestMapping("/Signup")
     public String signUp(Model model) {
         model.addAttribute("customerDto", new CustomerDto());
