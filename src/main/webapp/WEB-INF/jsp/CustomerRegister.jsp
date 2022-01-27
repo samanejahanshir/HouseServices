@@ -18,7 +18,7 @@
 <body style="background-color: #c3e7f8">
 
 <div class="container col-12">
-    <form:form cssClass="p-1 my-5 mx-5" enctype="multipart/form-data" method="post" action="/customer/register"
+    <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/customer/register"
                modelAttribute="customerDto">
         <h2 style="text-justify: distribute-center-last">Register Customer</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
@@ -27,7 +27,7 @@
                     <form:label path="firstName">firstName :</form:label>
                 </td>
                 <td>
-                    <form:input type="text" path="firstName" placeHolder="first name"/>
+                    <form:input path="firstName" placeHolder="first name"/>
                 </td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@
                     <form:label path="lastName">lastName :</form:label>
                 </td>
                 <td>
-                    <form:input type="text" path="lastName" placeHolder="last name"/>
+                    <form:input  path="lastName" placeHolder="last name"/>
                 </td>
             </tr>
             <tr>

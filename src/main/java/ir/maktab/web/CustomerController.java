@@ -36,7 +36,7 @@ public class CustomerController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String customerRegister(@ModelAttribute("customerDto") CustomerDto customerDto, Model model, HttpSession session) {
         userService.saveCustomer(customerDto);
-        session.setAttribute("customerDto", customerDto);
+        session.setAttribute("email", customerDto.getEmail());
         return "redirect:/index";
     }
 

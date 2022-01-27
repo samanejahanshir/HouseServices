@@ -11,12 +11,14 @@
 <html>
 <head>
     <title>Add Offer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
 </head>
 <body>
 <div class="container col-12">
     <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/expert/saveOffer/${idOrder}"
                modelAttribute="offerDto">
-        <h2 style="text-justify: distribute-center-last">Add Order</h2>
+        <h2 style="text-justify: distribute-center-last">Add Offer</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
             <tr>
                 <td>

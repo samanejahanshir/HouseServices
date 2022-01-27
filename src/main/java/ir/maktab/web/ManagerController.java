@@ -37,12 +37,6 @@ public class ManagerController {
         }
     }
 
-
-    @RequestMapping("/management")
-    public String displayManagementPage() {
-        return "";
-    }
-
     @RequestMapping("/listUsers")
     public String viewListUsers(Model model) {
         model.addAttribute("conditionSearch", new ConditionSearch());
@@ -118,10 +112,10 @@ public class ManagerController {
         return "AddExpertToSubService";
     }
 
-    @RequestMapping(value = "/saveExpertToServices/{service}",method = RequestMethod.POST)
+    @RequestMapping(value = "/saveExpertToServices/{service}", method = RequestMethod.POST)
     public String saveExpertToServices(@PathVariable("service") String service, Model model, @RequestParam("expertEmail") String expertEmail) {
         expertService.addSubServiceToExpertList(expertEmail, service);
-        model.addAttribute("message","expert added to list services");
+        model.addAttribute("message", "expert added to list services");
         return "managerPage";
     }
 

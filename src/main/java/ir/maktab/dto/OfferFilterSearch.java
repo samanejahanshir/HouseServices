@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OfferFilterSearch {
-    private String byScore;
-    private  String byPrice;
+   private String[] filter=new String[2];
 }

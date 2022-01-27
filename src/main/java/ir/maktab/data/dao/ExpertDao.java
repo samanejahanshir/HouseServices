@@ -17,6 +17,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -57,7 +58,7 @@ public interface ExpertDao extends JpaRepository<Expert, Integer>, JpaSpecificat
             if (condition.getRole() != null) {
                 predicates.add(cb.equal(root.get("role"), condition.getRole()));
             }
-            if (condition.getSubServiceName() != null) {
+            if (condition.getSubServiceName() != null && !Objects.equals(condition.getSubServiceName(), "")) {
                 Join<Expert, SubServices> serviceJoin = root.joinList("services");
                 predicates.add(cb.equal(serviceJoin.get("name"), condition.getSubServiceName()));
             }

@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -126,14 +127,19 @@ public class OrderService {
     @Transactional
     public List<OrderDto> getListOrdersOfSubServiceExpert(String email) {
         Expert expert = expertService.getExpertByEmail(email);
+        List<OrderDto> orderDto = null;
         if (expert != null) {
-            List<String> subServiceNames = expert.getServices().stream().map(SubServices::getName).collect(Collectors.toList());
-            List<Orders> orders = orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
-            //  List<Orders> orders = orderDao.findByStateEqualsOOrStateEqualsAndSubServicesIn(OrderState.WAIT_SELECT_EXPERT, OrderState.WAIT_OFFER_EXPERTS, expert.getServices());
-            return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+            if( !expert.getServices().isEmpty()) {
+                List<String> subServiceNames = expert.getServices().stream().map(SubServices::getName).collect(Collectors.toList());
+               List<Orders> orders = orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
+                //  List<Orders> orders = orderDao.findByStateEqualsOOrStateEqualsAndSubServicesIn(OrderState.WAIT_SELECT_EXPERT, OrderState.WAIT_OFFER_EXPERTS, expert.getServices());
+                orderDto= orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+            }
+
         } else {
             throw new ExpertNotExistException();
         }
+        return orderDto;
     }
 
     public List<OrderDto> getListOrdersForExpert(String email) {

@@ -19,17 +19,17 @@ public class CommendController {
     final OrderService orderService;
 
     @RequestMapping("/addCommend/{idOrder}")
-    public String addCommendToOrder(@PathVariable("idOrder")int id, Model model, HttpSession session){
-        session.setAttribute("idOrder",id);
-        model.addAttribute("commend",new Commend());
+    public String addCommendToOrder(@PathVariable("idOrder") int id, Model model, HttpSession session) {
+        session.setAttribute("idOrder", id);
+        model.addAttribute("commend", new Commend());
         return "AddCommendToOrder";
     }
 
-    @RequestMapping(value = "/saveCommend",method = RequestMethod.POST)
-    public String saveCommend(@ModelAttribute("commend")Commend commend,Model model,HttpSession session){
-        int id=(Integer) session.getAttribute("idOrder");
-        orderService.registerACommentToOrder(commend,id);
-        model.addAttribute("message","commend added successfully");
+    @RequestMapping(value = "/saveCommend", method = RequestMethod.POST)
+    public String saveCommend(@ModelAttribute("commend") Commend commend, Model model, HttpSession session) {
+        int id = (Integer) session.getAttribute("idOrder");
+        orderService.registerACommentToOrder(commend, id);
+        model.addAttribute("message", "commend added successfully");
         return "CustomerPage";
     }
 }

@@ -26,10 +26,10 @@
         <table class="table table-striped table-primary text-dark table-hover">
             <tr>
                 <td>
-                   byPrice: <form:checkbox  path="byPrice"  value="byPrice"/>
+                   byPrice: <form:checkbox  path="filter"  value="byPrice"/>
                 </td>
                 <td>
-                  byScore:  <form:checkbox path="byScore" value="byScore" />
+                  byScore:  <form:checkbox path="filter" value="byScore" />
                 </td>
 
                 <td>
