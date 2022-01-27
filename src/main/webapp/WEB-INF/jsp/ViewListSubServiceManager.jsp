@@ -18,7 +18,15 @@
 <body style="background-color: #c3e7f8">
 <p>${message}</p>
 <br>
+<c:if test="${role_user.equals('manager')}">
 <form action="/manager/home">
+    </c:if>
+        <c:if test="${role_user.equals('customer')}">
+        <form action="/customer/home">
+            </c:if>
+                <c:if test="${role_user.equals('expert')}">
+                <form action="/expert/home">
+                    </c:if>
     <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
             style="margin: 2vh 2vw">Dashboard
     </button>

@@ -2,15 +2,19 @@ package ir.maktab.web;
 
 import ir.maktab.data.model.User;
 import ir.maktab.dto.*;
+import ir.maktab.exceptions.MainServiceDuplicateException;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -35,12 +39,16 @@ public class ManagerController {
 
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public String dologin(Model model, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
-        if (managerService.getManagerByNameAndPass(email, password) != null) {
-            session.setAttribute("email", email);
-            return "managerPage";
-        } else {
-            return "index";
-        }
+       try {
+           if (managerService.getManagerByNameAndPass(email, password) != null) {
+               session.setAttribute("email", email);
+               return "managerPage";
+           }
+       }catch (RuntimeException e){
+           model.addAttribute("message", e.getMessage());
+       }
+        return "index";
+
     }
 
     @RequestMapping("/listUsers")
@@ -77,9 +85,12 @@ public class ManagerController {
 
     @RequestMapping(value = "/saveMainService", method = RequestMethod.POST)
     public String saveMainService(@ModelAttribute("mainService") MainServiceDto mainServiceDto, Model model) {
-        boolean error = false;
-        managerService.saveMainServiceToDb(mainServiceDto);
-        model.addAttribute("message", "save saccessfully");
+       try {
+           managerService.saveMainServiceToDb(mainServiceDto);
+           model.addAttribute("message", "save saccessfully");
+       }catch (RuntimeException e){
+           model.addAttribute("message", e.getMessage());
+       }
         return "AddMainServices";
     }
 
@@ -94,9 +105,12 @@ public class ManagerController {
 
     @RequestMapping(value = "/saveSubService", method = RequestMethod.POST)
     public String saveSubService(@ModelAttribute("subServiceDto") SubServiceDto subServiceDto, Model model) {
-        boolean error = false;
-        managerService.saveSubService(subServiceDto);
-        model.addAttribute("message", "save saccessfully");
+       try {
+           managerService.saveSubService(subServiceDto);
+           model.addAttribute("message", "save saccessfully");
+       }catch (RuntimeException e){
+           model.addAttribute("message", e.getMessage());
+       }
         return "AddSubService";
     }
 
@@ -125,8 +139,12 @@ public class ManagerController {
 
     @RequestMapping(value = "/saveExpertToServices/{service}", method = RequestMethod.POST)
     public String saveExpertToServices(@PathVariable("service") String service, Model model, @RequestParam("expertEmail") String expertEmail) {
-        expertService.addSubServiceToExpertList(expertEmail, service);
-        model.addAttribute("message", "expert added to list services");
+      try {
+          expertService.addSubServiceToExpertList(expertEmail, service);
+          model.addAttribute("message", "expert added to list services");
+      }catch (RuntimeException e){
+          model.addAttribute("message", e.getMessage());
+      }
         return "managerPage";
     }
 
@@ -179,10 +197,22 @@ public class ManagerController {
         return "managerPage";
     }
 
-    @ExceptionHandler(RuntimeException.class)
+  /*  @ExceptionHandler(RuntimeException.class)
     public final String handleException(RuntimeException ex, Model model, WebRequest request) {
         model.addAttribute("message", ex.getMessage());
         return "errorPage";
-    }
+    }*/
 
+   /* @ExceptionHandler(MainServiceDuplicateException.class)
+    public final String handleException(MainServiceDuplicateException ex, Model model, WebRequest request) {
+        model.addAttribute("message", ex.getMessage());
+        return "AddMainServices";
+    }*/
+  /* @ExceptionHandler(value = MainServiceDuplicateException.class)
+   public ModelAndView loginExceptionHandler(MainServiceDuplicateException ex) {
+       Map<String, Object> model = new HashMap<>();
+      // model.put("customer", new CustomerDto());
+       model.put("message", ex.getMessage());
+       return new ModelAndView("AddMainServices", model);
+   }*/
 }

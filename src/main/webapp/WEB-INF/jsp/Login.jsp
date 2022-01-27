@@ -15,7 +15,9 @@
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
 <body style="background-color: #c3e7f8">
+<br>
 <p>${message}</p>
+<br>
 <div class="container col-12">
     <c:if test="${role_user.equals('customer')}">
     <form method="post" action="<c:url value="/customer/doLogin"/>">
