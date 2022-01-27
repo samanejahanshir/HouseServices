@@ -40,10 +40,16 @@ public class CustomerController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String customerRegister(@ModelAttribute("customerDto") CustomerDto customerDto, Model model, HttpSession session) {
-        userService.saveCustomer(customerDto);
-        session.setAttribute("email", customerDto.getEmail());
-        model.addAttribute("message","register done successfully,you should waiting for confirm by manager");
+        try {
+            userService.saveCustomer(customerDto);
+            session.setAttribute("email", customerDto.getEmail());
+            model.addAttribute("message", "register done successfully,you should waiting for confirm by manager");
+        }catch (RuntimeException e){
+            model.addAttribute("message", e.getMessage());
+            return "CustomerRegister";
+        }
         return "index";
+
     }
 
     @RequestMapping("/Signin")
@@ -54,7 +60,12 @@ public class CustomerController {
 
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public String doLogin(Model model, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
-        CustomerDto customerDto = customerService.findByEmailAndPass(email, password);
+        CustomerDto customerDto = null;
+       try {
+           customerDto = customerService.findByEmailAndPass(email, password);
+       }catch (RuntimeException e){
+           model.addAttribute("message", e.getMessage());
+       }
         if (customerDto != null) {
             if (customerDto.getState().equals(UserState.CONFIRMED)) {
                 session.setAttribute("email", email);
@@ -71,8 +82,13 @@ public class CustomerController {
     @RequestMapping("/viewInformation")
     public String viewInformation(Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
-        CustomerDto customerDto = customerService.getInformation(email);
-        model.addAttribute("customerDto", customerDto);
+        try {
+            CustomerDto customerDto = customerService.getInformation(email);
+            model.addAttribute("customerDto", customerDto);
+        }catch (RuntimeException e){
+            model.addAttribute("message", e.getMessage());
+            return "CustomerPage";
+        }
         return "CustomerInfo";
     }
 
@@ -116,10 +132,14 @@ public class CustomerController {
     @RequestMapping(value = "/saveCredit", method = RequestMethod.POST)
     public String saveCredit(Model model, @RequestParam("amount") int amount, HttpSession session) {
         String email = (String) session.getAttribute("email");
-        CustomerDto customerDto = customerService.getCustomerMapper().toDto(customerService.getCustomerByEmail(email));
-        customerService.incrementCredit(customerDto, amount);
-        model.addAttribute("message", "credit incremented");
-        return "CustomerPage";
+        try {
+            CustomerDto customerDto = customerService.getCustomerMapper().toDto(customerService.getCustomerByEmail(email));
+            customerService.incrementCredit(customerDto, amount);
+            model.addAttribute("message", "credit incremented");
+        }catch (RuntimeException e){
+            model.addAttribute("message", e.getMessage());
+        }
+        return "IncrementCredit";
     }
 
     @RequestMapping("/logout")
@@ -128,9 +148,9 @@ public class CustomerController {
         return "redirect:/index";
     }
 
-    @ExceptionHandler(RuntimeException.class)
+   /* @ExceptionHandler(RuntimeException.class)
     public final String handleException(RuntimeException ex, Model model, WebRequest request) {
         model.addAttribute("message", ex.getMessage());
         return "errorPage";
-    }
+    }*/
 }

@@ -40,9 +40,14 @@ public class ExpertController {
             bindingResult.getFieldErrors().forEach(error -> model.addAttribute(error.getField(), error.getDefaultMessage()));
             return "ExpertRegister";
         }*/
-        userService.saveExpert(expertDto);
-        session.setAttribute("email", expertDto.getEmail());
-        model.addAttribute("message","register done successfully,you should waiting for confirm by manager");
+        try {
+            userService.saveExpert(expertDto);
+            session.setAttribute("email", expertDto.getEmail());
+            model.addAttribute("message", "register done successfully,you should waiting for confirm by manager");
+        }catch (RuntimeException e){
+            model.addAttribute("message", e.getMessage());
+            return "ExpertRegister";
+        }
         return "index";
 
     }
@@ -56,7 +61,12 @@ public class ExpertController {
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public String doLogin(Model model, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
         model.addAttribute("email", email);
-        ExpertDto expertDto = expertService.findByEmailAndPass(email, password);
+        ExpertDto expertDto=null;
+        try {
+            expertDto = expertService.findByEmailAndPass(email, password);
+        }catch (RuntimeException e){
+            model.addAttribute("message",e.getMessage());
+        }
         if ( expertDto!= null) {
             if(expertDto.getState().equals(UserState.CONFIRMED)){
                 session.setAttribute("email", email);
@@ -76,8 +86,13 @@ public class ExpertController {
     @RequestMapping("/viewInformation")
     public String viewInformation(Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
-        ExpertDto expertDto = expertService.getInformation(email);
-        model.addAttribute("expertDto", expertDto);
+        try {
+            ExpertDto expertDto = expertService.getInformation(email);
+            model.addAttribute("expertDto", expertDto);
+        }catch (RuntimeException e){
+            model.addAttribute("message",e.getMessage());
+            return "ExpertPage";
+        }
         return "ExpertInfo";
     }
 

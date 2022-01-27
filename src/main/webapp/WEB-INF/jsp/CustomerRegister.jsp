@@ -16,7 +16,8 @@
 
 </head>
 <body style="background-color: #c3e7f8">
-
+<p>${message}</p>
+<br>
 <div class="container col-12">
     <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/customer/register"
                modelAttribute="customerDto">

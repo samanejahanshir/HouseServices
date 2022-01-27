@@ -1,20 +1,17 @@
 package ir.maktab.web;
 
-import ir.maktab.data.model.User;
-import ir.maktab.dto.*;
-import ir.maktab.exceptions.MainServiceDuplicateException;
+import ir.maktab.dto.ConditionSearch;
+import ir.maktab.dto.MainServiceDto;
+import ir.maktab.dto.SubServiceDto;
+import ir.maktab.dto.UserDto;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -39,14 +36,14 @@ public class ManagerController {
 
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public String dologin(Model model, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
-       try {
-           if (managerService.getManagerByNameAndPass(email, password) != null) {
-               session.setAttribute("email", email);
-               return "managerPage";
-           }
-       }catch (RuntimeException e){
-           model.addAttribute("message", e.getMessage());
-       }
+        try {
+            if (managerService.getManagerByNameAndPass(email, password) != null) {
+                session.setAttribute("email", email);
+                return "managerPage";
+            }
+        } catch (RuntimeException e) {
+            model.addAttribute("message", e.getMessage());
+        }
         return "index";
 
     }
@@ -85,12 +82,12 @@ public class ManagerController {
 
     @RequestMapping(value = "/saveMainService", method = RequestMethod.POST)
     public String saveMainService(@ModelAttribute("mainService") MainServiceDto mainServiceDto, Model model) {
-       try {
-           managerService.saveMainServiceToDb(mainServiceDto);
-           model.addAttribute("message", "save saccessfully");
-       }catch (RuntimeException e){
-           model.addAttribute("message", e.getMessage());
-       }
+        try {
+            managerService.saveMainServiceToDb(mainServiceDto);
+            model.addAttribute("message", "save saccessfully");
+        } catch (RuntimeException e) {
+            model.addAttribute("message", e.getMessage());
+        }
         return "AddMainServices";
     }
 
@@ -99,18 +96,18 @@ public class ManagerController {
         //  model.addAttribute("message","");
         model.addAttribute("subServiceDto", new SubServiceDto());
         List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
-        model.addAttribute("MainServiceDtos",mainServiceDtos);
+        model.addAttribute("MainServiceDtos", mainServiceDtos);
         return "AddSubService";
     }
 
     @RequestMapping(value = "/saveSubService", method = RequestMethod.POST)
     public String saveSubService(@ModelAttribute("subServiceDto") SubServiceDto subServiceDto, Model model) {
-       try {
-           managerService.saveSubService(subServiceDto);
-           model.addAttribute("message", "save saccessfully");
-       }catch (RuntimeException e){
-           model.addAttribute("message", e.getMessage());
-       }
+        try {
+            managerService.saveSubService(subServiceDto);
+            model.addAttribute("message", "save saccessfully");
+        } catch (RuntimeException e) {
+            model.addAttribute("message", e.getMessage());
+        }
         return "AddSubService";
     }
 
@@ -139,12 +136,12 @@ public class ManagerController {
 
     @RequestMapping(value = "/saveExpertToServices/{service}", method = RequestMethod.POST)
     public String saveExpertToServices(@PathVariable("service") String service, Model model, @RequestParam("expertEmail") String expertEmail) {
-      try {
-          expertService.addSubServiceToExpertList(expertEmail, service);
-          model.addAttribute("message", "expert added to list services");
-      }catch (RuntimeException e){
-          model.addAttribute("message", e.getMessage());
-      }
+        try {
+            expertService.addSubServiceToExpertList(expertEmail, service);
+            model.addAttribute("message", "expert added to list services");
+        } catch (RuntimeException e) {
+            model.addAttribute("message", e.getMessage());
+        }
         return "managerPage";
     }
 
