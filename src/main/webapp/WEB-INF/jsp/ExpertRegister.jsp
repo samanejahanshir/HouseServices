@@ -87,7 +87,7 @@
                     <form:label path="image">image:</form:label>
                 </td>
                 <td>
-                    <form:input type="file" path="image" placeHolder="profile image"/>
+                    <form:input type="file" path="image" id="image" placeHolder="profile image"/>
                 </td>
             </tr>
             <tr>
@@ -107,5 +107,16 @@
         </table>
     </form:form>
 </div>
+<script>
+    const imageFile = document.getElementById("image");
+
+    imageFile.onchange = function () {
+        const maxAllowedSize = 300 * 1024;
+        if (this.files[0].size > maxAllowedSize) {
+            alert("Image File is too big! should be <300kb");
+            this.value = "";
+        }
+    }
+</script>
 </body>
 </html>

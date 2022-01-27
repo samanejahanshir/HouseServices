@@ -1,14 +1,19 @@
 package ir.maktab.web;
 
+import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.dto.*;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -35,7 +40,7 @@ public class ExpertController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String expertRegister(@ModelAttribute("expertDto") ExpertDto expertDto, Model model, HttpSession session) {
+    public String expertRegister(@ModelAttribute("expertDto")@Validated ExpertDto expertDto, Model model, HttpSession session) {
         /*if (bindingResult.hasErrors()) {
             bindingResult.getFieldErrors().forEach(error -> model.addAttribute(error.getField(), error.getDefaultMessage()));
             return "ExpertRegister";
@@ -44,7 +49,7 @@ public class ExpertController {
             userService.saveExpert(expertDto);
             session.setAttribute("email", expertDto.getEmail());
             model.addAttribute("message", "register done successfully,you should waiting for confirm by manager");
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             model.addAttribute("message", e.getMessage());
             return "ExpertRegister";
         }
@@ -61,18 +66,17 @@ public class ExpertController {
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public String doLogin(Model model, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
         model.addAttribute("email", email);
-        ExpertDto expertDto=null;
+        ExpertDto expertDto = null;
         try {
             expertDto = expertService.findByEmailAndPass(email, password);
-        }catch (RuntimeException e){
-            model.addAttribute("message",e.getMessage());
+        } catch (RuntimeException e) {
+            model.addAttribute("message", e.getMessage());
         }
-        if ( expertDto!= null) {
-            if(expertDto.getState().equals(UserState.CONFIRMED)){
+        if (expertDto != null) {
+            if (expertDto.getState().equals(UserState.CONFIRMED)) {
                 session.setAttribute("email", email);
                 return "ExpertPage";
-            }
-            else {
+            } else {
                 model.addAttribute("message", "you are not confirm");
                 return "index";
             }
@@ -89,8 +93,8 @@ public class ExpertController {
         try {
             ExpertDto expertDto = expertService.getInformation(email);
             model.addAttribute("expertDto", expertDto);
-        }catch (RuntimeException e){
-            model.addAttribute("message",e.getMessage());
+        } catch (RuntimeException e) {
+            model.addAttribute("message", e.getMessage());
             return "ExpertPage";
         }
         return "ExpertInfo";
@@ -98,6 +102,7 @@ public class ExpertController {
 
     @RequestMapping("/addServiceToList")
     public String addSubServiceToExpertList(Model model) {
+
         List<MainServiceDto> listMainServices = mainServices.getListMainService();
         model.addAttribute("listMainServices", listMainServices);
         model.addAttribute("role_user", "expert");
@@ -114,10 +119,18 @@ public class ExpertController {
 
     @RequestMapping("/addSubServiceToList/{service}")
     public String saveSubServiceToList(@PathVariable("service") String service, Model model, HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        expertService.addSubServiceToExpertList(email, service);
-        model.addAttribute("message", "subService added to list");
-        return "ExpertPage";
+        SubServiceDto subServiceDto = subService.getSubServiceByName(service);
+        try {
+            String email = (String) session.getAttribute("email");
+            expertService.addSubServiceToExpertList(email, service);
+            model.addAttribute("message", "subService added to list");
+        } catch (RuntimeException e) {
+            model.addAttribute("message", e.getMessage());
+        }
+        List<SubServiceDto> listSubService = subService.getListSubService(subServiceDto.getGroupName());
+        model.addAttribute("listSubServices", listSubService);
+        model.addAttribute("role_user", "expert");
+        return "/expert/viewListSubServices/"+subServiceDto.getGroupName();
     }
 
     @RequestMapping("/changePass")
@@ -145,11 +158,15 @@ public class ExpertController {
 
     @RequestMapping("/saveOffer/{orderId}")
     public String saveOffer(@PathVariable("orderId") int orderId, @ModelAttribute("offerDto") OfferDto offerDto, HttpSession session, Model model) {
-        OrderDto orderDto = orderService.getOrderById(orderId);
-        offerDto.setOrderDto(orderDto);
-        String email = (String) session.getAttribute("email");
-        expertService.addOfferToOrder(email, offerDto);
-        model.addAttribute("message", "offer added successfuly");
+       try {
+           OrderDto orderDto = orderService.getOrderById(orderId);
+           offerDto.setOrderDto(orderDto);
+           String email = (String) session.getAttribute("email");
+           expertService.addOfferToOrder(email, offerDto);
+           model.addAttribute("message", "offer added successfuly");
+       }catch (RuntimeException e){
+           model.addAttribute("message", e.getMessage());
+       }
         return "ExpertPage";
     }
 
@@ -159,10 +176,16 @@ public class ExpertController {
         return "redirect:/index";
     }
 
-    @ExceptionHandler(RuntimeException.class)
+  /*  @ExceptionHandler(RuntimeException.class)
     public final String handleException(RuntimeException ex, Model model, WebRequest request) {
         model.addAttribute("message", ex.getMessage());
         return "errorPage";
-    }
+    }*/
+  @ExceptionHandler(value = BindException.class)
+  public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
+//        String referer = request.getHeader("Referer");
+      String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+      return new ModelAndView(lastView, ex.getBindingResult().getModel());
+  }
 
 }

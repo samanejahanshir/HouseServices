@@ -12,6 +12,7 @@ public class SubServiceMapper {
                 .name(subServices.getName())
                 .basePrice(subServices.getBasePrice())
                 .description(subServices.getDescription())
+                .groupName(subServices.getMainServices().getGroupName())
                 .build();
 
     }
