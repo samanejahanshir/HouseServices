@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import ir.maktab.data.enums.UserState;
 import ir.maktab.dto.*;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,8 @@ public class ExpertController {
         }*/
         userService.saveExpert(expertDto);
         session.setAttribute("email", expertDto.getEmail());
-        return "ExpertPage";
+        model.addAttribute("message","register done successfully,you should waiting for confirm by manager");
+        return "index";
 
     }
 
@@ -49,9 +51,17 @@ public class ExpertController {
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public String doLogin(Model model, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
         model.addAttribute("email", email);
-        if (expertService.findByEmailAndPass(email, password) != null) {
-            session.setAttribute("email", email);
-            return "ExpertPage";
+        ExpertDto expertDto = expertService.findByEmailAndPass(email, password);
+        if ( expertDto!= null) {
+            if(expertDto.getState().equals(UserState.CONFIRMED)){
+                session.setAttribute("email", email);
+                return "ExpertPage";
+            }
+            else {
+                model.addAttribute("message", "you are not confirm");
+                return "index";
+            }
+
         } else {
             return "index";
         }

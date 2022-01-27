@@ -19,29 +19,37 @@
 <body style="background-color: #c3e7f8">
 <%--<p>${message}</p>--%>
 <div class="container col-12">
-<form:form modelAttribute="expertDto">
-    <table class="table table-bordered table-striped table-primary text-dark">
-        <tr>
-            <th>First Name</th>
-            <th>LastName</th>
-            <th>Email</th>
-            <th>RegisterDate</th>
-            <th>Score</th>
-            <th>SubService</th>
-        </tr>
-        <tr>
-            <td>${expertDto.firstName}</td>
-            <td>${expertDto.lastName}</td>
-            <td>${expertDto.email}</td>
-            <td>${expertDto.registerDate}</td>
-            <td>${expertDto.score}</td>
+    <form:form modelAttribute="expertDto">
+        <table class="table table-bordered table-striped table-primary text-dark">
+            <tr>
+                <th>First Name</th>
+                <th>LastName</th>
+                <th>Email</th>
+                <th>RegisterDate</th>
+                <th>Score</th>
+                <th>SubService</th>
+            </tr>
+            <tr>
+                <td>${expertDto.firstName}</td>
+                <td>${expertDto.lastName}</td>
+                <td>${expertDto.email}</td>
+                <td>${expertDto.registerDate}</td>
+                <td>${expertDto.score}</td>
                 <c:forEach var="subservice" items="${expertDto.subServiceDto}">
-                    <td>${subservice.name}</td>
-                </c:forEach>
-        </tr>
 
-    </table>
-</form:form>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>${subservice.name}</td>
+            </tr>
+            </c:forEach>
+            </tr>
+
+        </table>
+    </form:form>
 </div>
 </body>
 </html>

@@ -19,7 +19,17 @@ public class UserMapper {
                 .registerDate(user.getRegisterDate())
                 .role(user.getRole())
                 .password(user.getPassword())
+                .state(user.getState())
+                .credit(user.getCredit())
                 .build();
+    }
+
+    public User toEntity(UserDto userDto){
+        User user=new User();
+        user.setId(userDto.getId());
+        user.setEmail(userDto.getEmail());
+        user.setState(userDto.getState());
+        return user;
     }
 
     public CustomerDto toCustomerDto(UserDto userDto) {
@@ -28,6 +38,8 @@ public class UserMapper {
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
+                .state(userDto.getState())
+                .credit(userDto.getCredit())
                 .build();
     }
 
@@ -37,6 +49,8 @@ public class UserMapper {
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
+                .state(userDto.getState())
+                .credit(userDto.getCredit())
                 .build();
     }
 

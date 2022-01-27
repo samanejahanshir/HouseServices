@@ -1,5 +1,6 @@
 package ir.maktab.data.model;
 
+import ir.maktab.data.enums.UserState;
 import ir.maktab.data.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,9 @@ public class User {
     private Date registerDate;
     @Enumerated(EnumType.STRING)
     private UserType role;
+    @Enumerated(EnumType.STRING)
+    private UserState state;
+    private double credit;
 
     @Override
     public String toString() {

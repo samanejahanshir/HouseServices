@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import ir.maktab.data.model.User;
 import ir.maktab.dto.*;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,11 @@ public class ManagerController {
     final MainServicesService mainServices;
     final ExpertService expertService;
 
+    @RequestMapping("/home")
+    public String homePageManager(Model model) {
+        return "managerPage";
+    }
+
     @RequestMapping("/Signin")
     public String signIn(Model model) {
         model.addAttribute("role_user", "manager");
@@ -40,6 +46,9 @@ public class ManagerController {
     @RequestMapping("/listUsers")
     public String viewListUsers(Model model) {
         model.addAttribute("conditionSearch", new ConditionSearch());
+        List<UserDto> userDtoList;
+        List<UserDto> userDtos = userService.getUserByCondition(new ConditionSearch());
+        model.addAttribute("listUserDto", userDtos);
         return "ViewListUsers";
     }
 
@@ -78,6 +87,8 @@ public class ManagerController {
     public String addSubService(Model model) {
         //  model.addAttribute("message","");
         model.addAttribute("subServiceDto", new SubServiceDto());
+        List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
+        model.addAttribute("MainServiceDtos",mainServiceDtos);
         return "AddSubService";
     }
 
@@ -119,22 +130,33 @@ public class ManagerController {
         return "managerPage";
     }
 
-    @RequestMapping("/viewListNotConfirmCustomer")
+    @RequestMapping("/viewListNotConfirmUser")
     public String viewListNotConfirmUsers(Model model) {
-        List<CustomerDto> customerNoConfirm = managerService.getListCustomerNoConfirm();
-        model.addAttribute("listCustomer", customerNoConfirm);
-        return "ViewNotConfirmCustomer";
+        List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
+        model.addAttribute("userDtos", listUserNoConfirm);
+        return "ViewNotConfirmUser";
     }
 
-    @RequestMapping("/confirmCustomer/{id}")
+    @RequestMapping("/confirmUser/{id}")
     public String confirmCustomer(@PathVariable int id, Model model) {
-        CustomerDto customerDto = managerService.getCustomerService().getCustomerById(id);
-        managerService.confirmCustomer(customerDto);
+        //CustomerDto customerDto = managerService.getCustomerService().getCustomerById(id);
+        // User user = managerService.getUserService().getUserById(id);
+        managerService.confirmUser(id);
         model.addAttribute("message", "confirm is successfully");
-        List<CustomerDto> customerNoConfirm = managerService.getListCustomerNoConfirm();
+       /* List<CustomerDto> customerNoConfirm = managerService.getListCustomerNoConfirm();
         model.addAttribute("listCustomer", customerNoConfirm);
+*/
+        List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
+        model.addAttribute("userDtos", listUserNoConfirm);
+        return "ViewNotConfirmUser";
+    }
 
-        return "ViewNotConfirmCustomer";
+    @RequestMapping("/confirmAll")
+    public String confirmAll(Model model) {
+        List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
+        managerService.confirmAll(listUserNoConfirm);
+        model.addAttribute("message", "confirm all successfully");
+        return "/manager/viewListNotConfirmUser";
     }
 
     @RequestMapping("/logout")

@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -51,6 +52,16 @@ public class UserService {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public User getUserById(int id){
+        Optional<User> optionalUser = userDao.findById(id);
+        if(optionalUser.isPresent()){
+           return optionalUser.get();
+        }
+        else {
+            throw  new UserNotFoundException();
         }
     }
 

@@ -1,5 +1,6 @@
 package ir.maktab.data.model;
 
+import ir.maktab.data.enums.UserState;
 import ir.maktab.data.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,8 +29,8 @@ public class Expert extends User {
     private List<Offer> offers=new ArrayList<>();*/
 
     @Builder
-    public Expert(Integer id, String firstName, String lastName, String email, String password, Date registerDate, byte[] image, List<SubServices> services, List<Orders> orders, int score, UserType role) {
-        super(id, firstName, lastName, email, password, registerDate, role);
+    public Expert(Integer id, String firstName, String lastName, String email, String password, Date registerDate, byte[] image, List<SubServices> services, List<Orders> orders, int score, UserType role, UserState state,double credit) {
+        super(id, firstName, lastName, email, password, registerDate, role,state,credit);
         this.image = image;
         this.services = services;
         this.orders = orders;

@@ -20,4 +20,6 @@ public class UserDto {
     private Date registerDate;
     private UserType role;
     private String password;
+    private UserState state;
+    private double credit;
 }

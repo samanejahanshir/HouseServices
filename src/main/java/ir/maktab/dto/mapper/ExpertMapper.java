@@ -19,6 +19,8 @@ public class ExpertMapper {
                 .image(expert.getImage())
                 .role(expert.getRole())
                 .password(expert.getPassword())
+                .credit(expert.getCredit())
+                .state(expert.getState())
                 .build();
     }
     public Expert toEntity(ExpertDto expertDto){
@@ -31,6 +33,8 @@ public class ExpertMapper {
                 .image(expertDto.getImage())
                 .role(expertDto.getRole())
                 .password(expertDto.getPassword())
+                .credit(expertDto.getCredit())
+                .state(expertDto.getState())
                 .build();
     }
 }

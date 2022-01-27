@@ -1,5 +1,6 @@
 package ir.maktab.dto;
 
+import ir.maktab.data.enums.UserState;
 import ir.maktab.data.enums.UserType;
 import ir.maktab.service.validation.OnLogin;
 import ir.maktab.service.validation.OnRegister;
@@ -37,5 +38,7 @@ public class ExpertDto {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",message = "password length should >8 and a-z and A-z")
     private String password;
     private List<SubServiceDto> subServiceDto=new ArrayList<>();
+    private UserState state;
+    private double credit;
 
 }

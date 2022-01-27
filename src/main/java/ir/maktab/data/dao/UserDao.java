@@ -1,6 +1,8 @@
 package ir.maktab.data.dao;
 
+import ir.maktab.data.enums.UserState;
 import ir.maktab.data.enums.UserType;
+import ir.maktab.data.model.Customer;
 import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.SubServices;
 import ir.maktab.data.model.User;
@@ -23,8 +25,10 @@ public interface UserDao extends JpaRepository<User, Integer> , JpaSpecification
     Optional<User> findByEmailAndPassword(String email, String password);
 
     Optional<User> findByEmail(String email);
+    List<User> findByStateEquals(UserState state);
 
-   /* public List<User> getListUserByCondition(UserType type, String email, String name, String family) {
+
+    /* public List<User> getListUserByCondition(UserType type, String email, String name, String family) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Criteria criteria;

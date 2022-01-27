@@ -37,7 +37,8 @@ public class CustomerController {
     public String customerRegister(@ModelAttribute("customerDto") CustomerDto customerDto, Model model, HttpSession session) {
         userService.saveCustomer(customerDto);
         session.setAttribute("email", customerDto.getEmail());
-        return "redirect:/index";
+        model.addAttribute("message","register done successfully,you should waiting for confirm by manager");
+        return "index";
     }
 
     @RequestMapping("/Signin")

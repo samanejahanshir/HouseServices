@@ -24,11 +24,12 @@ public class OfferController {
 
     @RequestMapping("/viewListOffers/{id}")
     public String displayListOffers(@PathVariable int id, Model model, HttpSession session) {
-       /* String email = (String) session.getAttribute("email");
+     //   String email = (String) session.getAttribute("email");
             OrderDto orderDto = orderService.getOrderById(id);
-            List<OfferDto> listOffers = offerService.getListOffers(orderDto);*/
+            List<OfferDto> listOffers = offerService.getListOffers(orderDto);
         model.addAttribute("orderId", id);
         model.addAttribute("offerFilter", new OfferFilterSearch());
+        model.addAttribute("listOffers", listOffers);
         return "ViewListOffersForOrder";
     }
 
@@ -47,11 +48,13 @@ public class OfferController {
         }
         List<OfferDto> listOffers = offerService.getListOffersSortByScoreOrPrice(orderDto, byPrice, byScore);
         model.addAttribute("listOffers", listOffers);
+        model.addAttribute("offerFilter", offerFilter);
+
         return "ViewListOffersForOrder";
     }
 
     @RequestMapping("/selectOffer/{id}")
-    public String selectOffer(@PathVariable int id, Model model, HttpSession session) {
+    public String selectOffer(@PathVariable int id, Model model, HttpSession session,@ModelAttribute("offerFilter")OfferFilterSearch offerFilter) {
         OfferDto offerDto = offerService.findOfferById(id);
         orderService.selectOfferForOrder(offerDto);
         OrderDto orderDto = orderService.getOrderById(offerDto.getOrderDto().getId());
@@ -59,6 +62,7 @@ public class OfferController {
         model.addAttribute("listOffers", listOffers);
         model.addAttribute("message", "select offer successfuly");
         model.addAttribute("orderId",orderDto.getId());
+        model.addAttribute("offerFilter",offerFilter);
         return "ViewListOffersForOrder";
     }
 

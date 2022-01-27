@@ -17,10 +17,17 @@
 </head>
 <body style="background-color: #c3e7f8">
 <p>${message}</p>
+<br>
+<form action="/manager/home">
+    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+            style="margin: 2vh 2vw">Dashboard
+    </button>
+</form>
 <div class="container col-12">
+    <a href="/manager/confirmAll">confirm all</a>
 <table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>FirstName</th><th>LastName</th><th>Email</th><th>Role</th><th>RegisterDate</th></tr>
-    <c:forEach var="user" items="${listCustomer}" >
+    <c:forEach var="user" items="${userDtos}" >
         <tr>
             <td>${user.id}</td>
             <td>${user.firstName}</td>
@@ -28,7 +35,7 @@
             <td>${user.email}</td>
             <td>${user.role}</td>
             <td>${user.registerDate}</td>
-            <td><a href="/manager/confirmCustomer/${user.id}">Confirm</a> </td>
+            <td><a href="/manager/confirmUser/${user.id}">Confirm</a> </td>
         </tr>
     </c:forEach>
 </table>

@@ -3,6 +3,7 @@ package ir.maktab.service;
 import ir.maktab.data.dao.*;
 import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.enums.OrderState;
+import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.Offer;
 import ir.maktab.data.model.Orders;
@@ -41,6 +42,7 @@ public class ExpertService {
 
     public void saveExpert(Expert expert) {
         if (expertDao.findByEmail(expert.getEmail()).isEmpty()) {
+            expert.setState(UserState.NOT_CONFIRMED);
             expertDao.save(expert);
         } else {
             throw new UserByEmailExistException();

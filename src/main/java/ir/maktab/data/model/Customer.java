@@ -19,17 +19,17 @@ public class Customer extends User {
     private List<Orders> orders = new ArrayList<>();
    /* @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Address> addresses = new HashSet<>();*/
-    private double credit;
-    @Enumerated(EnumType.STRING)
-    private UserState state;
+   // private double credit;
+   /* @Enumerated(EnumType.STRING)
+    private UserState state;*/
 
     @Builder
     public Customer(Integer id, String firstName, String lastName, String email, String password, UserState state, Date registerDate, double credit, List<Orders> orders, UserType role) {
-        super(id, firstName, lastName, email, password, registerDate, role);
+        super(id, firstName, lastName, email, password, registerDate, role,state,credit);
         this.orders = orders;
        // this.addresses = addresses;
-        this.credit = credit;
-        this.state = state;
+       // this.credit = credit;
+       // this.state = state;
     }
 /*  public static final class CustomerBuilder {
         private List<Orders> orders = new ArrayList<>();

@@ -35,6 +35,8 @@ public class ManagerService {
     private final UserMapper userMapper;
     private final CustomerMapper customerMapper;
     private final CustomerService customerService;
+    private final UserService userService;
+
 
 
     public void saveSubService(SubServiceDto subServiceDto) {
@@ -102,6 +104,11 @@ public class ManagerService {
         return customers.stream().map(customerMapper::toDto).collect(Collectors.toList());
     }
 
+    public List<UserDto> getListUserNoConfirm() {
+        List<User> users = userDao.findByStateEquals(UserState.NOT_CONFIRMED);
+        return users.stream().map(userMapper::toDto).collect(Collectors.toList());
+    }
+
     public void confirmCustomer(CustomerDto customerDto) {
         Customer customer = customerService.getCustomerByEmail(customerDto.getEmail());
         if (customer != null) {
@@ -111,6 +118,23 @@ public class ManagerService {
             throw new CustomerNotExistException();
         }
 
+    }
+
+    public void confirmUser(int id) {
+        User user = userService.getUserById(id);
+        if (user != null) {
+            user.setState(UserState.CONFIRMED);
+            userDao.save(user);
+        } else {
+            throw new CustomerNotExistException();
+        }
+
+    }
+
+    public void confirmAll(List<UserDto> userDtos) {
+        List<User> users = userDtos.stream().map(userMapper::toEntity).collect(Collectors.toList());
+        users.forEach(user -> user.setState(UserState.CONFIRMED));
+        userDao.saveAll(users);
     }
 
     public Manager getManagerByNameAndPass(String userName, String password) {
