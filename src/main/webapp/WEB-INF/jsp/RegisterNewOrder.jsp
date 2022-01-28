@@ -30,7 +30,7 @@
 
 <div class="container col-12">
     <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/order/saveOrder"
-               modelAttribute="orderDto">
+               modelAttribute="orderDto" onsubmit="return checkPostalCode(this);" >
         <h2 style="text-justify: distribute-center-last">Add Order</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
             <tr>
@@ -46,7 +46,7 @@
                     orderDoingDate:
                 </td>
                 <td>
-                    <input type="date" name="orderDate" placeHolder="yyyy-mm-dd"/>
+                    <input type="date" name="orderDate" id="date" placeHolder="yyyy-mm-dd"/>
                 </td>
             </tr>
             <tr>
@@ -55,6 +55,14 @@
                 </td>
                 <td>
                     <form:input type="number" path="orderDoingTime" placeHolder="orderDoingTime"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <form:errors path="orderDoingTime"/>
                 </td>
             </tr>
 
@@ -79,7 +87,14 @@
                     <form:label path="address.postalCode">postal code:</form:label>
                 </td>
                 <td>
-                    <form:input type="text" path="address.postalCode" placeHolder="postalCode"/>
+                    <form:input type="text" id="postalCode" path="address.postalCode" placeHolder="postalCode" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <form:errors path="address.postalCode" />
                 </td>
             </tr>
             <tr>
@@ -100,5 +115,29 @@
         </table>
     </form:form>
 </div>
+
+<script>
+  //  const postalCode = document.getElementById("postalCode");
+
+    function checkPostalCode(form) {
+        if (form.postalCode.value.length<10) {
+            alert("postal code numbers should be 10");
+            this.value = "";
+            return false;
+        }
+    }
+</script>
+<%--<script>
+    //  const postalCode = document.getElementById("postalCode");
+
+    function checkDate(form) {
+        const date=document.getElementById("date").innerText;
+        if (date==="" || date==null) {
+            alert("date can not empty");
+            this.value = "";
+            return false;
+        }
+    }
+</script>--%>
 </body>
 </html>

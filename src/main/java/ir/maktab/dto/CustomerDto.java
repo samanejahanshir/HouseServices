@@ -7,7 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,19 +21,23 @@ import java.util.Set;
 @AllArgsConstructor
 public class CustomerDto {
     private Integer id;
-  /*  @NotNull(message = "first name can't empty")
-    @Pattern(regexp ="^[a-zA-Z]{3}",message = "format first name is invalid !")*/
+    @NotBlank(message = "should not be empty")
+    @Length(min = 3,message = "Length should be bigger than 3 character")
+    @Pattern(regexp = "^[a-zA-Z]{3,30}", message = "firstName only contains letters")
     private String firstName;
-   /* @NotNull(message = "last name can't empty")
-    @Pattern(regexp ="^[a-zA-Z]{3}",message = "format first name is invalid !")*/
+    @NotBlank(message = "should not be empty")
+    @Length(min = 3,message = "Length should be bigger than 3 character")
+    @Pattern(regexp = "^[a-zA-Z]{3,30}", message = "lastName only contains letters")
     private String lastName;
-  //  @NotNull(message = "email can't empty")
+    @NotBlank(message = "should not be empty")
+    @Pattern(regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*" +
+            "@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", message = "format email not valid")
     private String email;
     private Date registerDate;
     private double credit;
     private UserState state;
-   // private Set<Address> addresses=new HashSet<>();
     private UserType role;
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",message = "password length should >8 and contain a-z and A-z")
     private String password;
 
 }

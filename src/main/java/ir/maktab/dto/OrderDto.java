@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Date;
 @Builder
 @Data
@@ -19,12 +21,15 @@ public class OrderDto {
     private String description;
     private Date orderRegisterDate;
     private Date orderDoingDate;
+    @Min(value = 1,message = "min time should be 1")
+    @Max(value = 24,message = "max time should be 24")
     private int orderDoingTime;
     private OrderState state;
-    private Address address;
+    private AddressDto address;
     private String uuid;
     private SubServiceDto subServiceDto;
     private ExpertDto expertDto;
     private CustomerDto customerDto;
+
 
 }

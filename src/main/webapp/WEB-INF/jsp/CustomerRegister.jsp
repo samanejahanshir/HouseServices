@@ -78,6 +78,14 @@
             </tr>
             <tr>
                 <td>
+                    <label>password :</label>
+                </td>
+                <td>
+                    <form:errors path="password"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
                 </td>
                 <td>
                     <form:button name="register">Register</form:button>

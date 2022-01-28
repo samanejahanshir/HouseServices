@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.MainServiceDto;
@@ -11,9 +12,13 @@ import ir.maktab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -39,7 +44,7 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String customerRegister(@ModelAttribute("customerDto") CustomerDto customerDto, Model model, HttpSession session) {
+    public String customerRegister(@ModelAttribute("customerDto")@Validated CustomerDto customerDto, Model model, HttpSession session) {
         try {
             userService.saveCustomer(customerDto);
             session.setAttribute("email", customerDto.getEmail());
@@ -153,4 +158,10 @@ public class CustomerController {
         model.addAttribute("message", ex.getMessage());
         return "errorPage";
     }*/
+   @ExceptionHandler(value = BindException.class)
+   public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
+//        String referer = request.getHeader("Referer");
+       String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+       return new ModelAndView(lastView, ex.getBindingResult().getModel());
+   }
 }

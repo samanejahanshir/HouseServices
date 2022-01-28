@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.OrderState;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.SubServiceDto;
@@ -8,9 +9,13 @@ import ir.maktab.service.SubServicesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,7 +53,7 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
-    public String saveNewOrder(@ModelAttribute("orderDto") OrderDto orderDto, @RequestParam("orderDate") String date, HttpSession session, Model model) throws ParseException {
+    public String saveNewOrder(@ModelAttribute("orderDto") @Validated OrderDto orderDto, @RequestParam("orderDate") String date, HttpSession session, Model model) throws ParseException {
         String email = (String) session.getAttribute("email");
         String subService = (String) session.getAttribute("subService");
         SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-mm-dd");
@@ -139,5 +144,12 @@ public class OrderController {
         }
         model.addAttribute("score", score);
         return "ViewListOrdersForExpert";
+    }
+
+    @ExceptionHandler(value = BindException.class)
+    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
+//        String referer = request.getHeader("Referer");
+        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+        return new ModelAndView(lastView, ex.getBindingResult().getModel());
     }
 }

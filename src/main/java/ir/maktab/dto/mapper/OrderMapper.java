@@ -12,6 +12,7 @@ public class OrderMapper {
     private  final SubServiceMapper subServiceMapper;
     private  final ExpertMapper expertMapper;
     private final CustomerMapper customerMapper;
+    private final AddressMapper addressMapper;
     public OrderDto toDto(Orders orders) {
         return OrderDto.builder()
                 .id(orders.getId())
@@ -20,7 +21,7 @@ public class OrderMapper {
                 .orderDoingTime(orders.getOrderDoingTime())
                 .orderRegisterDate(orders.getOrderRegisterDate())
                 .proposedPrice(orders.getProposedPrice())
-                .address(orders.getAddress())
+                .address(addressMapper.toDto(orders.getAddress()))
                 .state(orders.getState())
                 .uuid(orders.getUuid())
                 .subServiceDto(subServiceMapper.toDto(orders.getSubServices()))
@@ -36,7 +37,7 @@ public class OrderMapper {
                 .description(orderDto.getDescription())
                 .orderRegisterDate(orderDto.getOrderRegisterDate())
                 .proposedPrice(orderDto.getProposedPrice())
-                .address(orderDto.getAddress())
+                .address(addressMapper.toEntity(orderDto.getAddress()))
                 .subServices(subServiceMapper.toEntity(orderDto.getSubServiceDto()))
                 .customer(customerMapper.toEntity(orderDto.getCustomerDto()))
                // .expert(expertMapper.toEntity(orderDto.getExpertDto()))
