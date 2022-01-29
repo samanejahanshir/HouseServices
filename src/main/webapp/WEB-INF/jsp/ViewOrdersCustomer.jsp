@@ -41,7 +41,7 @@
             <td><a href="/commend/addCommend/${order.id}">add a commend</a></td>
 
         </c:if>
-            <c:if test="${(order.state=='WAIT_OFFER_EXPERTS') || (order.state=='WAIT_SELECT_EXPERT')}">
+            <c:if test="${order.state=='WAIT_SELECT_EXPERT'}">
 
             <td><a href="/offer/viewListOffers/${order.id}">view Offers</a></td>
             </c:if>

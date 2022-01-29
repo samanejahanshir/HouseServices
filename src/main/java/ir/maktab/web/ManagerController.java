@@ -155,12 +155,12 @@ public class ManagerController {
         if (session.getAttribute("emailManager") != null) {
             List<SubServiceDto> listSubService = subServices.getListSubService(groupName);
             model.addAttribute("listSubServices", listSubService);
-            if(session.getAttribute("messageSuccess")!=null){
-                model.addAttribute("message",session.getAttribute("messageSuccess"));
+            if (session.getAttribute("messageSuccess") != null) {
+                model.addAttribute("message", session.getAttribute("messageSuccess"));
                 session.removeAttribute("messageSuccess");
             }
-            if(session.getAttribute("error")!=null){
-                model.addAttribute("message",session.getAttribute("error"));
+            if (session.getAttribute("error") != null) {
+                model.addAttribute("message", session.getAttribute("error"));
                 session.removeAttribute("error");
             }
             model.addAttribute("role_user", "manager");
@@ -183,11 +183,11 @@ public class ManagerController {
     }
 
     @RequestMapping(value = "/saveExpertToServices/{service}", method = RequestMethod.POST)
-    public String saveExpertToServices(@PathVariable("service") String service, Model model, @RequestParam("expertEmail") String expertEmail,HttpSession session) {
-      String groupName="";
+    public String saveExpertToServices(@PathVariable("service") String service, Model model, @RequestParam("expertEmail") String expertEmail, HttpSession session) {
+        String groupName = "";
         try {
             SubServiceDto subServiceByName = subServices.getSubServiceByName(service);
-            groupName=subServiceByName.getGroupName();
+            groupName = subServiceByName.getGroupName();
             expertService.addSubServiceToExpertList(expertEmail, service);
             session.setAttribute("messageSuccess", "expert added to list services");
         } catch (RuntimeException e) {
@@ -197,12 +197,12 @@ public class ManagerController {
     }
 
     @RequestMapping("/viewListNotConfirmUser")
-    public String viewListNotConfirmUsers(Model model,HttpSession session) {
-        if(session.getAttribute("emailManager")!=null) {
+    public String viewListNotConfirmUsers(Model model, HttpSession session) {
+        if (session.getAttribute("emailManager") != null) {
             List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
             model.addAttribute("userDtos", listUserNoConfirm);
-            if(session.getAttribute("messageSuccess")!=null){
-                model.addAttribute("message",session.getAttribute("messageSuccess"));
+            if (session.getAttribute("messageSuccess") != null) {
+                model.addAttribute("message", session.getAttribute("messageSuccess"));
                 session.removeAttribute("messageSuccess");
             }
             return "ViewNotConfirmUser";
@@ -213,32 +213,25 @@ public class ManagerController {
     }
 
     @RequestMapping("/confirmUser/{id}")
-    public String confirmCustomer(@PathVariable int id, Model model,HttpSession session) {
-        //CustomerDto customerDto = managerService.getCustomerService().getCustomerById(id);
-        // User user = managerService.getUserService().getUserById(id);
-       if(session.getAttribute("emailManager")!=null) {
-           managerService.confirmUser(id);
-           session.setAttribute("messageSuccess", "confirm is successfully");
-       /* List<CustomerDto> customerNoConfirm = managerService.getListCustomerNoConfirm();
-        model.addAttribute("listCustomer", customerNoConfirm);
-*/
-          /* List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
-           model.addAttribute("userDtos", listUserNoConfirm);*/
-           return "redirect:/manager/viewListNotConfirmUser";
-       }else {
-           model.addAttribute("message", "you should login");
-           return "index";
-       }
+    public String confirmUser(@PathVariable int id, Model model, HttpSession session) {
+        if (session.getAttribute("emailManager") != null) {
+            managerService.confirmUser(id);
+            session.setAttribute("messageSuccess", "confirm is successfully");
+            return "redirect:/manager/viewListNotConfirmUser";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping("/confirmAll")
-    public String confirmAll(Model model,HttpSession session) {
-        if(session.getAttribute("emailManager")!=null) {
+    public String confirmAll(Model model, HttpSession session) {
+        if (session.getAttribute("emailManager") != null) {
             List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
             managerService.confirmAll(listUserNoConfirm);
             session.setAttribute("messageSuccess", "confirm all successfully");
             return "redirect:/manager/viewListNotConfirmUser";
-        }else {
+        } else {
             model.addAttribute("message", "you should login");
             return "index";
         }
@@ -270,11 +263,11 @@ public class ManagerController {
         return "errorPage";
     }*/
 
-   /* @ExceptionHandler(MainServiceDuplicateException.class)
-    public final String handleException(MainServiceDuplicateException ex, Model model, WebRequest request) {
-        model.addAttribute("message", ex.getMessage());
-        return "AddMainServices";
-    }*/
+    /* @ExceptionHandler(MainServiceDuplicateException.class)
+     public final String handleException(MainServiceDuplicateException ex, Model model, WebRequest request) {
+         model.addAttribute("message", ex.getMessage());
+         return "AddMainServices";
+     }*/
   /* @ExceptionHandler(value = MainServiceDuplicateException.class)
    public ModelAndView loginExceptionHandler(MainServiceDuplicateException ex) {
        Map<String, Object> model = new HashMap<>();
@@ -282,10 +275,10 @@ public class ManagerController {
        model.put("message", ex.getMessage());
        return new ModelAndView("AddMainServices", model);
    }*/
-   @ExceptionHandler(value = BindException.class)
-   public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
+    @ExceptionHandler(value = BindException.class)
+    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
 //        String referer = request.getHeader("Referer");
-       String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
-       return new ModelAndView(lastView, ex.getBindingResult().getModel());
-   }
+        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+        return new ModelAndView(lastView, ex.getBindingResult().getModel());
+    }
 }

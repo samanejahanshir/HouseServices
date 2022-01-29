@@ -24,16 +24,27 @@ public class OfferController {
 
     @RequestMapping("/viewListOffers/{id}")
     public String displayListOffers(@PathVariable int id, Model model, HttpSession session) {
-     //   String email = (String) session.getAttribute("email");
+        if (session.getAttribute("email") != null) {
             OrderDto orderDto = orderService.getOrderById(id);
             List<OfferDto> listOffers = offerService.getListOffers(orderDto);
-        model.addAttribute("orderId", id);
-        model.addAttribute("offerFilter", new OfferFilterSearch());
-        model.addAttribute("listOffers", listOffers);
-        return "ViewListOffersForOrder";
+            model.addAttribute("orderId", id);
+            model.addAttribute("offerFilter", new OfferFilterSearch());
+            model.addAttribute("listOffers", listOffers);
+            if (session.getAttribute("messageSuccess") != null) {
+                model.addAttribute("message", session.getAttribute("messageSuccess"));
+                session.removeAttribute("messageSuccess");
+            }
+            if (session.getAttribute("error") != null) {
+                model.addAttribute("message", session.getAttribute("error"));
+                session.removeAttribute("error");
+            }
+            return "ViewListOffersForOrder";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
-    //TODO  باید هر دو انتخاب شوند وگرنه ارور میدهد
     @PostMapping("/searchOffers/{id}")
     public String searchOffers(@PathVariable int id, @ModelAttribute("offerFilter") OfferFilterSearch offerFilter, Model model
             , HttpSession session) {
@@ -54,16 +65,20 @@ public class OfferController {
     }
 
     @RequestMapping("/selectOffer/{id}")
-    public String selectOffer(@PathVariable int id, Model model, HttpSession session,@ModelAttribute("offerFilter")OfferFilterSearch offerFilter) {
-        OfferDto offerDto = offerService.findOfferById(id);
-        orderService.selectOfferForOrder(offerDto);
-        OrderDto orderDto = orderService.getOrderById(offerDto.getOrderDto().getId());
-        List<OfferDto> listOffers = offerService.getListOffers(orderDto);
-        model.addAttribute("listOffers", listOffers);
-        model.addAttribute("message", "select offer successfuly");
-        model.addAttribute("orderId",orderDto.getId());
-        model.addAttribute("offerFilter",offerFilter);
-        return "ViewListOffersForOrder";
+    public String selectOffer(@PathVariable int id, Model model, HttpSession session, @ModelAttribute("offerFilter") OfferFilterSearch offerFilter) {
+        int orderId = 0;
+        try {
+            OfferDto offerDto = offerService.findOfferById(id);
+            orderService.selectOfferForOrder(offerDto);
+            OrderDto orderDto = orderService.getOrderById(offerDto.getOrderDto().getId());
+            orderId = orderDto.getId();
+            List<OfferDto> listOffers = offerService.getListOffers(orderDto);
+            model.addAttribute("listOffers", listOffers);
+            session.setAttribute("messageSuccess", "select offer successfuly");
+        } catch (RuntimeException e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        return "redirect:/offer/viewListOffers/" + orderId;
     }
 
     @ExceptionHandler(RuntimeException.class)

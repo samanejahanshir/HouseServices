@@ -63,8 +63,9 @@
                     <td>${offer.startTime}</td>
                     <td>${offer.expertDto.firstName} ${offer.expertDto.lastName}</td>
                     <td>${offer.state}</td>
+                    <c:if test="${offer.orderDto.state=='WAIT_SELECT_EXPERT'}">
                     <td><a href="/offer/selectOffer/${offer.id}">select</a></td>
-
+                    </c:if>
                 </tr>
             </c:forEach>
         </table>
