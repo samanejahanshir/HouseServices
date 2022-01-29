@@ -25,6 +25,7 @@
             <li class="list-group-item"><a href="/customer/viewListServices">View List Services</a></li>
             <li class="list-group-item"><a href="/customer/incrementCredit">Increment Credit</a></li>
             <li class="list-group-item"><a href="/customer/changePass">Change Password</a></li>
+            <li class="list-group-item"><a href="/order/addNewOrder">Add New Order</a></li>
             <li class="list-group-item"><a href="/customer/logout">Log Out</a></li>
 
         </ul>

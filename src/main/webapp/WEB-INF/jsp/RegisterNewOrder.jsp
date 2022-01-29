@@ -8,12 +8,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
     <title>New Order</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
 </head>
 <body style="background-color: #c3e7f8">
@@ -29,8 +30,8 @@
 --%>
 
 <div class="container col-12">
-    <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/order/saveOrder"
-               modelAttribute="orderDto" onsubmit="return checkPostalCode(this);" >
+    <form:form cssClass="p-1 my-5 mx-5" method="post" action="/order/saveOrder"
+               modelAttribute="orderDto" onsubmit="return checkPostalCode(this);">
         <h2 style="text-justify: distribute-center-last">Add Order</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
             <tr>
@@ -87,14 +88,14 @@
                     <form:label path="address.postalCode">postal code:</form:label>
                 </td>
                 <td>
-                    <form:input type="text" id="postalCode" path="address.postalCode" placeHolder="postalCode" />
+                    <form:input type="text" id="postalCode" path="address.postalCode" placeHolder="postalCode"/>
                 </td>
             </tr>
             <tr>
                 <td>
                 </td>
                 <td>
-                    <form:errors path="address.postalCode" />
+                    <form:errors path="address.postalCode"/>
                 </td>
             </tr>
             <tr>
@@ -105,7 +106,7 @@
                     <form:input type="text" path="address.tag" placeHolder="tag"/>
                 </td>
             </tr>
-           <tr>
+            <tr>
                 <td>
                 </td>
                 <td>
@@ -117,12 +118,16 @@
 </div>
 
 <script>
-  //  const postalCode = document.getElementById("postalCode");
+    //  const postalCode = document.getElementById("postalCode");
 
     function checkPostalCode(form) {
-        if (form.postalCode.value.length<10) {
+        if (form.postalCode.value.length < 10) {
             alert("postal code numbers should be 10");
             this.value = "";
+            return false;
+        }
+        if (isNaN(form.postalCode.value)) {
+            alert("type of postal code should be numbers");
             return false;
         }
     }

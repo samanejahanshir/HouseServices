@@ -2,8 +2,10 @@ package ir.maktab.web;
 
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.OrderState;
+import ir.maktab.dto.MainServiceDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.SubServiceDto;
+import ir.maktab.service.MainServicesService;
 import ir.maktab.service.OrderService;
 import ir.maktab.service.SubServicesService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ import java.util.List;
 public class OrderController {
     final OrderService orderService;
     final SubServicesService service;
+    final SubServicesService subServices;
+    final MainServicesService mainServices;
 
     @RequestMapping("/allOrders")
     public String displayListOrders(Model model, HttpSession session) {
@@ -52,8 +56,38 @@ public class OrderController {
         return "RegisterNewOrder";
     }
 
-    @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
+    @RequestMapping("/addNewOrder")
+    public String addNewOrderCustomer( Model model, HttpSession session) {
+        //session.setAttribute("subService", nameService);
+        model.addAttribute("orderDto", new OrderDto());
+        List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
+        model.addAttribute("MainServiceDtos",mainServiceDtos);
+        return "AddNewOrder";
+    }
+
+    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    public  String searchSubServices(@ModelAttribute("orderDto") OrderDto orderDto,Model model,HttpSession session){
+        List<SubServiceDto> listSubService = subServices.getListSubService(orderDto.getSubServiceDto().getGroupName());
+        model.addAttribute("subServiceDtoList",listSubService);
+        if(!listSubService.isEmpty()) {
+            model.addAttribute("select", true);
+        }
+        return "AddNewOrder";
+    }
+
+    @RequestMapping(value = "/saveNewOrder", method = RequestMethod.POST)
     public String saveNewOrder(@ModelAttribute("orderDto") @Validated OrderDto orderDto, @RequestParam("orderDate") String date, HttpSession session, Model model) throws ParseException {
+        String email = (String) session.getAttribute("email");
+        SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-mm-dd");
+        Date dateParse = outSDF.parse(date);
+        orderDto.setOrderDoingDate(dateParse);
+        orderService.saveOrder(orderDto, email);
+        model.addAttribute("message", "new order added");
+        return "CustomerPage";
+    }
+
+    @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
+    public String saveNewOrderFromServiceInSession(@ModelAttribute("orderDto") @Validated OrderDto orderDto, @RequestParam("orderDate") String date, HttpSession session, Model model) throws ParseException {
         String email = (String) session.getAttribute("email");
         String subService = (String) session.getAttribute("subService");
         SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-mm-dd");
