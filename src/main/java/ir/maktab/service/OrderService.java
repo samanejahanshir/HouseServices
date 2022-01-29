@@ -6,8 +6,10 @@ import ir.maktab.data.dao.SubServiceDao;
 import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.model.*;
+import ir.maktab.dto.CommendDto;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
+import ir.maktab.dto.mapper.CommendMapper;
 import ir.maktab.dto.mapper.CustomerMapper;
 import ir.maktab.dto.mapper.OrderMapper;
 import ir.maktab.exceptions.CreditNotEnoughException;
@@ -37,6 +39,7 @@ public class OrderService {
     final OfferDao offerDao;
     final CustomerMapper customerMapper;
     final CommendService commendService;
+    final CommendMapper commendMapper;
 
 
     public void saveOrder(OrderDto orderDto, String email) {
@@ -57,7 +60,15 @@ public class OrderService {
     public List<OrderDto> getListOrders(String email) {
         Customer customer = customerService.getCustomerByEmail(email);
         List<Orders> orders = orderDao.findByCustomer_Id(customer.getId());
-        return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+        List<OrderDto> orderDtos = orders.stream().map(orders1 -> {
+            OrderDto orderDto = orderMapper.toDto(orders1);
+            if(orders1.getCommend()!=null){
+                CommendDto commendDto = commendMapper.toDto(orders1.getCommend());
+                orderDto.setCommendDto(commendDto);
+            }
+            return orderDto;
+        }).collect(Collectors.toList());
+        return orderDtos;
     }
 
     public List<OrderDto> getListOrdersThatNotFinished(String email) {
@@ -113,12 +124,16 @@ public class OrderService {
         Optional<Orders> ordersOptional = orderDao.findById(orderId);
         if (ordersOptional.isPresent()) {
             Orders orders = ordersOptional.get();
-            Expert expert = orders.getExpert();
-            expert.setScore(expert.getScore() + commend.getScore());
-            expertService.updateExpert(expert);
-            commendService.saveCommend(commend);
-            orders.setCommend(commend);
-            orderDao.save(orders);
+            if(orders.getCommend()!=null){
+                throw new RuntimeException("there is a commend for this order");
+            }else {
+                Expert expert = orders.getExpert();
+                expert.setScore(expert.getScore() + commend.getScore());
+                expertService.updateExpert(expert);
+                commendService.saveCommend(commend);
+                orders.setCommend(commend);
+                orderDao.save(orders);
+            }
         } else {
             throw new OrderNotFoundException();
         }

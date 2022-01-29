@@ -25,7 +25,7 @@
 </form>
 <div class="container col-12">
 <c:if test="${typeList=='historyList'}">
-    <p>score of this order : ${score}</p>
+    <p> ${score}</p>
 </c:if>
     <table class="table table-bordered table-striped table-primary text-dark">
         <tr>

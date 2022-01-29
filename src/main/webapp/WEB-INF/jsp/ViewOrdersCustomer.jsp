@@ -37,7 +37,7 @@
             <td>${order.subServiceDto.name}</td>
 <%--
             <c:if test="${order.state.equals('WAIT_OFFER_EXPERTS') || order.state.equals('WAIT_SELECT_EXPERT')}">
---%><c:if test="${order.state=='PAID'}">
+--%><c:if test="${order.state=='PAID' && order.commendDto==null}">
             <td><a href="/commend/addCommend/${order.id}">add a commend</a></td>
 
         </c:if>

@@ -30,6 +30,7 @@ public class OrderDto {
     private SubServiceDto subServiceDto;
     private ExpertDto expertDto;
     private CustomerDto customerDto;
+    private CommendDto commendDto;
 
 
 }

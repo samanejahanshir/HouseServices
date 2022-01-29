@@ -110,10 +110,18 @@ public class ExpertController {
     }
 
     @RequestMapping("/viewListSubServices/{groupName}")
-    public String viewListSubServices(Model model, @PathVariable String groupName) {
+    public String viewListSubServices(Model model, @PathVariable String groupName,HttpSession session) {
         List<SubServiceDto> listSubService = subService.getListSubService(groupName);
         model.addAttribute("listSubServices", listSubService);
         model.addAttribute("role_user", "expert");
+        if(session.getAttribute("messageSuccess")!=null){
+            model.addAttribute("message",session.getAttribute("messageSuccess"));
+            session.removeAttribute("messageSuccess");
+        }
+        if(session.getAttribute("error")!=null){
+            model.addAttribute("message",session.getAttribute("error"));
+            session.removeAttribute("error");
+        }
         return "ViewListSubServiceManager";
     }
 
@@ -123,14 +131,14 @@ public class ExpertController {
         try {
             String email = (String) session.getAttribute("email");
             expertService.addSubServiceToExpertList(email, service);
-            model.addAttribute("message", "subService added to list");
+            session.setAttribute("messageSuccess", "subService added to list");
         } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
+            session.setAttribute("error", e.getMessage());
         }
-        List<SubServiceDto> listSubService = subService.getListSubService(subServiceDto.getGroupName());
+       /* List<SubServiceDto> listSubService = subService.getListSubService(subServiceDto.getGroupName());
         model.addAttribute("listSubServices", listSubService);
-        model.addAttribute("role_user", "expert");
-        return "/expert/viewListSubServices/" + subServiceDto.getGroupName();
+        model.addAttribute("role_user", "expert");*/
+        return "redirect:/expert/viewListSubServices/" + subServiceDto.getGroupName();
     }
 
     @RequestMapping("/changePass")

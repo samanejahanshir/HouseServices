@@ -112,7 +112,7 @@ public class CustomerController {
         model.addAttribute("role_user", "customer");
         return "ViewListSubServiceManager";
     }
-
+//TODO send email for change password
     @RequestMapping("/changePass")
     public String changePass(Model model) {
         model.addAttribute("role_user", "customer");
@@ -128,7 +128,7 @@ public class CustomerController {
         model.addAttribute("message", "change pass is successfuly");
         return "CustomerPage";
     }
-
+//TODO pardakht baraye afzayesh credit?
     @RequestMapping("/incrementCredit")
     public String incrementCredit() {
         return "IncrementCredit";
