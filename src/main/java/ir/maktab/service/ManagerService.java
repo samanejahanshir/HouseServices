@@ -132,9 +132,10 @@ public class ManagerService {
     }
 
     public void confirmAll(List<UserDto> userDtos) {
-        List<User> users = userDtos.stream().map(userMapper::toEntity).collect(Collectors.toList());
-        users.forEach(user -> user.setState(UserState.CONFIRMED));
-        userDao.saveAll(users);
+        //List<User> users = userDtos.stream().map(userMapper::toEntity).collect(Collectors.toList());
+        //users.forEach(user -> user.setState(UserState.CONFIRMED));
+       // userDao.saveAll(users);
+        userDtos.forEach(userDto -> confirmUser(userDto.getId()));
     }
 
     public Manager getManagerByNameAndPass(String userName, String password) {

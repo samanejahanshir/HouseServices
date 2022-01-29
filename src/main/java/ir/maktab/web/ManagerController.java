@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.dto.ConditionSearch;
 import ir.maktab.dto.MainServiceDto;
 import ir.maktab.dto.SubServiceDto;
@@ -8,8 +9,11 @@ import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -38,7 +42,7 @@ public class ManagerController {
     public String dologin(Model model, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
         try {
             if (managerService.getManagerByNameAndPass(email, password) != null) {
-                session.setAttribute("email", email);
+                session.setAttribute("emailManager", email);
                 return "managerPage";
             }
         } catch (RuntimeException e) {
@@ -50,7 +54,7 @@ public class ManagerController {
 
     @RequestMapping("/listUsers")
     public String viewListUsers(Model model, HttpSession session) {
-        if (session.getAttribute("email") != null) {
+        if (session.getAttribute("emailManager") != null) {
             model.addAttribute("conditionSearch", new ConditionSearch());
             List<UserDto> userDtoList;
             List<UserDto> userDtos = userService.getUserByCondition(new ConditionSearch());
@@ -65,7 +69,7 @@ public class ManagerController {
     @PostMapping("/search")
     public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch, Model model
             , HttpSession session) {
-        if (session.getAttribute("email") != null) {
+        if (session.getAttribute("emailManager") != null) {
             List<UserDto> userDtoList;
             if ((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName() == null) && conditionSearch.getMaxScore() == 0 && conditionSearch.getMinScore() == 0) {
                 userDtoList = userService.getUserByCondition(conditionSearch);
@@ -86,7 +90,7 @@ public class ManagerController {
 
     @RequestMapping("/addMainService")
     public String addMainService(Model model, HttpSession session) {
-        if (session.getAttribute("email") != null) {
+        if (session.getAttribute("emailManager") != null) {
             model.addAttribute("message", "");
             model.addAttribute("mainService", new MainServiceDto());
             return "AddMainServices";
@@ -110,7 +114,7 @@ public class ManagerController {
     @RequestMapping("/addSubService")
     public String addSubService(Model model, HttpSession session) {
         //  model.addAttribute("message","");
-        if (session.getAttribute("email") != null) {
+        if (session.getAttribute("emailManager") != null) {
             model.addAttribute("subServiceDto", new SubServiceDto());
             List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
             model.addAttribute("MainServiceDtos", mainServiceDtos);
@@ -134,7 +138,7 @@ public class ManagerController {
 
     @RequestMapping("/viewListMainServices")
     public String viewListMainServices(Model model, HttpSession session) {
-        if (session.getAttribute("email") != null) {
+        if (session.getAttribute("emailManager") != null) {
             List<MainServiceDto> listMainService = mainServices.getListMainService();
             model.addAttribute("role_user", "manager");
             model.addAttribute("listMainServices", listMainService);
@@ -148,7 +152,7 @@ public class ManagerController {
 
     @RequestMapping("/viewListSubServices/{groupName}")
     public String viewListSubServices(Model model, @PathVariable String groupName, HttpSession session) {
-        if (session.getAttribute("email") != null) {
+        if (session.getAttribute("emailManager") != null) {
             List<SubServiceDto> listSubService = subServices.getListSubService(groupName);
             model.addAttribute("listSubServices", listSubService);
             if(session.getAttribute("messageSuccess")!=null){
@@ -169,7 +173,7 @@ public class ManagerController {
 
     @RequestMapping("/addExpertToServices/{service}")
     public String addExpertToServices(@PathVariable("service") String service, Model model, HttpSession session) {
-        if (session.getAttribute("email") != null) {
+        if (session.getAttribute("emailManager") != null) {
             model.addAttribute("service", service);
             return "AddExpertToSubService";
         } else {
@@ -193,37 +197,56 @@ public class ManagerController {
     }
 
     @RequestMapping("/viewListNotConfirmUser")
-    public String viewListNotConfirmUsers(Model model) {
-        List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
-        model.addAttribute("userDtos", listUserNoConfirm);
-        return "ViewNotConfirmUser";
+    public String viewListNotConfirmUsers(Model model,HttpSession session) {
+        if(session.getAttribute("emailManager")!=null) {
+            List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
+            model.addAttribute("userDtos", listUserNoConfirm);
+            if(session.getAttribute("messageSuccess")!=null){
+                model.addAttribute("message",session.getAttribute("messageSuccess"));
+                session.removeAttribute("messageSuccess");
+            }
+            return "ViewNotConfirmUser";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping("/confirmUser/{id}")
-    public String confirmCustomer(@PathVariable int id, Model model) {
+    public String confirmCustomer(@PathVariable int id, Model model,HttpSession session) {
         //CustomerDto customerDto = managerService.getCustomerService().getCustomerById(id);
         // User user = managerService.getUserService().getUserById(id);
-        managerService.confirmUser(id);
-        model.addAttribute("message", "confirm is successfully");
+       if(session.getAttribute("emailManager")!=null) {
+           managerService.confirmUser(id);
+           session.setAttribute("messageSuccess", "confirm is successfully");
        /* List<CustomerDto> customerNoConfirm = managerService.getListCustomerNoConfirm();
         model.addAttribute("listCustomer", customerNoConfirm);
 */
-        List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
-        model.addAttribute("userDtos", listUserNoConfirm);
-        return "ViewNotConfirmUser";
+          /* List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
+           model.addAttribute("userDtos", listUserNoConfirm);*/
+           return "redirect:/manager/viewListNotConfirmUser";
+       }else {
+           model.addAttribute("message", "you should login");
+           return "index";
+       }
     }
 
     @RequestMapping("/confirmAll")
-    public String confirmAll(Model model) {
-        List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
-        managerService.confirmAll(listUserNoConfirm);
-        model.addAttribute("message", "confirm all successfully");
-        return "/manager/viewListNotConfirmUser";
+    public String confirmAll(Model model,HttpSession session) {
+        if(session.getAttribute("emailManager")!=null) {
+            List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
+            managerService.confirmAll(listUserNoConfirm);
+            session.setAttribute("messageSuccess", "confirm all successfully");
+            return "redirect:/manager/viewListNotConfirmUser";
+        }else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("email");
+        session.removeAttribute("emailManager");
         return "redirect:/index";
     }
 
@@ -235,7 +258,7 @@ public class ManagerController {
 
     @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
     public String saveNewPassword(@RequestParam("password") String password, Model model, HttpSession session) {
-        String email = (String) session.getAttribute("email");
+        String email = (String) session.getAttribute("emailManager");
         managerService.updatePassword(email, password);
         model.addAttribute("message", "change pass is successfuly");
         return "managerPage";
@@ -259,4 +282,10 @@ public class ManagerController {
        model.put("message", ex.getMessage());
        return new ModelAndView("AddMainServices", model);
    }*/
+   @ExceptionHandler(value = BindException.class)
+   public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
+//        String referer = request.getHeader("Referer");
+       String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+       return new ModelAndView(lastView, ex.getBindingResult().getModel());
+   }
 }
