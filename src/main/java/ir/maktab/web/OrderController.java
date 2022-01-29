@@ -43,32 +43,46 @@ public class OrderController {
 
     @RequestMapping("/newOrders")
     public String displayNewOrders(Model model, HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        List<OrderDto> orderDtoList = orderService.getListOrdersThatNotFinished(email);
-        model.addAttribute("listOrdersDto", orderDtoList);
+        if(session.getAttribute("email")!=null) {
+            String email = (String) session.getAttribute("email");
+            List<OrderDto> orderDtoList = orderService.getListOrdersThatNotFinished(email);
+            model.addAttribute("listOrdersDto", orderDtoList);
 
-        if (session.getAttribute("messageSuccess") != null) {
-          String  message = (String) session.getAttribute("messageSuccess");
-            model.addAttribute("message",message);
-            session.removeAttribute("messageSuccess");
+            if (session.getAttribute("messageSuccess") != null) {
+                String message = (String) session.getAttribute("messageSuccess");
+                model.addAttribute("message", message);
+                session.removeAttribute("messageSuccess");
+            }
+            return "ViewOrdersCustomer";
+        }else {
+            model.addAttribute("message", "you should login");
+            return "index";
         }
-        return "ViewOrdersCustomer";
     }
 
     @RequestMapping("/addNewOrder/{name}")
     public String addNewOrder(@PathVariable("name") String nameService, Model model, HttpSession session) {
-        session.setAttribute("subService", nameService);
-        model.addAttribute("orderDto", new OrderDto());
-        return "RegisterNewOrder";
+        if(session.getAttribute("email")!=null) {
+            session.setAttribute("subService", nameService);
+            model.addAttribute("orderDto", new OrderDto());
+            return "RegisterNewOrder";
+        }else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping("/addNewOrder")
     public String addNewOrderCustomer( Model model, HttpSession session) {
-        //session.setAttribute("subService", nameService);
-        model.addAttribute("orderDto", new OrderDto());
-        List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
-        model.addAttribute("MainServiceDtos",mainServiceDtos);
-        return "AddNewOrder";
+       if(session.getAttribute("email")!=null) {
+           model.addAttribute("orderDto", new OrderDto());
+           List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
+           model.addAttribute("MainServiceDtos", mainServiceDtos);
+           return "AddNewOrder";
+       }else {
+           model.addAttribute("message", "you should login");
+           return "index";
+       }
     }
 
     @RequestMapping(value = "/search",method = RequestMethod.POST)
@@ -108,91 +122,130 @@ public class OrderController {
 
     @RequestMapping(value = "/allOrdersExpert")
     public String viewAllOrderOfExpert(Model model, HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        List<OrderDto> orderDtos = orderService.getListOrdersOfSubServiceExpert(email);
-        model.addAttribute("listOrder", orderDtos);
-        model.addAttribute("typeList", "allOrders");
-        return "ViewListOrdersForExpert";
+        if(session.getAttribute("email")!=null) {
+            String email = (String) session.getAttribute("email");
+            List<OrderDto> orderDtos = orderService.getListOrdersOfSubServiceExpert(email);
+            model.addAttribute("listOrder", orderDtos);
+            model.addAttribute("typeList", "allOrders");
+            return "ViewListOrdersForExpert";
+        }else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping(value = "/listWorks")
     public String viewListWorkOfExpert(Model model, HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        List<OrderDto> orderDtos = orderService.viewListWorkOfExpert(email);
-        model.addAttribute("listOrder", orderDtos);
-        model.addAttribute("typeList", "workList");
-        return "ViewListOrdersForExpert";
+        if(session.getAttribute("email")!=null) {
+            String email = (String) session.getAttribute("email");
+            List<OrderDto> orderDtos = orderService.viewListWorkOfExpert(email);
+            model.addAttribute("listOrder", orderDtos);
+            model.addAttribute("typeList", "workList");
+            return "ViewListOrdersForExpert";
+        }else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping("/select/{orderId}")
     public String selectWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
-        OrderDto orderDto = orderService.getOrderById(orderId);
-        String message = "";
-        if (session.getAttribute("messageSuccess") != null) {
-            message = (String) session.getAttribute("messageSuccess");
-            session.removeAttribute("messageSuccess");
-        }
-        model.addAttribute("orderDto", orderDto);
-        model.addAttribute("message", message);
-        return "SelectOrderToWorking";
+       if(session.getAttribute("email")!=null) {
+           OrderDto orderDto = orderService.getOrderById(orderId);
+           String message = "";
+           if (session.getAttribute("messageSuccess") != null) {
+               message = (String) session.getAttribute("messageSuccess");
+               session.removeAttribute("messageSuccess");
+           }
+           model.addAttribute("orderDto", orderDto);
+           model.addAttribute("message", message);
+           return "SelectOrderToWorking";
+       }else {
+           model.addAttribute("message", "you should login");
+           return "index";
+       }
     }
 
     @RequestMapping("/startWork/{orderId}")
     public String startWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
-        orderService.updateOrderState(orderId, OrderState.STARTED);
-        session.setAttribute("messageSuccess", "work started");
-        return "redirect:/order/select/" + orderId;
+       if(session.getAttribute("email")!=null) {
+           orderService.updateOrderState(orderId, OrderState.STARTED);
+           session.setAttribute("messageSuccess", "work started");
+           return "redirect:/order/select/" + orderId;
+       }else {
+           model.addAttribute("message", "you should login");
+           return "index";
+       }
     }
 
     @RequestMapping("/endWork/{orderId}")
     public String endWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
-        orderService.updateOrderState(orderId, OrderState.DONE);
-        session.setAttribute("messageSuccess", "work done.");
-        return "redirect:/order/select/" + orderId;
+       if(session.getAttribute("email")!=null) {
+           orderService.updateOrderState(orderId, OrderState.DONE);
+           session.setAttribute("messageSuccess", "work done.");
+           return "redirect:/order/select/" + orderId;
+       }else {
+           model.addAttribute("message", "you should login");
+           return "index";
+       }
     }
 
     @RequestMapping("/payByCredit/{orderId}")
     public String paymentForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
-        orderService.updateOrderStateToPaid(orderId);
-        session.setAttribute("messageSuccess", "The payment was success.");
-        return "redirect:/order/newOrders";
+       if(session.getAttribute("email")!=null) {
+           orderService.updateOrderStateToPaid(orderId);
+           session.setAttribute("messageSuccess", "The payment was success.");
+           return "redirect:/order/newOrders";
+       }else {
+           model.addAttribute("message", "you should login");
+           return "index";
+       }
     }
 
     @RequestMapping("/showScore/{orderId}")
-    public String showScoreOrderForExpert(@PathVariable("orderId") int orderId, HttpSession session) {
-       try {
-           int score = orderService.getScoreOrderForExpert(orderId);
-           session.setAttribute("scoreExpert", Integer.toString(score));
-       }catch (RuntimeException e){
-           session.setAttribute("error",e.getMessage());
-       }
-        return "redirect:/order/historyWorks";
-
+    public String showScoreOrderForExpert(@PathVariable("orderId") int orderId,Model model, HttpSession session) {
+      if(session.getAttribute("email")!=null) {
+          try {
+              int score = orderService.getScoreOrderForExpert(orderId);
+              session.setAttribute("scoreExpert", Integer.toString(score));
+          } catch (RuntimeException e) {
+              session.setAttribute("error", e.getMessage());
+          }
+          return "redirect:/order/historyWorks";
+      }else {
+          model.addAttribute("message", "you should login");
+          return "index";
+      }
     }
 
-    @ExceptionHandler(RuntimeException.class)
+   /* @ExceptionHandler(RuntimeException.class)
     public final String handleException(RuntimeException ex, Model model, WebRequest request) {
         model.addAttribute("message", ex.getMessage());
         return "errorPage";
-    }
+    }*/
 
     @RequestMapping("/historyWorks")
     public String showHistoryWorks(Model model, HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        List<OrderDto> orderDtoList = orderService.getHistoryWorksOfExpert(email);
-        model.addAttribute("typeList", "historyList");
-        model.addAttribute("listOrder", orderDtoList);
-        String score = "";
-        if (session.getAttribute("scoreExpert") != null) {
-            score = (String) session.getAttribute("scoreExpert");
-            session.removeAttribute("scoreExpert");
+        if(session.getAttribute("email")!=null) {
+            String email = (String) session.getAttribute("email");
+            List<OrderDto> orderDtoList = orderService.getHistoryWorksOfExpert(email);
+            model.addAttribute("typeList", "historyList");
+            model.addAttribute("listOrder", orderDtoList);
+            String score = "";
+            if (session.getAttribute("scoreExpert") != null) {
+                score = (String) session.getAttribute("scoreExpert");
+                session.removeAttribute("scoreExpert");
+            }
+            if (session.getAttribute("error") != null) {
+                model.addAttribute("message", session.getAttribute("error"));
+                session.removeAttribute("error");
+            }
+            model.addAttribute("score", score);
+            return "ViewListOrdersForExpert";
+        }else {
+            model.addAttribute("message", "you should login");
+            return "index";
         }
-        if(session.getAttribute("error")!=null){
-            model.addAttribute("message",session.getAttribute("error"));
-            session.removeAttribute("error");
-        }
-        model.addAttribute("score", score);
-        return "ViewListOrdersForExpert";
     }
 
     @ExceptionHandler(value = BindException.class)
