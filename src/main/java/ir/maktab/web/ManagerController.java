@@ -49,35 +49,51 @@ public class ManagerController {
     }
 
     @RequestMapping("/listUsers")
-    public String viewListUsers(Model model) {
-        model.addAttribute("conditionSearch", new ConditionSearch());
-        List<UserDto> userDtoList;
-        List<UserDto> userDtos = userService.getUserByCondition(new ConditionSearch());
-        model.addAttribute("listUserDto", userDtos);
-        return "ViewListUsers";
+    public String viewListUsers(Model model, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            model.addAttribute("conditionSearch", new ConditionSearch());
+            List<UserDto> userDtoList;
+            List<UserDto> userDtos = userService.getUserByCondition(new ConditionSearch());
+            model.addAttribute("listUserDto", userDtos);
+            return "ViewListUsers";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @PostMapping("/search")
     public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch, Model model
             , HttpSession session) {
-        List<UserDto> userDtoList;
-        if ((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName() == null) && conditionSearch.getMaxScore() == 0 && conditionSearch.getMinScore() == 0) {
-            userDtoList = userService.getUserByCondition(conditionSearch);
+        if (session.getAttribute("email") != null) {
+            List<UserDto> userDtoList;
+            if ((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName() == null) && conditionSearch.getMaxScore() == 0 && conditionSearch.getMinScore() == 0) {
+                userDtoList = userService.getUserByCondition(conditionSearch);
 
+            } else {
+                userDtoList = userService.getExpertsByCondition(conditionSearch);
+
+            }
+            //  session.setAttribute("products", productDtos);
+            model.addAttribute("listUserDto", userDtoList);
+            //    session.setAttribute("listUserDto",userDtoList);
+            return "ViewListUsers";
         } else {
-            userDtoList = userService.getExpertsByCondition(conditionSearch);
-
+            model.addAttribute("message", "you should login");
+            return "index";
         }
-        //  session.setAttribute("products", productDtos);
-        model.addAttribute("listUserDto", userDtoList);
-        return "ViewListUsers";
     }
 
     @RequestMapping("/addMainService")
-    public String addMainService(Model model) {
-        model.addAttribute("message", "");
-        model.addAttribute("mainService", new MainServiceDto());
-        return "AddMainServices";
+    public String addMainService(Model model, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            model.addAttribute("message", "");
+            model.addAttribute("mainService", new MainServiceDto());
+            return "AddMainServices";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping(value = "/saveMainService", method = RequestMethod.POST)
@@ -92,12 +108,17 @@ public class ManagerController {
     }
 
     @RequestMapping("/addSubService")
-    public String addSubService(Model model) {
+    public String addSubService(Model model, HttpSession session) {
         //  model.addAttribute("message","");
-        model.addAttribute("subServiceDto", new SubServiceDto());
-        List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
-        model.addAttribute("MainServiceDtos", mainServiceDtos);
-        return "AddSubService";
+        if (session.getAttribute("email") != null) {
+            model.addAttribute("subServiceDto", new SubServiceDto());
+            List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
+            model.addAttribute("MainServiceDtos", mainServiceDtos);
+            return "AddSubService";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping(value = "/saveSubService", method = RequestMethod.POST)
@@ -112,37 +133,63 @@ public class ManagerController {
     }
 
     @RequestMapping("/viewListMainServices")
-    public String viewListMainServices(Model model) {
-        List<MainServiceDto> listMainService = mainServices.getListMainService();
-        model.addAttribute("role_user", "manager");
-        model.addAttribute("listMainServices", listMainService);
-        listMainService.forEach(System.out::println);
-        return "ViewListMainServiceManager";
+    public String viewListMainServices(Model model, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            List<MainServiceDto> listMainService = mainServices.getListMainService();
+            model.addAttribute("role_user", "manager");
+            model.addAttribute("listMainServices", listMainService);
+            listMainService.forEach(System.out::println);
+            return "ViewListMainServiceManager";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping("/viewListSubServices/{groupName}")
-    public String viewListSubServices(Model model, @PathVariable String groupName) {
-        List<SubServiceDto> listSubService = subServices.getListSubService(groupName);
-        model.addAttribute("listSubServices", listSubService);
-        model.addAttribute("role_user", "manager");
-        return "ViewListSubServiceManager";
+    public String viewListSubServices(Model model, @PathVariable String groupName, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            List<SubServiceDto> listSubService = subServices.getListSubService(groupName);
+            model.addAttribute("listSubServices", listSubService);
+            if(session.getAttribute("messageSuccess")!=null){
+                model.addAttribute("message",session.getAttribute("messageSuccess"));
+                session.removeAttribute("messageSuccess");
+            }
+            if(session.getAttribute("error")!=null){
+                model.addAttribute("message",session.getAttribute("error"));
+                session.removeAttribute("error");
+            }
+            model.addAttribute("role_user", "manager");
+            return "ViewListSubServiceManager";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping("/addExpertToServices/{service}")
-    public String addExpertToServices(@PathVariable("service") String service, Model model) {
-        model.addAttribute("service", service);
-        return "AddExpertToSubService";
+    public String addExpertToServices(@PathVariable("service") String service, Model model, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            model.addAttribute("service", service);
+            return "AddExpertToSubService";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
     @RequestMapping(value = "/saveExpertToServices/{service}", method = RequestMethod.POST)
-    public String saveExpertToServices(@PathVariable("service") String service, Model model, @RequestParam("expertEmail") String expertEmail) {
+    public String saveExpertToServices(@PathVariable("service") String service, Model model, @RequestParam("expertEmail") String expertEmail,HttpSession session) {
+      String groupName="";
         try {
+            SubServiceDto subServiceByName = subServices.getSubServiceByName(service);
+            groupName=subServiceByName.getGroupName();
             expertService.addSubServiceToExpertList(expertEmail, service);
-            model.addAttribute("message", "expert added to list services");
+            session.setAttribute("messageSuccess", "expert added to list services");
         } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
+            session.setAttribute("error", e.getMessage());
         }
-        return "managerPage";
+        return "redirect:/manager/viewListSubServices/" + groupName;
     }
 
     @RequestMapping("/viewListNotConfirmUser")

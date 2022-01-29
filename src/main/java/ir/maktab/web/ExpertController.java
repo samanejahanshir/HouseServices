@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -110,16 +109,16 @@ public class ExpertController {
     }
 
     @RequestMapping("/viewListSubServices/{groupName}")
-    public String viewListSubServices(Model model, @PathVariable String groupName,HttpSession session) {
+    public String viewListSubServices(Model model, @PathVariable String groupName, HttpSession session) {
         List<SubServiceDto> listSubService = subService.getListSubService(groupName);
         model.addAttribute("listSubServices", listSubService);
         model.addAttribute("role_user", "expert");
-        if(session.getAttribute("messageSuccess")!=null){
-            model.addAttribute("message",session.getAttribute("messageSuccess"));
+        if (session.getAttribute("messageSuccess") != null) {
+            model.addAttribute("message", session.getAttribute("messageSuccess"));
             session.removeAttribute("messageSuccess");
         }
-        if(session.getAttribute("error")!=null){
-            model.addAttribute("message",session.getAttribute("error"));
+        if (session.getAttribute("error") != null) {
+            model.addAttribute("message", session.getAttribute("error"));
             session.removeAttribute("error");
         }
         return "ViewListSubServiceManager";

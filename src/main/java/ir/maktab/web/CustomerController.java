@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,12 +43,12 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String customerRegister(@ModelAttribute("customerDto")@Validated CustomerDto customerDto, Model model, HttpSession session) {
+    public String customerRegister(@ModelAttribute("customerDto") @Validated CustomerDto customerDto, Model model, HttpSession session) {
         try {
             userService.saveCustomer(customerDto);
             session.setAttribute("email", customerDto.getEmail());
             model.addAttribute("message", "register done successfully,you should waiting for confirm by manager");
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             model.addAttribute("message", e.getMessage());
             return "CustomerRegister";
         }
@@ -66,11 +65,11 @@ public class CustomerController {
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public String doLogin(Model model, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
         CustomerDto customerDto = null;
-       try {
-           customerDto = customerService.findByEmailAndPass(email, password);
-       }catch (RuntimeException e){
-           model.addAttribute("message", e.getMessage());
-       }
+        try {
+            customerDto = customerService.findByEmailAndPass(email, password);
+        } catch (RuntimeException e) {
+            model.addAttribute("message", e.getMessage());
+        }
         if (customerDto != null) {
             if (customerDto.getState().equals(UserState.CONFIRMED)) {
                 session.setAttribute("email", email);
@@ -90,7 +89,7 @@ public class CustomerController {
         try {
             CustomerDto customerDto = customerService.getInformation(email);
             model.addAttribute("customerDto", customerDto);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             model.addAttribute("message", e.getMessage());
             return "CustomerPage";
         }
@@ -112,7 +111,8 @@ public class CustomerController {
         model.addAttribute("role_user", "customer");
         return "ViewListSubServiceManager";
     }
-//TODO send email for change password
+
+    //TODO send email for change password
     @RequestMapping("/changePass")
     public String changePass(Model model) {
         model.addAttribute("role_user", "customer");
@@ -128,7 +128,8 @@ public class CustomerController {
         model.addAttribute("message", "change pass is successfuly");
         return "CustomerPage";
     }
-//TODO pardakht baraye afzayesh credit?
+
+    //TODO pardakht baraye afzayesh credit?
     @RequestMapping("/incrementCredit")
     public String incrementCredit() {
         return "IncrementCredit";
@@ -141,7 +142,7 @@ public class CustomerController {
             CustomerDto customerDto = customerService.getCustomerMapper().toDto(customerService.getCustomerByEmail(email));
             customerService.incrementCredit(customerDto, amount);
             model.addAttribute("message", "credit incremented");
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             model.addAttribute("message", e.getMessage());
         }
         return "IncrementCredit";
@@ -153,15 +154,15 @@ public class CustomerController {
         return "redirect:/index";
     }
 
-   /* @ExceptionHandler(RuntimeException.class)
-    public final String handleException(RuntimeException ex, Model model, WebRequest request) {
-        model.addAttribute("message", ex.getMessage());
-        return "errorPage";
-    }*/
-   @ExceptionHandler(value = BindException.class)
-   public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
+    /* @ExceptionHandler(RuntimeException.class)
+     public final String handleException(RuntimeException ex, Model model, WebRequest request) {
+         model.addAttribute("message", ex.getMessage());
+         return "errorPage";
+     }*/
+    @ExceptionHandler(value = BindException.class)
+    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
 //        String referer = request.getHeader("Referer");
-       String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
-       return new ModelAndView(lastView, ex.getBindingResult().getModel());
-   }
+        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+        return new ModelAndView(lastView, ex.getBindingResult().getModel());
+    }
 }
