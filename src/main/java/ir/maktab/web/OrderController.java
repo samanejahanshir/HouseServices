@@ -46,6 +46,12 @@ public class OrderController {
         String email = (String) session.getAttribute("email");
         List<OrderDto> orderDtoList = orderService.getListOrdersThatNotFinished(email);
         model.addAttribute("listOrdersDto", orderDtoList);
+
+        if (session.getAttribute("messageSuccess") != null) {
+          String  message = (String) session.getAttribute("messageSuccess");
+            model.addAttribute("message",message);
+            session.removeAttribute("messageSuccess");
+        }
         return "ViewOrdersCustomer";
     }
 
@@ -123,7 +129,7 @@ public class OrderController {
         OrderDto orderDto = orderService.getOrderById(orderId);
         String message = "";
         if (session.getAttribute("messageSuccess") != null) {
-            message = (String) session.getAttribute("message");
+            message = (String) session.getAttribute("messageSuccess");
             session.removeAttribute("messageSuccess");
         }
         model.addAttribute("orderDto", orderDto);
@@ -145,18 +151,23 @@ public class OrderController {
         return "redirect:/order/select/" + orderId;
     }
 
-    @RequestMapping("/paymentCustomer/{orderId}")
+    @RequestMapping("/payByCredit/{orderId}")
     public String paymentForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         orderService.updateOrderStateToPaid(orderId);
         session.setAttribute("messageSuccess", "The payment was success.");
-        return "redirect:/order/select/" + orderId;
+        return "redirect:/order/newOrders";
     }
 
     @RequestMapping("/showScore/{orderId}")
     public String showScoreOrderForExpert(@PathVariable("orderId") int orderId, HttpSession session) {
-        int score = orderService.getScoreOrderForExpert(orderId);
-        session.setAttribute("scoreExpert", Integer.toString(score));
+       try {
+           int score = orderService.getScoreOrderForExpert(orderId);
+           session.setAttribute("scoreExpert", Integer.toString(score));
+       }catch (RuntimeException e){
+           session.setAttribute("error",e.getMessage());
+       }
         return "redirect:/order/historyWorks";
+
     }
 
     @ExceptionHandler(RuntimeException.class)
@@ -175,6 +186,10 @@ public class OrderController {
         if (session.getAttribute("scoreExpert") != null) {
             score = (String) session.getAttribute("scoreExpert");
             session.removeAttribute("scoreExpert");
+        }
+        if(session.getAttribute("error")!=null){
+            model.addAttribute("message",session.getAttribute("error"));
+            session.removeAttribute("error");
         }
         model.addAttribute("score", score);
         return "ViewListOrdersForExpert";

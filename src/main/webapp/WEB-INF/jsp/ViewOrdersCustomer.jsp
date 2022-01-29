@@ -45,6 +45,10 @@
 
             <td><a href="/offer/viewListOffers/${order.id}">view Offers</a></td>
             </c:if>
+            <c:if test="${(order.state=='DONE')}">
+                <td><a href="/order/payOnline${order.id}">pay online</a></td>
+                <td><a href="/order/payByCredit/${order.id}">pay by credit</a></td>
+            </c:if>
         </tr>
     </c:forEach>
 </table>

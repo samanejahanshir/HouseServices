@@ -174,7 +174,11 @@ public class OrderService {
     public int getScoreOrderForExpert(int orderId) {
         Optional<Orders> order = orderDao.findById(orderId);
         if (order.isPresent()) {
-            return order.get().getCommend().getScore();
+            if(order.get().getCommend()!=null) {
+                return order.get().getCommend().getScore();
+            }else {
+                throw  new RuntimeException("this order don't have  commend");
+            }
         } else {
             throw new OrderNotFoundException();
         }

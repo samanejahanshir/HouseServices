@@ -24,13 +24,16 @@
     </button>
 </form>
 <div class="container col-12">
+<c:if test="${typeList=='historyList'}">
+    <p>score of this order : ${score}</p>
+</c:if>
     <table class="table table-bordered table-striped table-primary text-dark">
         <tr>
             <th>Id</th>
             <th>DoingDate</th>
             <th>DoingTime</th>
             <th>RegisterDate</th>
-            <th>Price</th>
+            <th>PriceSubService</th>
             <th>state</th>
             <th>sub service</th>
             <th>customer</th>
@@ -41,7 +44,7 @@
                 <td>${order.orderDoingDate}</td>
                 <td>${order.orderDoingTime}</td>
                 <td>${order.orderRegisterDate}</td>
-                <td>${order.proposedPrice}</td>
+                <td>${order.subServiceDto.basePrice}</td>
                 <td>${order.state}</td>
                 <td>${order.subServiceDto.name}</td>
                 <td>${order.customerDto.firstName} ${order.customerDto.lastName}</td>
@@ -53,7 +56,6 @@
                 </c:if>
                 <c:if test="${typeList=='historyList'}">
                     <td><a href="/order/showScore/${order.id}">show score</a></td>
-                    <td><p>${score}</p></td>
                 </c:if>
             </tr>
         </c:forEach>

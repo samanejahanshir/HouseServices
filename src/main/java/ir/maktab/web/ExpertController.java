@@ -40,7 +40,7 @@ public class ExpertController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String expertRegister(@ModelAttribute("expertDto")@Validated ExpertDto expertDto, Model model, HttpSession session) {
+    public String expertRegister(@ModelAttribute("expertDto") @Validated ExpertDto expertDto, Model model, HttpSession session) {
         /*if (bindingResult.hasErrors()) {
             bindingResult.getFieldErrors().forEach(error -> model.addAttribute(error.getField(), error.getDefaultMessage()));
             return "ExpertRegister";
@@ -130,7 +130,7 @@ public class ExpertController {
         List<SubServiceDto> listSubService = subService.getListSubService(subServiceDto.getGroupName());
         model.addAttribute("listSubServices", listSubService);
         model.addAttribute("role_user", "expert");
-        return "/expert/viewListSubServices/"+subServiceDto.getGroupName();
+        return "/expert/viewListSubServices/" + subServiceDto.getGroupName();
     }
 
     @RequestMapping("/changePass")
@@ -150,24 +150,32 @@ public class ExpertController {
     }
 
     @RequestMapping("/addOffer/{id}")
-    public String addOfferToOrder(@PathVariable("id") int id, Model model) {
+    public String addOfferToOrder(@PathVariable("id") int id, Model model, HttpSession session) {
         model.addAttribute("offerDto", new OfferDto());
         model.addAttribute("idOrder", id);
+        if (session.getAttribute("error") != null) {
+            model.addAttribute("message", session.getAttribute("error"));
+            session.removeAttribute("error");
+        }
+        if (session.getAttribute("messageSuccess") != null) {
+            model.addAttribute("message", session.getAttribute("messageSuccess"));
+            session.removeAttribute("messageSuccess");
+        }
         return "AddOfferToOrder";
     }
 
     @RequestMapping("/saveOffer/{orderId}")
     public String saveOffer(@PathVariable("orderId") int orderId, @ModelAttribute("offerDto") OfferDto offerDto, HttpSession session, Model model) {
-       try {
-           OrderDto orderDto = orderService.getOrderById(orderId);
-           offerDto.setOrderDto(orderDto);
-           String email = (String) session.getAttribute("email");
-           expertService.addOfferToOrder(email, offerDto);
-           model.addAttribute("message", "offer added successfuly");
-       }catch (RuntimeException e){
-           model.addAttribute("message", e.getMessage());
-       }
-        return "ExpertPage";
+        try {
+            OrderDto orderDto = orderService.getOrderById(orderId);
+            offerDto.setOrderDto(orderDto);
+            String email = (String) session.getAttribute("email");
+            expertService.addOfferToOrder(email, offerDto);
+            session.setAttribute("messageSuccess", "offer added successfuly");
+        } catch (RuntimeException e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        return "redirect:/expert/addOffer/" + offerDto.getOrderDto().getId();
     }
 
     @RequestMapping("/logout")
@@ -176,16 +184,16 @@ public class ExpertController {
         return "redirect:/index";
     }
 
-  /*  @ExceptionHandler(RuntimeException.class)
-    public final String handleException(RuntimeException ex, Model model, WebRequest request) {
-        model.addAttribute("message", ex.getMessage());
-        return "errorPage";
-    }*/
-  @ExceptionHandler(value = BindException.class)
-  public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
+    /*  @ExceptionHandler(RuntimeException.class)
+      public final String handleException(RuntimeException ex, Model model, WebRequest request) {
+          model.addAttribute("message", ex.getMessage());
+          return "errorPage";
+      }*/
+    @ExceptionHandler(value = BindException.class)
+    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
 //        String referer = request.getHeader("Referer");
-      String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
-      return new ModelAndView(lastView, ex.getBindingResult().getModel());
-  }
+        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+        return new ModelAndView(lastView, ex.getBindingResult().getModel());
+    }
 
 }

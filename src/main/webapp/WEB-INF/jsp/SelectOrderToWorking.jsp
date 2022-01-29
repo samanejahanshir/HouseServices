@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 <head>
@@ -27,7 +28,7 @@
 <form:form modelAttribute="orderDto">
 <table class="table table-bordered table-striped table-primary text-dark">
     <tr><th>Id</th><th>DoingDate</th><th>DoingTime</th><th>RegisterDate</th>
-    <th>Price</th><th>state</th><th>sub service</th>
+    <th>PriceSubService</th><th>state</th><th>sub service</th>
     <th>customer</th>
     <th>address</th></tr>
         <tr>
@@ -35,14 +36,20 @@
             <td>${orderDto.orderDoingDate}</td>
             <td>${orderDto.orderDoingTime}</td>
             <td>${orderDto.orderRegisterDate}</td>
-            <td>${orderDto.proposedPrice}</td>
+            <td>${orderDto.subServiceDto.basePrice}</td>
             <td>${orderDto.state}</td>
             <td>${orderDto.subServiceDto.name}</td>
             <td>${orderDto.customerDto.firstName}  ${orderDto.customerDto.lastName}</td>
             <td>${orderDto.address.city}-${orderDto.address.street}-${orderDto.address.postalCode}-${orderDto.address.tag}</td>
+            <c:if test="${orderDto.state=='WAIT_EXPERT_COME'}">
             <td><a href="/order/startWork/${orderDto.id}">start</a> </td>
+            </c:if>
+            <c:if test="${orderDto.state=='STARTED'}">
             <td><a href="/order/endWork/${orderDto.id}">end</a> </td>
+            </c:if>
+<%--
             <td><a href="/order/paymentCustomer/${orderDto.id}">Payment customer</a> </td>
+--%>
         </tr>
 
 </table>
