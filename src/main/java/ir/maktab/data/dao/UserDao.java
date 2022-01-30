@@ -68,6 +68,12 @@ public interface UserDao extends JpaRepository<User, Integer> , JpaSpecification
            if (condition.getRole() != null ) {
                predicates.add(cb.equal(root.get("role"),condition.getRole()));
            }
+           if (condition.getStartDate()!=null && !condition.getStartDate().equals("")) {
+               predicates.add(cb.greaterThanOrEqualTo(root.get("registerDate"),condition.getStartDate()));
+           }
+           if (condition.getEndDate()!=null && !condition.getEndDate().equals("")) {
+               predicates.add(cb.lessThanOrEqualTo(root.get("registerDate"),condition.getEndDate()));
+           }
            return cb.and(predicates.toArray(new Predicate[0]));
        };
    }

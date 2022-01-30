@@ -40,6 +40,7 @@ public class OrderService {
     final CustomerMapper customerMapper;
     final CommendService commendService;
     final CommendMapper commendMapper;
+    final double profit = 0.7;
 
 
     public void saveOrder(OrderDto orderDto, String email) {
@@ -62,7 +63,7 @@ public class OrderService {
         List<Orders> orders = orderDao.findByCustomer_Id(customer.getId());
         List<OrderDto> orderDtos = orders.stream().map(orders1 -> {
             OrderDto orderDto = orderMapper.toDto(orders1);
-            if(orders1.getCommend()!=null){
+            if (orders1.getCommend() != null) {
                 CommendDto commendDto = commendMapper.toDto(orders1.getCommend());
                 orderDto.setCommendDto(commendDto);
             }
@@ -124,9 +125,9 @@ public class OrderService {
         Optional<Orders> ordersOptional = orderDao.findById(orderId);
         if (ordersOptional.isPresent()) {
             Orders orders = ordersOptional.get();
-            if(orders.getCommend()!=null){
+            if (orders.getCommend() != null) {
                 throw new RuntimeException("there is a commend for this order");
-            }else {
+            } else {
                 Expert expert = orders.getExpert();
                 expert.setScore(expert.getScore() + commend.getScore());
                 expertService.updateExpert(expert);
@@ -144,11 +145,11 @@ public class OrderService {
         Expert expert = expertService.getExpertByEmail(email);
         List<OrderDto> orderDto = null;
         if (expert != null) {
-            if( !expert.getServices().isEmpty()) {
+            if (!expert.getServices().isEmpty()) {
                 List<String> subServiceNames = expert.getServices().stream().map(SubServices::getName).collect(Collectors.toList());
-               List<Orders> orders = orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
+                List<Orders> orders = orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
                 //  List<Orders> orders = orderDao.findByStateEqualsOOrStateEqualsAndSubServicesIn(OrderState.WAIT_SELECT_EXPERT, OrderState.WAIT_OFFER_EXPERTS, expert.getServices());
-                orderDto= orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+                orderDto = orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
             }
 
         } else {
@@ -178,6 +179,9 @@ public class OrderService {
                 Customer customer = order.getCustomer();
                 customer.setCredit(customer.getCredit() - order.getProposedPrice());
                 customerService.updateCustomer(customer);
+                Expert expert = order.getExpert();
+                expert.setCredit(order.getProposedPrice() * profit);
+                expertService.updateExpert(expert);
                 orderDao.updateOrderState(orderId, OrderState.PAID);
             } else {
                 throw new CreditNotEnoughException();
@@ -186,13 +190,28 @@ public class OrderService {
     }
 
     @Transactional
+    public void updateOrderStateToPaidOnline(int orderId) {
+        Optional<Orders> orders = orderDao.findById(orderId);
+        if (orders.isPresent()) {
+            Orders order = orders.get();
+            Expert expert = order.getExpert();
+            expert.setCredit(order.getProposedPrice() * profit);
+            expertService.updateExpert(expert);
+            orderDao.updateOrderState(orderId, OrderState.PAID);
+        } else {
+            throw new OrderNotFoundException();
+        }
+    }
+
+
+    @Transactional
     public int getScoreOrderForExpert(int orderId) {
         Optional<Orders> order = orderDao.findById(orderId);
         if (order.isPresent()) {
-            if(order.get().getCommend()!=null) {
+            if (order.get().getCommend() != null) {
                 return order.get().getCommend().getScore();
-            }else {
-                throw  new RuntimeException("this order don't have  commend");
+            } else {
+                throw new RuntimeException("this order don't have  commend");
             }
         } else {
             throw new OrderNotFoundException();

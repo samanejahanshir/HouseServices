@@ -25,7 +25,7 @@ public class User {
     @Column(unique = true)
     private String email;
     private String password;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @CreationTimestamp
     private Date registerDate;
     @Enumerated(EnumType.STRING)

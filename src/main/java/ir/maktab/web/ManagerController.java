@@ -15,6 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -67,21 +70,33 @@ public class ManagerController {
     }
 
     @PostMapping("/search")
-    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch, Model model
-            , HttpSession session) {
+    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch,/*@RequestParam("startDate")String startDate,@RequestParam("endDate")String endDate */Model model, HttpSession session) throws ParseException {
         if (session.getAttribute("emailManager") != null) {
-            List<UserDto> userDtoList;
-            if ((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName() == null) && conditionSearch.getMaxScore() == 0 && conditionSearch.getMinScore() == 0) {
-                userDtoList = userService.getUserByCondition(conditionSearch);
+          try {
+              List<UserDto> userDtoList;
+              SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
+          /*  if(!startDate.equals("")) {
+               // conditionSearch.setStartDate(outSDF.parse(startDate));
+                conditionSearch.setStartDate(startDate);
+            }if(!endDate.equals("")) {
+               // conditionSearch.setEndDate(outSDF.parse(endDate));
+                  conditionSearch.setEndDate(endDate);
+              }*/
+              if ((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName() == null) && conditionSearch.getMaxScore() == 0 && conditionSearch.getMinScore() == 0) {
+                  userDtoList = userService.getUserByCondition(conditionSearch);
 
-            } else {
-                userDtoList = userService.getExpertsByCondition(conditionSearch);
+              } else {
+                  userDtoList = userService.getExpertsByCondition(conditionSearch);
 
-            }
-            //  session.setAttribute("products", productDtos);
-            model.addAttribute("listUserDto", userDtoList);
-            //    session.setAttribute("listUserDto",userDtoList);
+              }
+              //  session.setAttribute("products", productDtos);
+              model.addAttribute("listUserDto", userDtoList);
+              //    session.setAttribute("listUserDto",userDtoList);
+          }catch (RuntimeException e){
+              model.addAttribute("message",e.getMessage());
+          }
             return "ViewListUsers";
+
         } else {
             model.addAttribute("message", "you should login");
             return "index";
@@ -276,9 +291,10 @@ public class ManagerController {
        return new ModelAndView("AddMainServices", model);
    }*/
     @ExceptionHandler(value = BindException.class)
-    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
+    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request,Model model) {
 //        String referer = request.getHeader("Referer");
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+        model.addAttribute("message",ex.getMessage());
         return new ModelAndView(lastView, ex.getBindingResult().getModel());
     }
 }

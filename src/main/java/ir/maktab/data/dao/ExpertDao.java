@@ -68,6 +68,12 @@ public interface ExpertDao extends JpaRepository<Expert, Integer>, JpaSpecificat
             if(condition.getMaxScore()!=0){
                 predicates.add(cb.le(root.get("score"),condition.getMaxScore()));
             }
+            if (condition.getStartDate()!=null && !condition.getStartDate().equals("")) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("registerDate"),condition.getStartDate()));
+            }
+            if (condition.getEndDate()!=null && !condition.getEndDate().equals("")) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("registerDate"),condition.getEndDate()));
+            }
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

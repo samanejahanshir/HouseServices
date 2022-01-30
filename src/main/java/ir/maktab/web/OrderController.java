@@ -2,6 +2,7 @@ package ir.maktab.web;
 
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.OrderState;
+import ir.maktab.dto.Cart;
 import ir.maktab.dto.MainServiceDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.SubServiceDto;
@@ -52,6 +53,11 @@ public class OrderController {
                 String message = (String) session.getAttribute("messageSuccess");
                 model.addAttribute("message", message);
                 session.removeAttribute("messageSuccess");
+            }
+            if(session.getAttribute("error")!=null){
+                String message = (String) session.getAttribute("error");
+                model.addAttribute("message", message);
+                session.removeAttribute("error");
             }
             return "ViewOrdersCustomer";
         }else {
@@ -191,15 +197,42 @@ public class OrderController {
     }
 
     @RequestMapping("/payByCredit/{orderId}")
-    public String paymentForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
+    public String paymentByCreditForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
        if(session.getAttribute("email")!=null) {
-           orderService.updateOrderStateToPaid(orderId);
-           session.setAttribute("messageSuccess", "The payment was success.");
+           try {
+               orderService.updateOrderStateToPaid(orderId);
+               session.setAttribute("messageSuccess", "The payment was success.");
+           }catch (RuntimeException e){
+               session.setAttribute("error",e.getMessage());
+           }
            return "redirect:/order/newOrders";
        }else {
            model.addAttribute("message", "you should login");
            return "index";
        }
+    }
+
+    @RequestMapping("/payOnline/{orderId}")
+    public String paymentOnlineForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
+        if(session.getAttribute("email")!=null) {
+            OrderDto orderDto = orderService.getOrderById(orderId);
+            model.addAttribute("orderDto",orderDto);
+            model.addAttribute("cart",new Cart());
+            return "PayOnline";
+        }else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
+    }
+    @RequestMapping(value = "/paymentOnline",method = RequestMethod.POST)
+    public String paymentOnlineDone(Model model,HttpSession session,@ModelAttribute("cart") @Validated Cart cart){
+        try {
+            orderService.updateOrderStateToPaidOnline(cart.getIdOrder());
+            session.setAttribute("messageSuccess","payment was successfully");
+        }catch (RuntimeException e){
+            session.setAttribute("error",e.getMessage());
+        }
+        return "redirect:/order/newOrders";
     }
 
     @RequestMapping("/showScore/{orderId}")

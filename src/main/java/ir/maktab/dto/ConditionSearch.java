@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -18,5 +20,7 @@ public class ConditionSearch {
     private int minScore;
     private int maxScore;
     private UserType role;
+    private Date startDate;
+    private Date endDate;
 
 }
