@@ -66,16 +66,29 @@ public class UserService {
     }
 
     public List<UserDto> getUserByCondition(ConditionSearch condition) {
-        List<User> userList = userDao.findAll(UserDao.selectByCondition(condition));
-        if (!(userList.isEmpty())) {
-            return userList.stream().map(userMapper::toDto).collect(Collectors.toList());
-        } else {
-            throw new UserNotFoundException();
+        if(condition!=null) {
+            List<User> userList = userDao.findAll(UserDao.selectByCondition(condition));
+            if (!(userList.isEmpty())) {
+                return userList.stream().map(userMapper::toDto).collect(Collectors.toList());
+            } else {
+                throw new UserNotFoundException();
+            }
+        }else {
+            List<User> userDaoAll = userDao.findAll();
+            return userDaoAll.stream().map(userMapper::toDto).collect(Collectors.toList());
         }
     }
 
     public List<UserDto> getExpertsByCondition(ConditionSearch condition) {
-        List<ExpertDto> expertDtoList = expertService.getExpertsByCondition(condition);
-        return expertDtoList.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
+        if(condition!=null) {
+            List<ExpertDto> expertDtoList = expertService.getExpertsByCondition(condition);
+            return expertDtoList.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
+        }
+        else {
+            List<Expert> allExperts = expertService.getExpertDao().findAll();
+            List<ExpertDto> expertDtos = allExperts.stream().map(expertMapper::toDto).collect(Collectors.toList());
+            return expertDtos.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
+
+        }
     }
 }

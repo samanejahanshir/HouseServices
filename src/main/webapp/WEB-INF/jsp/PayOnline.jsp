@@ -16,11 +16,12 @@
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
 </head>
-<body>
+<body onload="timer=setTimeout('auto_reload()',600000)">
 <P>${message}</P>
 <div class="container col-12">
+    <p id="timertag"></p>
     <form:form cssClass="p-1 my-5 mx-5" method="post" action="/order/paymentOnline"
-               modelAttribute="cart" >
+               modelAttribute="cart">
         <h2 style="text-justify: distribute-center-last">Add Order</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
             <form:input type="hidden" path="idOrder" value="${orderDto.id}"/>
@@ -37,9 +38,9 @@
                 </td>
                 <td>
                     <form:errors path="number"/>
-<%--
-                    <label id="cart_error"></label>
---%>
+                        <%--
+                                            <label id="cart_error"></label>
+                        --%>
                 </td>
             </tr>
             <tr>
@@ -56,9 +57,9 @@
                 <td>
                     <form:errors path="cvv2"/>
 
-<%--
-                    <label id="cvv2_error"></label>
---%>
+                        <%--
+                                            <label id="cvv2_error"></label>
+                        --%>
                 </td>
             </tr>
             <tr>
@@ -66,19 +67,22 @@
                     date:
                 </td>
                 <td>
-                   year: <form:input type="number" name="year" path="year" id="year"/>   month: <form:input type="number" path="month" name="month" id="month"/>
+                    year: <form:input type="number" name="year" path="year" id="year"/> month: <form:input type="number"
+                                                                                                           path="month"
+                                                                                                           name="month"
+                                                                                                           id="month"/>
                 </td>
             </tr>
             <tr>
                 <td>
                 </td>
                 <td>
-                    <form:errors path="year"/>      <form:errors path="month"/>
+                    <form:errors path="year"/> <form:errors path="month"/>
 
 
-<%--
-                    <label id="year_error"></label> <label id="month_error"></label>
---%>
+                        <%--
+                                            <label id="year_error"></label> <label id="month_error"></label>
+                        --%>
 
                 </td>
             </tr>
@@ -96,9 +100,9 @@
                 <td>
                     <form:errors path="password"/>
 
-<%--
-                    <label id="pass_error"></label>
---%>
+                        <%--
+                                            <label id="pass_error"></label>
+                        --%>
                 </td>
             </tr>
 
@@ -123,55 +127,19 @@
 </div>
 
 <script>
-    //  const postalCode = document.getElementById("postalCode");
-    const cart = document.getElementById("cart").value;
-    const cvv2 = document.getElementById("cvv2").value;
-    const month =document.getElementById("month").value;
-    const year = document.getElementById("year").value;
-    const pass = document.getElementById("password").value;
 
-    function check() {
-        if (cart.length!==16) {
-            document.getElementById("cart_error").innerText="cart length should be 16";
-            return false;
-        }
-        if (isNaN(cart)) {
-            document.getElementById("cart_error").innerText="cart number should be number";
-            return false;
-        }
-        if (cvv2.toString().length < 3) {
-            document.getElementById("cvv2_error").innerText="length of cvv2 > = 3";
-            return false;
-        }
-        if (isNaN(cvv2)) {
-            document.getElementById("cvv2_error").innerText="cvv2 should be number";
-            return false;
-        }
-        if (year.toString().length !==2) {
-            document.getElementById("year_error").innerText="length of year =2";
-            return false;
-        }
-        if (isNaN(year)) {
-            document.getElementById("year_error").innerText="year should be number";
-            return false;
-        }
-        if (month.toString().length !==2) {
-            document.getElementById("month_error").innerText="length of month=2";
-            return false;
-        }
-        if (isNaN(month)) {
-            document.getElementById("month_error").innerText="month should be number";
-            return false;
-        }
-        if (pass.toString().length <5) {
-            document.getElementById("pass_error").innerText="length of password should be >5 ";
-            return false;
-        }
-        if (isNaN(pass)) {
-            document.getElementById("pass_error").innerText="password should be number";
-            return false;
-        }
+    var timer = null;
+
+    function auto_reload() {
+        window.location = '/order/allOrders';
     }
+    /*function myTimer() {
+
+        var time=new Date();
+        document.getElementById("timer").innerText=(d.getTime()-time.getTime()).toString();
+    }
+    setInterval(myTimer,600000);*/
+
 </script>
 </body>
 </html>

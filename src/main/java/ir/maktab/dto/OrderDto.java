@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -20,6 +21,7 @@ public class OrderDto {
     private double proposedPrice;
     private String description;
     private Date orderRegisterDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date orderDoingDate;
     @Min(value = 1,message = "min time should be 1")
     @Max(value = 24,message = "max time should be 24")
