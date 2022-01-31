@@ -2,6 +2,7 @@ package ir.maktab.web;
 
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.UserState;
+import ir.maktab.dto.Cart;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.MainServiceDto;
 import ir.maktab.dto.SubServiceDto;
@@ -129,14 +130,14 @@ public class CustomerController {
         return "CustomerPage";
     }
 
-    //TODO pardakht baraye afzayesh credit?
     @RequestMapping("/incrementCredit")
-    public String incrementCredit() {
+    public String incrementCredit(Model model) {
+        model.addAttribute("cart",new Cart());
         return "IncrementCredit";
     }
 
     @RequestMapping(value = "/saveCredit", method = RequestMethod.POST)
-    public String saveCredit(Model model, @RequestParam("amount") int amount, HttpSession session) {
+    public String saveCredit(@ModelAttribute("cart")@Validated Cart cart ,Model model, @RequestParam("amount") int amount, HttpSession session) {
         String email = (String) session.getAttribute("email");
         try {
             CustomerDto customerDto = customerService.getCustomerMapper().toDto(customerService.getCustomerByEmail(email));
@@ -145,7 +146,7 @@ public class CustomerController {
         } catch (RuntimeException e) {
             model.addAttribute("message", e.getMessage());
         }
-        return "IncrementCredit";
+        return "CustomerPage";
     }
 
     @RequestMapping("/logout")

@@ -102,11 +102,11 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/saveNewOrder", method = RequestMethod.POST)
-    public String saveNewOrder(@ModelAttribute("orderDto") @Validated OrderDto orderDto, @RequestParam("orderDate") Date date, HttpSession session, Model model) throws ParseException {
+    public String saveNewOrder(@ModelAttribute("orderDto") @Validated OrderDto orderDto, @RequestParam("orderDate") String date, HttpSession session, Model model) throws ParseException {
         String email = (String) session.getAttribute("email");
-        SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-mm-dd");
-       // Date dateParse = outSDF.parse(date);
-        orderDto.setOrderDoingDate(date);
+        SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateParse = outSDF.parse(date);
+        orderDto.setOrderDoingDate(dateParse);
         orderService.saveOrder(orderDto, email);
         model.addAttribute("message", "new order added");
         return "CustomerPage";
@@ -116,7 +116,7 @@ public class OrderController {
     public String saveNewOrderFromServiceInSession(@ModelAttribute("orderDto") @Validated OrderDto orderDto, @RequestParam("orderDate") String date, HttpSession session, Model model) throws ParseException {
         String email = (String) session.getAttribute("email");
         String subService = (String) session.getAttribute("subService");
-        SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
         Date dateParse = outSDF.parse(date);
         orderDto.setOrderDoingDate(dateParse);
         SubServiceDto subServiceDto = SubServiceDto.builder().name(subService).build();
@@ -282,9 +282,10 @@ public class OrderController {
     }
 
     @ExceptionHandler(value = BindException.class)
-    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
+    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request,Model model) {
 //        String referer = request.getHeader("Referer");
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+        model.addAttribute("message", ex.getMessage());
         return new ModelAndView(lastView, ex.getBindingResult().getModel());
     }
 }

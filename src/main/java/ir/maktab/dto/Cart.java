@@ -24,8 +24,8 @@ public class Cart {
     @Min(0)
     @Max(99)
     private int year;
-    @Min(1)
-    @Max(12)
+    @Min(value = 1,message = "month should be >1")
+    @Max(value = 12,message = "month should be <12")
     private int month;
     @Size(min = 3,max = 4,message = "length should be 3 or 4 number")
     @Pattern(regexp ="^[0-9]{3,4}",message = "should be number" )
