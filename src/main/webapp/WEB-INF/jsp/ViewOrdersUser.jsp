@@ -1,17 +1,16 @@
 <%--
   Created by IntelliJ IDEA.
   User: MitKnight
-  Date: 1/19/2022
-  Time: 3:51 PM
+  Date: 1/30/2022
+  Time: 7:37 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>User</title>
+    <title>User Orders</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
@@ -25,49 +24,51 @@
     </button>
 </form>
 <div class="container col-12">
-    <h1>Users List</h1>
+    <h1>Orders List</h1>
 
-    <form:form cssClass="text-center" modelAttribute="conditionSearch" action="/manager/search" method="post">
+    <form:form cssClass="text-center" modelAttribute="orderSearch" action="/manager/searchOrders" method="post">
         <table class="table table-striped table-primary text-dark table-hover">
             <tr>
                 <td>
-                   firstName: <br/><form:input path="firstName" name="firstName" placeHolder="first  name"/>
+                    <form:select path="mainServiceName" cssClass="dropdown form-control" required="required"
+                                 cssStyle="width: 12vw">
+                        <option value="">--</option>
+                        <c:forEach items="${mainServices}" var="service">
+                            <option value="${service.groupName}">${service.groupName}</option>
+                        </c:forEach>
+                    </form:select>
                 </td>
                 <td>
-                   lastName: <br/><form:input path="lastName" name="lastName" placeHolder="last name"/>
+                    <form:select path="subServiceName" cssClass="dropdown form-control" required="required"
+                                 cssStyle="width: 12vw">
+                        <option value="">--</option>
+                        <c:forEach items="${subServices}" var="service">
+                            <option value="${service.name}">${service.name}</option>
+                        </c:forEach>
+                    </form:select>
                 </td>
                 <td>
-                   email: <br/><form:input path="email" name="email" placeHolder="email"/>
-                </td>
-                <td>
-                   role:<br/> <form:input path="role" name="role" placeHolder="role"/>
-                </td>
-                <td>
-                   minScore:<br/> <form:input path="minScore" name="minScore" placeHolder="min score"/>
-                </td>
-                <td>
-                   maxScore:<br/> <form:input path="maxScore" name="maxScore" placeHolder="max score"/>
+                    <form:select path="state" cssClass="dropdown form-control" required="required"
+                                 cssStyle="width: 12vw">
+                        <option value="">--</option>
+                            <option value="WAIT_OFFER_EXPERTS">WAIT_OFFER_EXPERTS</option>
+                        <option value="WAIT_SELECT_EXPERT">WAIT_SELECT_EXPERT</option>
+                        <option value="WAIT_EXPERT_COME">WAIT_EXPERT_COME</option>
+                        <option value="STARTED">STARTED</option>
+                        <option value="DONE">DONE</option>
+                        <option value="PAID">PAID</option>
+
+                    </form:select>
                 </td>
             </tr>
             <tr>
                 <td>
-                    from:<br/><input type="date"   name="startDate" />
+                    from:<br/><form:input type="date"  path="startDate" name="startDate"  placeHolder="start date"/>
                 </td>
                 <td>
-                   to:<br/><input type="date"  name="endDate" />
+                    to:<br/><form:input type="date" path="endDate" name="endDate"  placeHolder="end date"/>
                 </td>
-                <td>
-                    subService:<br/><form:input path="subServiceName" name="subServiceName" placeHolder="subServiceName"/>
-                </td>
-                <td>
-                    <br/>
-                    count add order:<form:radiobutton path="orderUser" value="customer"/>
-                </td>
-                <td>
-                    <br/>
-                    count done order:<form:radiobutton path="orderUser" value="expert"/>
 
-                </td>
                 <td>
                     <br/>
                     <form:button name="search">Search</form:button>
@@ -85,7 +86,7 @@
 
 
             </tr>
-            <c:forEach items="${listUserDto}" var="user">
+           <%-- <c:forEach items="${listUserDto}" var="user">
                 <tr>
                     <td>${user.id}</td>
                     <td>${user.firstName}</td>
@@ -93,9 +94,9 @@
                     <td>${user.email}</td>
                     <td>${user.role}</td>
                     <td>${user.registerDate}</td>
-                    <td><a href="/manager/viewOrders/${user.id}">order detail</a></td>
+                    <td><a href="/manager/viewOrders/${user.id}"></a></td>
                 </tr>
-            </c:forEach>
+            </c:forEach>--%>
         </table>
     </form:form>
 </div>

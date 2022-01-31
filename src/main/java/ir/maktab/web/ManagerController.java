@@ -1,10 +1,9 @@
 package ir.maktab.web;
 
 import ir.maktab.config.LastViewInterceptor;
-import ir.maktab.dto.ConditionSearch;
-import ir.maktab.dto.MainServiceDto;
-import ir.maktab.dto.SubServiceDto;
-import ir.maktab.dto.UserDto;
+import ir.maktab.data.enums.UserType;
+import ir.maktab.data.model.User;
+import ir.maktab.dto.*;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
@@ -29,6 +29,7 @@ public class ManagerController {
     final SubServicesService subServices;
     final MainServicesService mainServices;
     final ExpertService expertService;
+    final OrderService orderService;
 
     @RequestMapping("/home")
     public String homePageManager(Model model) {
@@ -59,8 +60,8 @@ public class ManagerController {
     public String viewListUsers(Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
             model.addAttribute("conditionSearch", new ConditionSearch());
-            List<UserDto> userDtoList;
-            List<UserDto> userDtos = userService.getUserByCondition(new ConditionSearch());
+            List<User> all = userService.getUserDao().findAll();
+            List<UserDto> userDtos =all.stream().map(user -> userService.getUserMapper().toDto(user)).collect(Collectors.toList());
             model.addAttribute("listUserDto", userDtos);
             return "ViewListUsers";
         } else {
@@ -70,33 +71,31 @@ public class ManagerController {
     }
 
     @PostMapping("/search")
-    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch,/*@RequestParam("startDate")String startDate,@RequestParam("endDate")String endDate */Model model, HttpSession session) throws ParseException {
+    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch, Model model, @RequestParam("startDate")String startDate,@RequestParam("endDate")String endDate,HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
-          try {
-              List<UserDto> userDtoList;
-              SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
-          /*  if(!startDate.equals("")) {
-               // conditionSearch.setStartDate(outSDF.parse(startDate));
-                conditionSearch.setStartDate(startDate);
-            }if(!endDate.equals("")) {
-               // conditionSearch.setEndDate(outSDF.parse(endDate));
-                  conditionSearch.setEndDate(endDate);
-              }*/
-              if ((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName() == null) && conditionSearch.getMaxScore() == 0 && conditionSearch.getMinScore() == 0) {
-                  userDtoList = userService.getUserByCondition(conditionSearch);
-
-              } else {
-                  userDtoList = userService.getExpertsByCondition(conditionSearch);
-
-              }
-              //  session.setAttribute("products", productDtos);
-              model.addAttribute("listUserDto", userDtoList);
-              //    session.setAttribute("listUserDto",userDtoList);
-          }catch (RuntimeException e){
-              model.addAttribute("message",e.getMessage());
-          }
+            try {
+                SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
+                if(startDate!=null && !startDate.equals("")) {
+                    Date start = outSDF.parse(startDate);
+                    conditionSearch.setStartDate(start);
+                }
+                if(!endDate.equals("") && endDate!=null) {
+                    Date end = outSDF.parse(endDate);
+                    conditionSearch.setEndDate(end);
+                }
+                System.out.println(conditionSearch.getEndDate());
+                List<UserDto> userDtoList;
+                if ((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName() == null) && conditionSearch.getMaxScore() == 0 && conditionSearch.getMinScore() == 0) {
+                    userDtoList = userService.getUserByCondition(conditionSearch);
+                } else {
+                    userDtoList = userService.getExpertsByCondition(conditionSearch);
+                }
+                model.addAttribute("listUserDto", userDtoList);
+                model.addAttribute("conditionSearch",conditionSearch);
+            } catch (RuntimeException | ParseException e) {
+                model.addAttribute("message", e.getMessage());
+            }
             return "ViewListUsers";
-
         } else {
             model.addAttribute("message", "you should login");
             return "index";
@@ -290,11 +289,40 @@ public class ManagerController {
        model.put("message", ex.getMessage());
        return new ModelAndView("AddMainServices", model);
    }*/
+    @RequestMapping("/viewOrders/{id}")
+    public String viewListOrderUser(@PathVariable("id") int id, Model model, HttpSession session) {
+        if (session.getAttribute("emailManager") != null) {
+            List<OrderDto> listOrders;
+            User userById = userService.getUserById(id);
+            if (userById.getRole().equals(UserType.CUSTOMER)) {
+                listOrders = orderService.getListOrders(userById.getEmail());
+            } else {
+                listOrders = orderService.viewListWorkOfExpert(userById.getEmail());
+            }
+            List<MainServiceDto> mainServiceList = mainServices.getListMainService();
+            List<SubServiceDto> subServiceList = subServices.getListAllSubService();
+            model.addAttribute("listOrders", listOrders);
+            model.addAttribute("orderSearch", new OrdersSearch());
+            model.addAttribute("mainServices", mainServiceList);
+            model.addAttribute("subServices", subServiceList);
+
+            return "ViewOrdersUser";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
+    }
+
+   /* @RequestMapping(value = "/searchOrders",method = RequestMethod.POST)
+    public String searchOrdersByFilter(){
+
+    }*/
+
     @ExceptionHandler(value = BindException.class)
-    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request,Model model) {
+    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request, Model model) {
 //        String referer = request.getHeader("Referer");
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
-        model.addAttribute("message",ex.getMessage());
+        model.addAttribute("message", ex.getMessage());
         return new ModelAndView(lastView, ex.getBindingResult().getModel());
     }
 }

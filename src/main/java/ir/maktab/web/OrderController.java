@@ -102,11 +102,11 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/saveNewOrder", method = RequestMethod.POST)
-    public String saveNewOrder(@ModelAttribute("orderDto") @Validated OrderDto orderDto, @RequestParam("orderDate") String date, HttpSession session, Model model) throws ParseException {
+    public String saveNewOrder(@ModelAttribute("orderDto") @Validated OrderDto orderDto, @RequestParam("orderDate") Date date, HttpSession session, Model model) throws ParseException {
         String email = (String) session.getAttribute("email");
         SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-mm-dd");
-        Date dateParse = outSDF.parse(date);
-        orderDto.setOrderDoingDate(dateParse);
+       // Date dateParse = outSDF.parse(date);
+        orderDto.setOrderDoingDate(date);
         orderService.saveOrder(orderDto, email);
         model.addAttribute("message", "new order added");
         return "CustomerPage";

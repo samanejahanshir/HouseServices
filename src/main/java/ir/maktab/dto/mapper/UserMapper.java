@@ -66,4 +66,16 @@ public class UserMapper {
                 .build();
     }
 
+    public UserDto customerDtoToUserDto(CustomerDto customerDto){
+        return UserDto.builder()
+                .id(customerDto.getId())
+                .password(customerDto.getPassword())
+                .firstName(customerDto.getFirstName())
+                .lastName(customerDto.getLastName())
+                .role(customerDto.getRole())
+                .email(customerDto.getEmail())
+                .registerDate(customerDto.getRegisterDate())
+                .build();
+    }
+
 }

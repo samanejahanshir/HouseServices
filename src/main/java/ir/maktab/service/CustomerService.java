@@ -1,18 +1,24 @@
 package ir.maktab.service;
 
 import ir.maktab.data.dao.CustomerDao;
+import ir.maktab.data.dao.ExpertDao;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.Customer;
+import ir.maktab.data.model.Expert;
+import ir.maktab.dto.ConditionSearch;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.mapper.CustomerMapper;
 import ir.maktab.exceptions.CustomerNotExistException;
 import ir.maktab.exceptions.UserByEmailExistException;
+import ir.maktab.exceptions.UserNotFoundException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -94,4 +100,12 @@ public class CustomerService {
         CustomerDto customerDto = customerMapper.toDto(customer);
         return customerDto;
     }
+  public List<CustomerDto> getCustomerByCondition(ConditionSearch condition){
+      List<Customer> userList = customerDao.findAll(CustomerDao.selectByCondition(condition));
+      if (!(userList.isEmpty())) {
+          return userList.stream().map(customerMapper::toDto).collect(Collectors.toList());
+      } else {
+          throw new UserNotFoundException();
+      }
+  }
 }

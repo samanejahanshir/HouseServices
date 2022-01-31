@@ -33,4 +33,9 @@ public class SubServicesService {
             throw new SubServiceNotFoundException();
         }
     }
+
+    public List<SubServiceDto> getListAllSubService() {
+        List<SubServices> subServices = this.subServices.findAll();
+        return subServices.stream().map(subServiceMapper::toDto).collect(Collectors.toList());
+    }
 }

@@ -16,6 +16,7 @@ import ir.maktab.dto.mapper.UserMapper;
 import ir.maktab.exceptions.UserNotFoundException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,28 +68,30 @@ public class UserService {
 
     public List<UserDto> getUserByCondition(ConditionSearch condition) {
         if(condition!=null) {
-            List<User> userList = userDao.findAll(UserDao.selectByCondition(condition));
-            if (!(userList.isEmpty())) {
-                return userList.stream().map(userMapper::toDto).collect(Collectors.toList());
+            if (condition.getOrderUser()!=null && condition.getOrderUser().equals("expert")) {
+                return getCustomerByCondition(condition);
+            } else if (condition.getOrderUser()!=null && condition.getOrderUser().equals("customer")) {
+                return getExpertsByCondition(condition);
             } else {
-                throw new UserNotFoundException();
+                List<User> userList = userDao.findAll(UserDao.selectByCondition(condition),Sort.by("registerDate"));
+                if (!(userList.isEmpty())) {
+                    return userList.stream().map(userMapper::toDto).collect(Collectors.toList());
+                } else {
+                    throw new UserNotFoundException();
+                }
             }
         }else {
-            List<User> userDaoAll = userDao.findAll();
-            return userDaoAll.stream().map(userMapper::toDto).collect(Collectors.toList());
+          return  userDao.findAll().stream().map(userMapper::toDto).collect(Collectors.toList());
         }
     }
 
+    public List<UserDto> getCustomerByCondition(ConditionSearch condition) {
+            List<CustomerDto> customerDtos = customerService.getCustomerByCondition(condition);
+            return customerDtos.stream().map(userMapper::customerDtoToUserDto).collect(Collectors.toList());
+    }
+
     public List<UserDto> getExpertsByCondition(ConditionSearch condition) {
-        if(condition!=null) {
             List<ExpertDto> expertDtoList = expertService.getExpertsByCondition(condition);
             return expertDtoList.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
-        }
-        else {
-            List<Expert> allExperts = expertService.getExpertDao().findAll();
-            List<ExpertDto> expertDtos = allExperts.stream().map(expertMapper::toDto).collect(Collectors.toList());
-            return expertDtos.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
-
-        }
     }
 }

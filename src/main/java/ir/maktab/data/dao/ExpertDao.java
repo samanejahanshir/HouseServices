@@ -55,9 +55,6 @@ public interface ExpertDao extends JpaRepository<Expert, Integer>, JpaSpecificat
             if (condition.getEmail() != null && !condition.getEmail().equals("")) {
                 predicates.add(cb.equal(root.get("email"), condition.getEmail()));
             }
-            if (condition.getRole() != null) {
-                predicates.add(cb.equal(root.get("role"), condition.getRole()));
-            }
             if (condition.getSubServiceName() != null && !Objects.equals(condition.getSubServiceName(), "")) {
                 Join<Expert, SubServices> serviceJoin = root.joinList("services");
                 predicates.add(cb.equal(serviceJoin.get("name"), condition.getSubServiceName()));
