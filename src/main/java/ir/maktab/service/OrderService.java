@@ -271,8 +271,12 @@ public class OrderService {
     }
     @Transactional
     public List<OrderDto> getListAllOrdersUserByCondition(OrdersSearch ordersSearch){
-        List<Orders> orders = orderDao.findAll(OrderDao.selectByCondition(ordersSearch));
+        List<Orders> orders;
+        if(ordersSearch!=null) {
+            orders = orderDao.findAll(OrderDao.selectByCondition(ordersSearch));
+        }else {
+            orders = orderDao.findAll();
+        }
         return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
     }
-
 }

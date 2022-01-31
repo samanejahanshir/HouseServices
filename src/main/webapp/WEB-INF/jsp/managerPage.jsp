@@ -24,6 +24,7 @@
             <li class="list-group-item"><a href="/manager/addSubService">Add New SubService</a></li>
             <li class="list-group-item"><a href="/manager/viewListMainServices">View List MainServices</a></li>
             <li class="list-group-item"><a href="/manager/viewListNotConfirmUser">View List NotConfirm Users</a></li>
+            <li class="list-group-item"><a href="/manager/viewListAllOrders">View List Orders</a></li>
             <li class="list-group-item"><a href="/manager/changePass">change password</a></li>
             <li class="list-group-item"><a href="/manager/logout">Log Out</a></li>
 

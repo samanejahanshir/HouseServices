@@ -299,11 +299,17 @@ public class ManagerController {
             return "index";
         }
     }
-
+    @RequestMapping(value = "/viewListAllOrders")
     public String viewListAllOrders(Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
-
-            return "ViewOrdersUser";
+            List<OrderDto> listOrders=orderService.getListAllOrdersUserByCondition(null);
+            List<MainServiceDto> mainServiceList = mainServices.getListMainService();
+            List<SubServiceDto> subServiceList = subServices.getListAllSubService();
+            model.addAttribute("listOrders", listOrders);
+            model.addAttribute("orderSearch", new OrdersSearch());
+            model.addAttribute("mainServices", mainServiceList);
+            model.addAttribute("subServices", subServiceList);
+            return "ViewAllOrdersDetail";
         } else {
             model.addAttribute("message", "you should login");
             return "index";
@@ -312,8 +318,6 @@ public class ManagerController {
 
     @RequestMapping(value = "/searchOrders",method = RequestMethod.POST)
     public String searchOrdersByFilter(@ModelAttribute("orderSearch")OrdersSearch ordersSearch,Model model,HttpSession session){
-        if(session.getAttribute("userId")!=null){
-            int userId=(Integer)session.getAttribute("userId");
             List<OrderDto> listOrders=orderService.getListAllOrdersUserByCondition(ordersSearch);
             List<MainServiceDto> mainServiceList = mainServices.getListMainService();
             List<SubServiceDto> subServiceList = subServices.getListAllSubService();
@@ -321,9 +325,7 @@ public class ManagerController {
             model.addAttribute("orderSearch", new OrdersSearch());
             model.addAttribute("mainServices", mainServiceList);
             model.addAttribute("subServices", subServiceList);
-            return "ViewOrdersUser";
-        }
-return "redirect:/manager/listUsers";
+            return "ViewAllOrdersDetail";
     }
 
     @ExceptionHandler(value = BindException.class)

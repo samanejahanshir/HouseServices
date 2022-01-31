@@ -49,13 +49,13 @@ public interface OrderDao extends JpaRepository<Orders, Integer> , JpaSpecificat
                 predicates.add(cb.equal(root.get("state"),ordersSearch.getState()));
             }
             if (ordersSearch.getSubServiceName()!=null && !ordersSearch.getSubServiceName().equals("")) {
-                Join<Orders, SubServices> serviceJoin = root.joinList("subServices");
+                Join<Orders, SubServices> serviceJoin = root.join("subServices");
                 predicates.add(cb.equal(serviceJoin.get("name"),ordersSearch.getSubServiceName()));
             }
             if (ordersSearch.getMainServiceName()!=null && !ordersSearch.getMainServiceName().equals("")) {
-                Join<Orders, SubServices> serviceJoin = root.joinList("subServices");
-                Join<SubServices, MainServices> MainserviceJoin = root.joinList("mainServices");
-                predicates.add(cb.equal(MainserviceJoin.joinMap("groupName"), ordersSearch.getMainServiceName()));
+                Join<Orders, SubServices> serviceJoin = root.join("subServices");
+                Join<SubServices, MainServices> mainServices = serviceJoin.join("mainServices");
+                predicates.add(cb.equal(mainServices.get("groupName"), ordersSearch.getMainServiceName()));
             }
             if (ordersSearch.getStartDate()!=null) {
                 predicates.add(cb.greaterThanOrEqualTo(root.get("orderDoingDate"),ordersSearch.getStartDate()));
