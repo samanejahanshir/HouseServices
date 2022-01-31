@@ -64,10 +64,10 @@
 
     <c:if test="${verify==true}">
         <c:if test="${role_user.equals('expert')}">
-        <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/saveNewPass">
+        <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/saveNewPass" onsubmit="return checkPassword();">
             </c:if>
             <c:if test="${role_user.equals('customer')}">
-            <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/saveNewPass">
+            <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/saveNewPass" onsubmit="return checkPassword();">
                 </c:if>
                 <%-- <c:if test="${role_user.equals('manager')}">
                  <form cssClass="p-1 my-5 mx-5" method="post" action="/manager/saveNewPass">
@@ -79,7 +79,7 @@
                             password:
                         </td>
                         <td>
-                            <input type="password" name="password">
+                            <input type="password" name="password" id="password">
                         </td>
                     </tr>
                     <tr>
@@ -87,7 +87,7 @@
                             Repeat password:
                         </td>
                         <td>
-                            <input type="password" name="re_password">
+                            <input type="password" name="re_password" id="repassword">
                         </td>
                     </tr>
                     <tr>
@@ -101,4 +101,38 @@
             </form>
         </c:if>
 </body>
+
+<script>
+
+    var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+
+    function checkInputs() {
+        if (password.length < 8) {
+            alert("postal code numbers should be 10");
+            this.value = "";
+            return false;
+        }
+        if (isNaN(form.postalCode.value)) {
+            alert("type of postal code should be numbers");
+            return false;
+        }
+    }
+</script>
+<script type="text/javascript">
+    var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+    const password = document.getElementById("password").value;
+    const repassword = document.getElementById("repassword").value;
+    function checkPassword()
+    {
+        // at least one number, one lowercase and one uppercase letter
+        // at least six characters
+       if(!re.test(password)){
+           return false;
+       }
+        if(password!==repassword){
+            return false;
+        }
+    }
+
+</script>
 </html>

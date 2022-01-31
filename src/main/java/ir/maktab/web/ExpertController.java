@@ -2,6 +2,7 @@ package ir.maktab.web;
 
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.UserState;
+import ir.maktab.data.model.VerifyCodeUser;
 import ir.maktab.dto.*;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/expert")
@@ -26,6 +29,7 @@ public class ExpertController {
     final SubServicesService subService;
     final MainServicesService mainServices;
     final OrderService orderService;
+    final VerifyCodeUserService codeUserService;
 
     @RequestMapping("/Signup")
     public String signUp(Model model) {
@@ -143,18 +147,76 @@ public class ExpertController {
     @RequestMapping("/changePass")
     public String changePass(Model model) {
         model.addAttribute("role_user", "expert");
-        String password = "";
-        model.addAttribute("newPass", password);
+        // String password = "";
+        // model.addAttribute("newPass", password);
         return "ChangePass";
     }
 
-    @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
-    public String saveNewPassword(@RequestParam("password") String password, Model model, HttpSession session) {
+    @RequestMapping(value = "/sendEmail", method = RequestMethod.POST)
+    public String sendEmailForChangePass(@RequestParam("email") String inputEmail, Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
-        expertService.updatePassword(email, password);
-        model.addAttribute("message", "change pass is successfuly");
-        return "ExpertPage";
+        if (inputEmail.equals(email)) {
+            // return "SendEmail";
+            int code = sendMail(email);
+            if (code != 0) {
+                VerifyCodeUser verifyCodeUser = VerifyCodeUser.builder()
+                        .code(code)
+                        .email(email)
+                        .build();
+                codeUserService.save(verifyCodeUser);
+                model.addAttribute("role_user", "expert");
+                model.addAttribute("verifyCode", new VerifyCodeUser());
+                return "ChangePassByCode";
+            } else {
+                return "ChangePass";
+            }
+        } else {
+            model.addAttribute("message", "email invalid!!");
+            return "ChangePass";
+        }
     }
+
+    @RequestMapping(value = "/checkVerifyCode", method = RequestMethod.POST)
+    public String checkVerifyCode(@RequestParam("code") int code, Model model, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        int code1 = codeUserService.getVerifyCodeByEmail(email);
+        if (code == code1) {
+            model.addAttribute("verify", true);
+        } else {
+            model.addAttribute("verify", false);
+            model.addAttribute("message", "verify code not valid");
+        }
+        return "ChangePassByCode";
+
+    }
+
+    private int sendMail(String email) {
+        int code = 0;
+        try {
+            code = (int) (Math.random() * (999999 - 100000 + 1) + 1000000);
+            String mailText = "verify code is : " + code;
+            MailService.sendMail(email, "verifyCode", mailText);
+            return code;
+        } catch (MessagingException | IOException e) {
+            e.printStackTrace();
+            code = 0;
+            return code;
+        }
+    }
+
+    @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
+    public String saveNewPassword(Model model, HttpSession session, @RequestParam("password") String password, @RequestParam("re_password") String rePassword) {
+        String email = (String) session.getAttribute("email");
+        if (password.equals(rePassword)) {
+            expertService.updatePassword(email, password);
+            model.addAttribute("message", "change pass is successfuly");
+            return "redirect:ExpertPage";
+        } else {
+            model.addAttribute("verify", true);
+            return "ChangePassByCode";
+        }
+    }
+
 
     @RequestMapping("/addOffer/{id}")
     public String addOfferToOrder(@PathVariable("id") int id, Model model, HttpSession session) {
