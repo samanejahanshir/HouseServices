@@ -5,10 +5,12 @@ import ir.maktab.data.dao.OrderDao;
 import ir.maktab.data.dao.SubServiceDao;
 import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.enums.OrderState;
+import ir.maktab.data.enums.UserType;
 import ir.maktab.data.model.*;
 import ir.maktab.dto.CommendDto;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
+import ir.maktab.dto.OrdersSearch;
 import ir.maktab.dto.mapper.CommendMapper;
 import ir.maktab.dto.mapper.CustomerMapper;
 import ir.maktab.dto.mapper.OrderMapper;
@@ -40,6 +42,7 @@ public class OrderService {
     final CustomerMapper customerMapper;
     final CommendService commendService;
     final CommendMapper commendMapper;
+    final UserService userService;
     final double profit = 0.7;
 
 
@@ -256,4 +259,20 @@ public class OrderService {
             throw new ExpertNotExistException();
         }
     }
+
+    @Transactional
+    public List<OrderDto> getListAllOrdersUser(int userId){
+        User userById = userService.getUserById(userId);
+            if (userById.getRole().equals(UserType.CUSTOMER)) {
+                return getListOrders(userById.getEmail());
+            } else {
+                return viewListWorkOfExpert(userById.getEmail());
+            }
+    }
+    @Transactional
+    public List<OrderDto> getListAllOrdersUserByCondition(OrdersSearch ordersSearch){
+        List<Orders> orders = orderDao.findAll(OrderDao.selectByCondition(ordersSearch));
+        return orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
+    }
+
 }

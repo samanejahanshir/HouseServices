@@ -292,19 +292,16 @@ public class ManagerController {
     @RequestMapping("/viewOrders/{id}")
     public String viewListOrderUser(@PathVariable("id") int id, Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
-            List<OrderDto> listOrders;
-            User userById = userService.getUserById(id);
-            if (userById.getRole().equals(UserType.CUSTOMER)) {
-                listOrders = orderService.getListOrders(userById.getEmail());
-            } else {
-                listOrders = orderService.viewListWorkOfExpert(userById.getEmail());
-            }
-            List<MainServiceDto> mainServiceList = mainServices.getListMainService();
-            List<SubServiceDto> subServiceList = subServices.getListAllSubService();
-            model.addAttribute("listOrders", listOrders);
-            model.addAttribute("orderSearch", new OrdersSearch());
-            model.addAttribute("mainServices", mainServiceList);
-            model.addAttribute("subServices", subServiceList);
+            List<OrderDto> listOrders=orderService.getListAllOrdersUser(id);
+            return "ViewOrdersUser";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
+    }
+
+    public String viewListAllOrders(Model model, HttpSession session) {
+        if (session.getAttribute("emailManager") != null) {
 
             return "ViewOrdersUser";
         } else {
@@ -313,10 +310,21 @@ public class ManagerController {
         }
     }
 
-   /* @RequestMapping(value = "/searchOrders",method = RequestMethod.POST)
-    public String searchOrdersByFilter(){
-
-    }*/
+    @RequestMapping(value = "/searchOrders",method = RequestMethod.POST)
+    public String searchOrdersByFilter(@ModelAttribute("orderSearch")OrdersSearch ordersSearch,Model model,HttpSession session){
+        if(session.getAttribute("userId")!=null){
+            int userId=(Integer)session.getAttribute("userId");
+            List<OrderDto> listOrders=orderService.getListAllOrdersUserByCondition(ordersSearch);
+            List<MainServiceDto> mainServiceList = mainServices.getListMainService();
+            List<SubServiceDto> subServiceList = subServices.getListAllSubService();
+            model.addAttribute("listOrders", listOrders);
+            model.addAttribute("orderSearch", new OrdersSearch());
+            model.addAttribute("mainServices", mainServiceList);
+            model.addAttribute("subServices", subServiceList);
+            return "ViewOrdersUser";
+        }
+return "redirect:/manager/listUsers";
+    }
 
     @ExceptionHandler(value = BindException.class)
     public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request, Model model) {

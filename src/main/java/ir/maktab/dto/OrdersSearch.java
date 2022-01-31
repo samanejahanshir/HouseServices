@@ -1,6 +1,7 @@
 package ir.maktab.dto;
 
 import ir.maktab.data.enums.OrderState;
+import ir.maktab.data.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class OrdersSearch {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
     private OrderState State;
+    private UserType userType;
 
 }
