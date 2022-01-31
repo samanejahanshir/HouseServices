@@ -21,6 +21,7 @@
         <property name="suffix" value=".jsp"></property>
     </bean>
 
+
     <!-- Configures Interceptors -->
     <mvc:interceptors>
 

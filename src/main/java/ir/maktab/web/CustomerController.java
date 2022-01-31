@@ -2,14 +2,12 @@ package ir.maktab.web;
 
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.UserState;
+import ir.maktab.data.model.VerifyCodeUser;
 import ir.maktab.dto.Cart;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.MainServiceDto;
 import ir.maktab.dto.SubServiceDto;
-import ir.maktab.service.CustomerService;
-import ir.maktab.service.MainServicesService;
-import ir.maktab.service.SubServicesService;
-import ir.maktab.service.UserService;
+import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +16,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/customer")
@@ -31,6 +31,7 @@ public class CustomerController {
     final SubServicesService subService;
     final UserService userService;
     final MainServicesService mainServices;
+    final VerifyCodeUserService codeUserService;
 
     @RequestMapping("/home")
     public String homePageManager(Model model) {
@@ -117,27 +118,84 @@ public class CustomerController {
     @RequestMapping("/changePass")
     public String changePass(Model model) {
         model.addAttribute("role_user", "customer");
-        String password = "";
-        model.addAttribute("newPass", password);
+        // String password = "";
+        // model.addAttribute("newPass", password);
         return "ChangePass";
     }
 
-    @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
-    public String saveNewPassword(@RequestParam("password") String password, Model model, HttpSession session) {
+    @RequestMapping(value = "/sendEmail", method = RequestMethod.POST)
+    public String sendEmailForChangePass(@RequestParam("email") String inputEmail, Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
-        customerService.updatePassword(email, password);
-        model.addAttribute("message", "change pass is successfuly");
-        return "CustomerPage";
+        if (inputEmail.equals(email)) {
+            // return "SendEmail";
+            int code = sendMail(email);
+            if (code != 0) {
+                VerifyCodeUser verifyCodeUser = VerifyCodeUser.builder()
+                        .code(code)
+                        .email(email)
+                        .build();
+                codeUserService.save(verifyCodeUser);
+                model.addAttribute("role_user", "customer");
+                model.addAttribute("verifyCode", new VerifyCodeUser());
+                return "ChangePassByCode";
+            } else {
+                return "ChangePass";
+            }
+        } else {
+            model.addAttribute("message", "email invalid!!");
+            return "ChangePass";
+        }
+    }
+
+    @RequestMapping(value = "/checkVerifyCode", method = RequestMethod.POST)
+    public String checkVerifyCode(@RequestParam("code") int code, Model model, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        int code1 = codeUserService.getVerifyCodeByEmail(email);
+        if (code == code1) {
+            model.addAttribute("verify", true);
+        } else {
+            model.addAttribute("verify", false);
+            model.addAttribute("message", "verify code not valid");
+        }
+        return "ChangePassByCode";
+
+    }
+
+    private int sendMail(String email) {
+        int code = 0;
+        try {
+            code = (int) (Math.random() * (999999 - 100000 + 1) + 1000000);
+            String mailText = "verify code is : " + code;
+            MailService.sendMail(email, "verifyCode", mailText);
+            return code;
+        } catch (MessagingException | IOException e) {
+            e.printStackTrace();
+            code = 0;
+            return code;
+        }
+    }
+
+    @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
+    public String saveNewPassword(Model model, HttpSession session, @RequestParam("password") String password, @RequestParam("re_password") String rePassword) {
+        String email = (String) session.getAttribute("email");
+        if (password.equals(rePassword)) {
+            customerService.updatePassword(email, password);
+            model.addAttribute("message", "change pass is successfuly");
+            return "redirect:CustomerPage";
+        } else {
+            model.addAttribute("verify", true);
+            return "ChangePassByCode";
+        }
     }
 
     @RequestMapping("/incrementCredit")
     public String incrementCredit(Model model) {
-        model.addAttribute("cart",new Cart());
+        model.addAttribute("cart", new Cart());
         return "IncrementCredit";
     }
 
     @RequestMapping(value = "/saveCredit", method = RequestMethod.POST)
-    public String saveCredit(@ModelAttribute("cart")@Validated Cart cart ,Model model, @RequestParam("amount") int amount, HttpSession session) {
+    public String saveCredit(@ModelAttribute("cart") @Validated Cart cart, Model model, @RequestParam("amount") int amount, HttpSession session) {
         String email = (String) session.getAttribute("email");
         try {
             CustomerDto customerDto = customerService.getCustomerMapper().toDto(customerService.getCustomerByEmail(email));

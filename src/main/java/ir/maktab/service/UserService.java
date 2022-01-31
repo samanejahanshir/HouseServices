@@ -36,7 +36,6 @@ public class UserService {
 
     public void saveExpert(ExpertDto expertDto) {
         Expert expert = expertMapper.toEntity(expertDto);
-        //  expert.setPassword(password);
         expert.setRole(UserType.EXPERT);
         expertService.saveExpert(expert);
     }
@@ -56,42 +55,41 @@ public class UserService {
         }
     }
 
-    public User getUserById(int id){
+    public User getUserById(int id) {
         Optional<User> optionalUser = userDao.findById(id);
-        if(optionalUser.isPresent()){
-           return optionalUser.get();
-        }
-        else {
-            throw  new UserNotFoundException();
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        } else {
+            throw new UserNotFoundException();
         }
     }
 
     public List<UserDto> getUserByCondition(ConditionSearch condition) {
-        if(condition!=null) {
-            if (condition.getOrderUser()!=null && condition.getOrderUser().equals("expert")) {
+        if (condition != null) {
+            if (condition.getOrderUser() != null && condition.getOrderUser().equals("expert")) {
                 return getCustomerByCondition(condition);
-            } else if (condition.getOrderUser()!=null && condition.getOrderUser().equals("customer")) {
-                return getExpertsByCondition(condition);
+            } else if (condition.getOrderUser() != null && condition.getOrderUser().equals("customer")) {
+                return getCustomerByCondition(condition);
             } else {
-                List<User> userList = userDao.findAll(UserDao.selectByCondition(condition),Sort.by("registerDate"));
+                List<User> userList = userDao.findAll(UserDao.selectByCondition(condition), Sort.by("registerDate"));
                 if (!(userList.isEmpty())) {
                     return userList.stream().map(userMapper::toDto).collect(Collectors.toList());
                 } else {
                     throw new UserNotFoundException();
                 }
             }
-        }else {
-          return  userDao.findAll().stream().map(userMapper::toDto).collect(Collectors.toList());
+        } else {
+            return userDao.findAll().stream().map(userMapper::toDto).collect(Collectors.toList());
         }
     }
 
     public List<UserDto> getCustomerByCondition(ConditionSearch condition) {
-            List<CustomerDto> customerDtos = customerService.getCustomerByCondition(condition);
-            return customerDtos.stream().map(userMapper::customerDtoToUserDto).collect(Collectors.toList());
+        List<CustomerDto> customerDtos = customerService.getCustomerByCondition(condition);
+        return customerDtos.stream().map(userMapper::customerDtoToUserDto).collect(Collectors.toList());
     }
 
     public List<UserDto> getExpertsByCondition(ConditionSearch condition) {
-            List<ExpertDto> expertDtoList = expertService.getExpertsByCondition(condition);
-            return expertDtoList.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
+        List<ExpertDto> expertDtoList = expertService.getExpertsByCondition(condition);
+        return expertDtoList.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
     }
 }

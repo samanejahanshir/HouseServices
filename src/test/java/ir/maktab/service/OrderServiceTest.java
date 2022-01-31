@@ -1,7 +1,6 @@
 package ir.maktab.service;
 
 import ir.maktab.config.SpringConfig;
-import ir.maktab.data.dao.SubServiceDao;
 import ir.maktab.data.model.*;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
@@ -128,14 +127,14 @@ static ExpertService expertService;
     @Test
     void updateOrderStateToPaidTest_ThrowException() {
         CreditNotEnoughException exp = Assertions.assertThrows(CreditNotEnoughException.class, () ->
-                orderService.updateOrderStateToPaid(10));
+                orderService.updateOrderStateToPaidByCredit(10));
         System.out.println(exp.getMessage());
         Assertions.assertEquals("credit of customer is not enough.", exp.getMessage());
     }
 
     @Test
     void updateOrderStateToPaidTest() {
-        orderService.updateOrderStateToPaid(9);
+        orderService.updateOrderStateToPaidByCredit(9);
     }
 
     @Test

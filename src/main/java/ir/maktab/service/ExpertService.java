@@ -74,14 +74,14 @@ public class ExpertService {
         expertDao.save(expert);
     }
 
-    public Expert getExpertByEmailJoinSubService(String email) {
+   /* public Expert getExpertByEmailJoinSubService(String email) {
         Optional<Expert> expertOptional = expertDao.getExpertByEmailJoinSubService(email);
         if (expertOptional.isPresent()) {
             return expertOptional.get();
         } else {
             throw new RuntimeException("this expert by this email not exist");
         }
-    }
+    }*/
 
     public void updateExpert(Expert expert) {
         Expert expertByEmail = getExpertByEmail(expert.getEmail());
@@ -99,11 +99,11 @@ public class ExpertService {
         if (subServicesOptional.isPresent() && expert != null) {
             SubServices subServices = subServicesOptional.get();
             if (expert.getServices() != null) {
-               if(expert.getServices().stream().anyMatch(subServices1 -> subServices1.getName().equalsIgnoreCase(subService))){
-                   throw new SubServiceDuplicateException();
-               }else {
-                   expert.getServices().add(subServices);
-               }
+                if (expert.getServices().stream().anyMatch(subServices1 -> subServices1.getName().equalsIgnoreCase(subService))) {
+                    throw new SubServiceDuplicateException();
+                } else {
+                    expert.getServices().add(subServices);
+                }
             } else {
                 expert.setServices(List.of(subServices));
             }
@@ -131,7 +131,7 @@ public class ExpertService {
         Expert expert = getExpertByEmail(email);
         if (expert != null) {
             List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
-            if (offers.stream().filter(offer -> offer.getOrders().getOrderDoingDate().equals(offerDto.getOrderDto().getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
+            if (offers.stream().filter(offer -> !offer.getState().equals(OfferState.REJECT) && offer.getOrders().getOrderDoingDate().equals(offerDto.getOrderDto().getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
             ).findFirst().isEmpty()) {
                 if (offerDto.getOfferPrice() >= offerDto.getOrderDto().getSubServiceDto().getBasePrice()) {
                     offerDto.setExpertDto(expertMapper.toDto(expert));

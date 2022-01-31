@@ -21,9 +21,9 @@
 <%--<c:if test="${role_user.equals('manager')}">
 <form action="/manager/home">
     </c:if>--%>
-   <c:if test="${role_user.equals('expert')}">
-     <form action="/expert/home">
-         </c:if>
+<c:if test="${role_user.equals('expert')}">
+<form action="/expert/home">
+    </c:if>
     <c:if test="${role_user.equals('customer')}">
     <form action="/customer/home">
         </c:if>
@@ -33,10 +33,10 @@
     </form>
     <div class="container col-12">
         <c:if test="${role_user.equals('expert')}">
-        <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/sendEmail">
+        <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/checkVerifyCode">
             </c:if>
             <c:if test="${role_user.equals('customer')}">
-            <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/sendEmail">
+            <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/checkVerifyCode">
                 </c:if>
                 <%-- <c:if test="${role_user.equals('manager')}">
                  <form cssClass="p-1 my-5 mx-5" method="post" action="/manager/saveNewPass">
@@ -45,29 +45,60 @@
                 <table class="table table-bordered table-striped table-primary text-dark">
                     <tr>
                         <td>
-                            Email:
+                            verify code:
                         </td>
                         <td>
-                            <input type="email" name="email">
+                            <input type="number" name="code">
                         </td>
                     </tr>
-                    <%-- <tr>
-                         <td>
-                            New Password:
-                         </td>
-                         <td>
-                             <input type="password" name="password">
-                         </td>
-                     </tr>--%>
                     <tr>
                         <td>
                         </td>
                         <td>
-                            <input type="submit" value="send code to email for change password">
+                            <input type="submit" value="check code">
                         </td>
                     </tr>
                 </table>
             </form>
     </div>
+
+    <c:if test="${verify==true}">
+        <c:if test="${role_user.equals('expert')}">
+        <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/saveNewPass">
+            </c:if>
+            <c:if test="${role_user.equals('customer')}">
+            <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/saveNewPass">
+                </c:if>
+                <%-- <c:if test="${role_user.equals('manager')}">
+                 <form cssClass="p-1 my-5 mx-5" method="post" action="/manager/saveNewPass">
+                     </c:if>--%>
+                <h2 style="text-justify: distribute-center-last">Change Password</h2>
+                <table class="table table-bordered table-striped table-primary text-dark">
+                    <tr>
+                        <td>
+                            password:
+                        </td>
+                        <td>
+                            <input type="password" name="password">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Repeat password:
+                        </td>
+                        <td>
+                            <input type="password" name="re_password">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                            <input type="submit" value="change password">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </c:if>
 </body>
 </html>

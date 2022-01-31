@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +43,7 @@ public class OrderController {
 
     @RequestMapping("/newOrders")
     public String displayNewOrders(Model model, HttpSession session) {
-        if(session.getAttribute("email")!=null) {
+        if (session.getAttribute("email") != null) {
             String email = (String) session.getAttribute("email");
             List<OrderDto> orderDtoList = orderService.getListOrdersThatNotFinished(email);
             model.addAttribute("listOrdersDto", orderDtoList);
@@ -54,13 +53,13 @@ public class OrderController {
                 model.addAttribute("message", message);
                 session.removeAttribute("messageSuccess");
             }
-            if(session.getAttribute("error")!=null){
+            if (session.getAttribute("error") != null) {
                 String message = (String) session.getAttribute("error");
                 model.addAttribute("message", message);
                 session.removeAttribute("error");
             }
             return "ViewOrdersCustomer";
-        }else {
+        } else {
             model.addAttribute("message", "you should login");
             return "index";
         }
@@ -68,34 +67,34 @@ public class OrderController {
 
     @RequestMapping("/addNewOrder/{name}")
     public String addNewOrder(@PathVariable("name") String nameService, Model model, HttpSession session) {
-        if(session.getAttribute("email")!=null) {
+        if (session.getAttribute("email") != null) {
             session.setAttribute("subService", nameService);
             model.addAttribute("orderDto", new OrderDto());
             return "RegisterNewOrder";
-        }else {
+        } else {
             model.addAttribute("message", "you should login");
             return "index";
         }
     }
 
     @RequestMapping("/addNewOrder")
-    public String addNewOrderCustomer( Model model, HttpSession session) {
-       if(session.getAttribute("email")!=null) {
-           model.addAttribute("orderDto", new OrderDto());
-           List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
-           model.addAttribute("MainServiceDtos", mainServiceDtos);
-           return "AddNewOrder";
-       }else {
-           model.addAttribute("message", "you should login");
-           return "index";
-       }
+    public String addNewOrderCustomer(Model model, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            model.addAttribute("orderDto", new OrderDto());
+            List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
+            model.addAttribute("MainServiceDtos", mainServiceDtos);
+            return "AddNewOrder";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
-    @RequestMapping(value = "/search",method = RequestMethod.POST)
-    public  String searchSubServices(@ModelAttribute("orderDto") OrderDto orderDto,Model model,HttpSession session){
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public String searchSubServices(@ModelAttribute("orderDto") OrderDto orderDto, Model model, HttpSession session) {
         List<SubServiceDto> listSubService = subServices.getListSubService(orderDto.getSubServiceDto().getGroupName());
-        model.addAttribute("subServiceDtoList",listSubService);
-        if(!listSubService.isEmpty()) {
+        model.addAttribute("subServiceDtoList", listSubService);
+        if (!listSubService.isEmpty()) {
             model.addAttribute("select", true);
         }
         return "AddNewOrder";
@@ -128,13 +127,13 @@ public class OrderController {
 
     @RequestMapping(value = "/allOrdersExpert")
     public String viewAllOrderOfExpert(Model model, HttpSession session) {
-        if(session.getAttribute("email")!=null) {
+        if (session.getAttribute("email") != null) {
             String email = (String) session.getAttribute("email");
             List<OrderDto> orderDtos = orderService.getListOrdersOfSubServiceExpert(email);
             model.addAttribute("listOrder", orderDtos);
             model.addAttribute("typeList", "allOrders");
             return "ViewListOrdersForExpert";
-        }else {
+        } else {
             model.addAttribute("message", "you should login");
             return "index";
         }
@@ -142,13 +141,13 @@ public class OrderController {
 
     @RequestMapping(value = "/listWorks")
     public String viewListWorkOfExpert(Model model, HttpSession session) {
-        if(session.getAttribute("email")!=null) {
+        if (session.getAttribute("email") != null) {
             String email = (String) session.getAttribute("email");
             List<OrderDto> orderDtos = orderService.viewListWorkOfExpert(email);
             model.addAttribute("listOrder", orderDtos);
             model.addAttribute("typeList", "workList");
             return "ViewListOrdersForExpert";
-        }else {
+        } else {
             model.addAttribute("message", "you should login");
             return "index";
         }
@@ -156,99 +155,100 @@ public class OrderController {
 
     @RequestMapping("/select/{orderId}")
     public String selectWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
-       if(session.getAttribute("email")!=null) {
-           OrderDto orderDto = orderService.getOrderById(orderId);
-           String message = "";
-           if (session.getAttribute("messageSuccess") != null) {
-               message = (String) session.getAttribute("messageSuccess");
-               session.removeAttribute("messageSuccess");
-           }
-           model.addAttribute("orderDto", orderDto);
-           model.addAttribute("message", message);
-           return "SelectOrderToWorking";
-       }else {
-           model.addAttribute("message", "you should login");
-           return "index";
-       }
-    }
-
-    @RequestMapping("/startWork/{orderId}")
-    public String startWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
-       if(session.getAttribute("email")!=null) {
-           orderService.updateOrderState(orderId, OrderState.STARTED);
-           session.setAttribute("messageSuccess", "work started");
-           return "redirect:/order/select/" + orderId;
-       }else {
-           model.addAttribute("message", "you should login");
-           return "index";
-       }
-    }
-
-    @RequestMapping("/endWork/{orderId}")
-    public String endWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
-       if(session.getAttribute("email")!=null) {
-           orderService.updateOrderState(orderId, OrderState.DONE);
-           session.setAttribute("messageSuccess", "work done.");
-           return "redirect:/order/select/" + orderId;
-       }else {
-           model.addAttribute("message", "you should login");
-           return "index";
-       }
-    }
-
-    @RequestMapping("/payByCredit/{orderId}")
-    public String paymentByCreditForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
-       if(session.getAttribute("email")!=null) {
-           try {
-               orderService.updateOrderStateToPaid(orderId);
-               session.setAttribute("messageSuccess", "The payment was success.");
-           }catch (RuntimeException e){
-               session.setAttribute("error",e.getMessage());
-           }
-           return "redirect:/order/newOrders";
-       }else {
-           model.addAttribute("message", "you should login");
-           return "index";
-       }
-    }
-
-    @RequestMapping("/payOnline/{orderId}")
-    public String paymentOnlineForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
-        if(session.getAttribute("email")!=null) {
+        if (session.getAttribute("email") != null) {
             OrderDto orderDto = orderService.getOrderById(orderId);
-            model.addAttribute("orderDto",orderDto);
-            model.addAttribute("cart",new Cart());
-            return "PayOnline";
-        }else {
+            String message = "";
+            if (session.getAttribute("messageSuccess") != null) {
+                message = (String) session.getAttribute("messageSuccess");
+                session.removeAttribute("messageSuccess");
+            }
+            model.addAttribute("orderDto", orderDto);
+            model.addAttribute("message", message);
+            return "SelectOrderToWorking";
+        } else {
             model.addAttribute("message", "you should login");
             return "index";
         }
     }
-    @RequestMapping(value = "/paymentOnline",method = RequestMethod.POST)
-    public String paymentOnlineDone(Model model,HttpSession session,@ModelAttribute("cart") @Validated Cart cart){
+
+    @RequestMapping("/startWork/{orderId}")
+    public String startWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            orderService.updateOrderState(orderId, OrderState.STARTED);
+            session.setAttribute("messageSuccess", "work started");
+            return "redirect:/order/select/" + orderId;
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
+    }
+
+    @RequestMapping("/endWork/{orderId}")
+    public String endWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            orderService.updateOrderState(orderId, OrderState.DONE);
+            session.setAttribute("messageSuccess", "work done.");
+            return "redirect:/order/select/" + orderId;
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
+    }
+
+    @RequestMapping("/payByCredit/{orderId}")
+    public String paymentByCreditForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            try {
+                orderService.updateOrderStateToPaidByCredit(orderId);
+                session.setAttribute("messageSuccess", "The payment was success.");
+            } catch (RuntimeException e) {
+                session.setAttribute("error", e.getMessage());
+            }
+            return "redirect:/order/newOrders";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
+    }
+
+    @RequestMapping("/payOnline/{orderId}")
+    public String paymentOnlineForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            OrderDto orderDto = orderService.getOrderById(orderId);
+            model.addAttribute("orderDto", orderDto);
+            model.addAttribute("cart", new Cart());
+            return "PayOnline";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
+    }
+
+    @RequestMapping(value = "/paymentOnline", method = RequestMethod.POST)
+    public String paymentOnlineDone(Model model, HttpSession session, @ModelAttribute("cart") @Validated Cart cart) {
         try {
             orderService.updateOrderStateToPaidOnline(cart.getIdOrder());
-            session.setAttribute("messageSuccess","payment was successfully");
-        }catch (RuntimeException e){
-            session.setAttribute("error",e.getMessage());
+            session.setAttribute("messageSuccess", "payment was successfully");
+        } catch (RuntimeException e) {
+            session.setAttribute("error", e.getMessage());
         }
         return "redirect:/order/newOrders";
     }
 
     @RequestMapping("/showScore/{orderId}")
-    public String showScoreOrderForExpert(@PathVariable("orderId") int orderId,Model model, HttpSession session) {
-      if(session.getAttribute("email")!=null) {
-          try {
-              int score = orderService.getScoreOrderForExpert(orderId);
-              session.setAttribute("scoreExpert", Integer.toString(score));
-          } catch (RuntimeException e) {
-              session.setAttribute("error", e.getMessage());
-          }
-          return "redirect:/order/historyWorks";
-      }else {
-          model.addAttribute("message", "you should login");
-          return "index";
-      }
+    public String showScoreOrderForExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
+        if (session.getAttribute("email") != null) {
+            try {
+                int score = orderService.getScoreOrderForExpert(orderId);
+                session.setAttribute("scoreExpert", Integer.toString(score));
+            } catch (RuntimeException e) {
+                session.setAttribute("error", e.getMessage());
+            }
+            return "redirect:/order/historyWorks";
+        } else {
+            model.addAttribute("message", "you should login");
+            return "index";
+        }
     }
 
    /* @ExceptionHandler(RuntimeException.class)
@@ -259,7 +259,7 @@ public class OrderController {
 
     @RequestMapping("/historyWorks")
     public String showHistoryWorks(Model model, HttpSession session) {
-        if(session.getAttribute("email")!=null) {
+        if (session.getAttribute("email") != null) {
             String email = (String) session.getAttribute("email");
             List<OrderDto> orderDtoList = orderService.getHistoryWorksOfExpert(email);
             model.addAttribute("typeList", "historyList");
@@ -275,14 +275,14 @@ public class OrderController {
             }
             model.addAttribute("score", score);
             return "ViewListOrdersForExpert";
-        }else {
+        } else {
             model.addAttribute("message", "you should login");
             return "index";
         }
     }
 
     @ExceptionHandler(value = BindException.class)
-    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request,Model model) {
+    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request, Model model) {
 //        String referer = request.getHeader("Referer");
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         model.addAttribute("message", ex.getMessage());

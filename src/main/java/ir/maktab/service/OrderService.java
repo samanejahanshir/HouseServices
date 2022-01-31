@@ -122,7 +122,6 @@ public class OrderService {
         orderDao.deleteById(orderId);
     }
 
-    //score 1 - 10
     @Transactional
     public void registerACommentToOrder(Commend commend, int orderId) {
         Optional<Orders> ordersOptional = orderDao.findById(orderId);
@@ -154,7 +153,6 @@ public class OrderService {
                 //  List<Orders> orders = orderDao.findByStateEqualsOOrStateEqualsAndSubServicesIn(OrderState.WAIT_SELECT_EXPERT, OrderState.WAIT_OFFER_EXPERTS, expert.getServices());
                 orderDto = orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
             }
-
         } else {
             throw new ExpertNotExistException();
         }
@@ -174,7 +172,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateOrderStateToPaid(int orderId) {
+    public void updateOrderStateToPaidByCredit(int orderId) {
         Optional<Orders> orders = orderDao.findById(orderId);
         if (orders.isPresent()) {
             Orders order = orders.get();

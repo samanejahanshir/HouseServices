@@ -1,10 +1,8 @@
 package ir.maktab.service;
 
 import ir.maktab.data.dao.CustomerDao;
-import ir.maktab.data.dao.ExpertDao;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.Customer;
-import ir.maktab.data.model.Expert;
 import ir.maktab.dto.ConditionSearch;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.mapper.CustomerMapper;
@@ -100,12 +98,13 @@ public class CustomerService {
         CustomerDto customerDto = customerMapper.toDto(customer);
         return customerDto;
     }
-  public List<CustomerDto> getCustomerByCondition(ConditionSearch condition){
-      List<Customer> userList = customerDao.findAll(CustomerDao.selectByCondition(condition));
-      if (!(userList.isEmpty())) {
-          return userList.stream().map(customerMapper::toDto).collect(Collectors.toList());
-      } else {
-          throw new UserNotFoundException();
-      }
-  }
+
+    public List<CustomerDto> getCustomerByCondition(ConditionSearch condition) {
+        List<Customer> userList = customerDao.findAll(CustomerDao.selectByCondition(condition));
+        if (!(userList.isEmpty())) {
+            return userList.stream().map(customerMapper::toDto).collect(Collectors.toList());
+        } else {
+            throw new UserNotFoundException();
+        }
+    }
 }

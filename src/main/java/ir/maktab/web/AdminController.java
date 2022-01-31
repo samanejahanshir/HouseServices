@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -126,20 +125,20 @@ public class AdminController {
         }
     }
 
-    @GetMapping(value = "/viewListNotConfirmUser",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/viewListNotConfirmUser", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserDto> viewListNotConfirmUsers() {
-           return managerService.getListUserNoConfirm();
+        return managerService.getListUserNoConfirm();
     }
 
-    @GetMapping(value = "/confirmUser/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/confirmUser/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void confirmUser(@PathVariable int id) {
-            managerService.confirmUser(id);
+        managerService.confirmUser(id);
     }
 
-    @GetMapping(value = "/confirmAll",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/confirmAll", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void confirmAll() {
-            List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
-            managerService.confirmAll(listUserNoConfirm);
+        List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
+        managerService.confirmAll(listUserNoConfirm);
     }
 
    /* @RequestMapping("/logout")

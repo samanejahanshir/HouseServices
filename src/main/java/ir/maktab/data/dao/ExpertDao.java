@@ -1,9 +1,7 @@
 package ir.maktab.data.dao;
 
 import ir.maktab.data.enums.UserType;
-import ir.maktab.data.model.Expert;
-import ir.maktab.data.model.SubServices;
-import ir.maktab.data.model.User;
+import ir.maktab.data.model.*;
 import ir.maktab.dto.ConditionSearch;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -70,6 +68,11 @@ public interface ExpertDao extends JpaRepository<Expert, Integer>, JpaSpecificat
             }
             if (condition.getEndDate()!=null && !condition.getEndDate().equals("")) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("registerDate"),condition.getEndDate()));
+            }
+            if (!condition.getOrderUser().equals("") && condition.getOrderUser() != null) {
+                Join<Expert, Orders> ordersJoin = root.joinList("orders");
+                predicates.add(cq.multiselect(ordersJoin.get("email"), cb.count(root)).groupBy(root.get("email")).getRestriction());
+
             }
             return cb.and(predicates.toArray(new Predicate[0]));
         };

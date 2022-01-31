@@ -61,11 +61,11 @@
                 </td>
                 <td>
                     <br/>
-                    count add order:<form:radiobutton path="orderUser" value="customer"/>
+                    count add order(customer):<form:radiobutton path="orderUser" value="customer"/>
                 </td>
                 <td>
                     <br/>
-                    count done order:<form:radiobutton path="orderUser" value="expert"/>
+                    count done order(expert):<form:radiobutton path="orderUser" value="expert"/>
 
                 </td>
                 <td>

@@ -1,7 +1,6 @@
 package ir.maktab.web;
 
 import ir.maktab.config.LastViewInterceptor;
-import ir.maktab.data.enums.UserType;
 import ir.maktab.data.model.User;
 import ir.maktab.dto.*;
 import ir.maktab.service.*;
@@ -61,7 +60,7 @@ public class ManagerController {
         if (session.getAttribute("emailManager") != null) {
             model.addAttribute("conditionSearch", new ConditionSearch());
             List<User> all = userService.getUserDao().findAll();
-            List<UserDto> userDtos =all.stream().map(user -> userService.getUserMapper().toDto(user)).collect(Collectors.toList());
+            List<UserDto> userDtos = all.stream().map(user -> userService.getUserMapper().toDto(user)).collect(Collectors.toList());
             model.addAttribute("listUserDto", userDtos);
             return "ViewListUsers";
         } else {
@@ -71,15 +70,15 @@ public class ManagerController {
     }
 
     @PostMapping("/search")
-    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch, Model model, @RequestParam("startDate")String startDate,@RequestParam("endDate")String endDate,HttpSession session) {
+    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch, Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
             try {
                 SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
-                if(startDate!=null && !startDate.equals("")) {
+                if (startDate != null && !startDate.equals("")) {
                     Date start = outSDF.parse(startDate);
                     conditionSearch.setStartDate(start);
                 }
-                if(!endDate.equals("") && endDate!=null) {
+                if (!endDate.equals("") && endDate != null) {
                     Date end = outSDF.parse(endDate);
                     conditionSearch.setEndDate(end);
                 }
@@ -91,7 +90,7 @@ public class ManagerController {
                     userDtoList = userService.getExpertsByCondition(conditionSearch);
                 }
                 model.addAttribute("listUserDto", userDtoList);
-                model.addAttribute("conditionSearch",conditionSearch);
+                model.addAttribute("conditionSearch", conditionSearch);
             } catch (RuntimeException | ParseException e) {
                 model.addAttribute("message", e.getMessage());
             }
@@ -292,17 +291,18 @@ public class ManagerController {
     @RequestMapping("/viewOrders/{id}")
     public String viewListOrderUser(@PathVariable("id") int id, Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
-            List<OrderDto> listOrders=orderService.getListAllOrdersUser(id);
+            List<OrderDto> listOrders = orderService.getListAllOrdersUser(id);
             return "ViewOrdersUser";
         } else {
             model.addAttribute("message", "you should login");
             return "index";
         }
     }
+
     @RequestMapping(value = "/viewListAllOrders")
     public String viewListAllOrders(Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
-            List<OrderDto> listOrders=orderService.getListAllOrdersUserByCondition(null);
+            List<OrderDto> listOrders = orderService.getListAllOrdersUserByCondition(null);
             List<MainServiceDto> mainServiceList = mainServices.getListMainService();
             List<SubServiceDto> subServiceList = subServices.getListAllSubService();
             model.addAttribute("listOrders", listOrders);
@@ -316,16 +316,16 @@ public class ManagerController {
         }
     }
 
-    @RequestMapping(value = "/searchOrders",method = RequestMethod.POST)
-    public String searchOrdersByFilter(@ModelAttribute("orderSearch")OrdersSearch ordersSearch,Model model,HttpSession session){
-            List<OrderDto> listOrders=orderService.getListAllOrdersUserByCondition(ordersSearch);
-            List<MainServiceDto> mainServiceList = mainServices.getListMainService();
-            List<SubServiceDto> subServiceList = subServices.getListAllSubService();
-            model.addAttribute("listOrders", listOrders);
-            model.addAttribute("orderSearch", new OrdersSearch());
-            model.addAttribute("mainServices", mainServiceList);
-            model.addAttribute("subServices", subServiceList);
-            return "ViewAllOrdersDetail";
+    @RequestMapping(value = "/searchOrders", method = RequestMethod.POST)
+    public String searchOrdersByFilter(@ModelAttribute("orderSearch") OrdersSearch ordersSearch, Model model, HttpSession session) {
+        List<OrderDto> listOrders = orderService.getListAllOrdersUserByCondition(ordersSearch);
+        List<MainServiceDto> mainServiceList = mainServices.getListMainService();
+        List<SubServiceDto> subServiceList = subServices.getListAllSubService();
+        model.addAttribute("listOrders", listOrders);
+        model.addAttribute("orderSearch", new OrdersSearch());
+        model.addAttribute("mainServices", mainServiceList);
+        model.addAttribute("subServices", subServiceList);
+        return "ViewAllOrdersDetail";
     }
 
     @ExceptionHandler(value = BindException.class)

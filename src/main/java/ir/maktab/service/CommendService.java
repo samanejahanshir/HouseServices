@@ -15,8 +15,4 @@ public class CommendService {
     public void saveCommend(Commend commend) {
         commendDao.save(commend);
     }
-
-    public int getScoreCommend() {
-        return 0;
-    }
 }

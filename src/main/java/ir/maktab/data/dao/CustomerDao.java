@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -44,16 +45,17 @@ public interface CustomerDao extends JpaRepository<Customer, Integer>, JpaSpecif
             if (condition.getEmail() != null && !condition.getEmail().equals("")) {
                 predicates.add(cb.equal(root.get("email"), condition.getEmail()));
             }
-            if (condition.getStartDate()!=null && !condition.getStartDate().equals("")) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("registerDate"),condition.getStartDate()));
+            if (condition.getStartDate() != null && !condition.getStartDate().equals("")) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("registerDate"), condition.getStartDate()));
             }
-            if (condition.getEndDate()!=null && !condition.getEndDate().equals("")) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("registerDate"),condition.getEndDate()));
+            if (condition.getEndDate() != null && !condition.getEndDate().equals("")) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("registerDate"), condition.getEndDate()));
             }
-            if(!condition.getOrderUser().equals("") && condition.getOrderUser()!=null){
+           /* if (!condition.getOrderUser().equals("") && condition.getOrderUser() != null) {
                 Join<Customer, Orders> ordersJoin = root.joinList("orders");
-               // predicates.add(cb.cb.count(ordersJoin));
-            }
+               cq.multiselect(ordersJoin.get("email"), cb.count(root)).groupBy(root.get("email")).getOrderList().forEach(System.out::println);
+
+            }*/
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
