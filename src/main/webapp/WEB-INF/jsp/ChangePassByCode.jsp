@@ -34,6 +34,7 @@
         <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
                 onclick="history.back()" style="margin: 2vh 2vw">back
         </button>
+        <c:if test="${verify==null || verify==false}">
     <div class="container col-12">
         <c:if test="${role_user.equals('expert')}">
         <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/checkVerifyCode">
@@ -64,7 +65,7 @@
                 </table>
             </form>
     </div>
-
+        </c:if>
     <c:if test="${verify==true}">
         <c:if test="${role_user.equals('expert')}">
         <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/saveNewPass" onsubmit="return checkPassword();">

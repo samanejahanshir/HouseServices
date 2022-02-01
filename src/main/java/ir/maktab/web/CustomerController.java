@@ -157,6 +157,7 @@ public class CustomerController {
             model.addAttribute("verify", false);
             model.addAttribute("message", "verify code not valid");
         }
+        model.addAttribute("role_user", "customer");
         return "ChangePassByCode";
 
     }
@@ -181,6 +182,7 @@ public class CustomerController {
         if (password.equals(rePassword)) {
             customerService.updatePassword(email, password);
             model.addAttribute("message", "change pass is successfuly");
+            codeUserService.deleteVerifyCode(email);
             return "redirect:CustomerPage";
         } else {
             model.addAttribute("verify", true);

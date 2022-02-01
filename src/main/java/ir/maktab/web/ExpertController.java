@@ -185,6 +185,7 @@ public class ExpertController {
             model.addAttribute("verify", false);
             model.addAttribute("message", "verify code not valid");
         }
+        model.addAttribute("role_user", "expert");
         return "ChangePassByCode";
 
     }
@@ -208,6 +209,7 @@ public class ExpertController {
         String email = (String) session.getAttribute("email");
         if (password.equals(rePassword)) {
             expertService.updatePassword(email, password);
+            codeUserService.deleteVerifyCode(email);
             model.addAttribute("message", "change pass is successfuly");
             return "redirect:ExpertPage";
         } else {
