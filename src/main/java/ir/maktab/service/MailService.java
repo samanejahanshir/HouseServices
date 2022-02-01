@@ -2,8 +2,7 @@ package ir.maktab.service;
 
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Service;
+
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -12,10 +11,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+
 @Service
 @PropertySource("classpath:mail.properties")
 public class MailService {
-    public static void sendMail(String to, String sub, String msg) throws MessagingException, IOException {
+    public static void sendMail(String to, String sub, String msg) throws MessagingException, IOException, IOException {
         FileInputStream fileInputStream = new FileInputStream("C:/Users/MitKnight/IdeaProjects/HW18/HomeService/src/main/resources/mail.properties");
         Properties properties = new Properties();
         properties.load(fileInputStream);
@@ -36,4 +36,17 @@ public class MailService {
         message.setText(msg);
         Transport.send(message);
     }
+   /* @Autowired
+    private MailSender crunchifymail; // MailSender interface defines a strategy
+    // for sending simple mails
+
+    public  void sendEmail(String toAddress, String fromAddress, String subject, String msgBody) {
+
+        SimpleMailMessage crunchifyMsg = new SimpleMailMessage();
+        crunchifyMsg.setFrom(fromAddress);
+        crunchifyMsg.setTo(toAddress);
+        crunchifyMsg.setSubject(subject);
+        crunchifyMsg.setText(msgBody);
+        crunchifymail.send(crunchifyMsg);
+    }*/
 }

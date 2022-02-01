@@ -18,6 +18,7 @@ ir\maktab\dto\OrderDto$OrderDtoBuilder.class
 ir\maktab\dto\OfferFilterSearch.class
 ir\maktab\web\HomeController.class
 ir\maktab\dto\UserDto.class
+ir\maktab\service\MailService$1.class
 ir\maktab\data\dao\CustomerDao.class
 ir\maktab\dto\AddressDto.class
 ir\maktab\web\CustomerController.class
@@ -45,10 +46,12 @@ ir\maktab\data\model\Orders.class
 ir\maktab\exceptions\InvalidTimeException.class
 ir\maktab\service\CommendService.class
 ir\maktab\dto\mapper\ExpertMapper.class
+ir\maktab\data\model\VerifyCodeUser.class
 ir\maktab\data\model\SubServices$SubServicesBuilder.class
 ir\maktab\dto\mapper\MainServiceMapper.class
 ir\maktab\data\dao\ManagerDao.class
 ir\maktab\data\model\MainServices.class
+ir\maktab\data\dao\VerifyCodeUserDao.class
 ir\maktab\config\HibernateConfig.class
 ir\maktab\service\OrderService.class
 ir\maktab\service\ExpertService.class
@@ -68,6 +71,7 @@ ir\maktab\web\OrderController.class
 ir\maktab\data\model\Customer$CustomerBuilder.class
 ir\maktab\dto\CustomerDto$CustomerDtoBuilder.class
 ir\maktab\exceptions\OfferNotFound.class
+ir\maktab\service\MailService.class
 ir\maktab\exceptions\SubServiceDuplicateException.class
 ir\maktab\service\validation\CheckValidation.class
 ir\maktab\data\model\Expert.class
@@ -85,6 +89,7 @@ ir\maktab\dto\CustomerDto.class
 ir\maktab\web\ExpertController.class
 ir\maktab\exceptions\UserByEmailExistException.class
 ir\maktab\dto\MainServiceDto$MainServiceDtoBuilder.class
+ir\maktab\service\VerifyCodeUserService.class
 ir\maktab\service\CustomerService.class
 ir\maktab\data\model\Customer.class
 ir\maktab\exceptions\UserNotFoundException.class
@@ -95,6 +100,7 @@ ir\maktab\dto\mapper\SubServiceMapper.class
 ir\maktab\dto\OfferDto$OfferDtoBuilder.class
 ir\maktab\data\model\Commend$CommendBuilder.class
 ir\maktab\data\model\Address$AddressBuilder.class
+ir\maktab\data\model\VerifyCodeUser$VerifyCodeUserBuilder.class
 ir\maktab\data\enums\OfferState.class
 ir\maktab\service\MainServicesService.class
 ir\maktab\data\model\Expert$ExpertBuilder.class

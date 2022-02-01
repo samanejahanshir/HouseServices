@@ -7,7 +7,7 @@
     <groupId>ir.maktab</groupId>
     <artifactId>HomeService</artifactId>
     <version>1.0-SNAPSHOT</version>
-<packaging>war</packaging>
+    <packaging>war</packaging>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -128,7 +128,6 @@
             <artifactId>javax.mail</artifactId>
             <version>1.6.0</version>
         </dependency>
-
     </dependencies>
     <build>
         <finalName>SpringMVC</finalName>
