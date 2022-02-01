@@ -23,6 +23,11 @@
             style="margin: 2vh 2vw">Dashboard
     </button>
 </form>
+
+    <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
+            onclick="history.back()" style="margin: 2vh 2vw">back
+    </button>
+
 <div class="container col-12">
 <form:form modelAttribute="subServiceDto" action="/manager/saveSubService">
 <h2 style="text-justify: distribute-center-last">Register Customer</h2>

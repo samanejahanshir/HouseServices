@@ -31,6 +31,9 @@
                 style="margin: 2vh 2vw">Dashboard
         </button>
     </form>
+        <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
+                onclick="history.back()" style="margin: 2vh 2vw">back
+        </button>
     <div class="container col-12">
         <c:if test="${role_user.equals('expert')}">
         <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/checkVerifyCode">
@@ -100,39 +103,46 @@
                 </table>
             </form>
         </c:if>
+                <script>
+
+                    var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+
+                    function checkInputs() {
+                        if (password.length < 8) {
+                            alert("postal code numbers should be 10");
+                            this.value = "";
+                            return false;
+                        }
+                        if (isNaN(form.postalCode.value)) {
+                            alert("type of postal code should be numbers");
+                            return false;
+                        }
+                    }
+                </script>
+                <script type="text/javascript">
+                    var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+                    const password = document.getElementById("password").value;
+                    const repassword = document.getElementById("repassword").value;
+                    function checkPassword()
+                    {
+                        // at least one number, one lowercase and one uppercase letter
+                        // at least six characters
+                        if(!re.test(password)){
+                            return false;
+                        }
+                        if(password!==repassword){
+                            return false;
+                        }
+                    }
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+                        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+                        crossorigin="anonymous"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+                        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+                        crossorigin="anonymous"></script>
 </body>
 
-<script>
 
-    var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-
-    function checkInputs() {
-        if (password.length < 8) {
-            alert("postal code numbers should be 10");
-            this.value = "";
-            return false;
-        }
-        if (isNaN(form.postalCode.value)) {
-            alert("type of postal code should be numbers");
-            return false;
-        }
-    }
-</script>
-<script type="text/javascript">
-    var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-    const password = document.getElementById("password").value;
-    const repassword = document.getElementById("repassword").value;
-    function checkPassword()
-    {
-        // at least one number, one lowercase and one uppercase letter
-        // at least six characters
-       if(!re.test(password)){
-           return false;
-       }
-        if(password!==repassword){
-            return false;
-        }
-    }
-
-</script>
 </html>
