@@ -179,15 +179,10 @@ public class CustomerController {
     @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
     public String saveNewPassword(Model model, HttpSession session, @RequestParam("password") String password, @RequestParam("re_password") String rePassword) {
         String email = (String) session.getAttribute("email");
-        if (password.equals(rePassword)) {
             customerService.updatePassword(email, password);
             model.addAttribute("message", "change pass is successfuly");
             codeUserService.deleteVerifyCode(email);
-            return "redirect:CustomerPage";
-        } else {
-            model.addAttribute("verify", true);
-            return "ChangePassByCode";
-        }
+            return "CustomerPage";
     }
 
     @RequestMapping("/incrementCredit")

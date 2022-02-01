@@ -67,10 +67,10 @@
     </div>
         </c:if>
     <c:if test="${verify==true}">
-        <c:if test="${role_user.equals('expert')}">
+        <c:if test="${role_user=='expert'}">
         <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/saveNewPass" onsubmit="return checkPassword();">
             </c:if>
-            <c:if test="${role_user.equals('customer')}">
+            <c:if test="${role_user=='customer'}">
             <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/saveNewPass" onsubmit="return checkPassword();">
                 </c:if>
                 <%-- <c:if test="${role_user.equals('manager')}">
@@ -104,34 +104,24 @@
                 </table>
             </form>
         </c:if>
-                <script>
-
-                    var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-
-                    function checkInputs() {
-                        if (password.length < 8) {
-                            alert("postal code numbers should be 10");
-                            this.value = "";
-                            return false;
-                        }
-                        if (isNaN(form.postalCode.value)) {
-                            alert("type of postal code should be numbers");
-                            return false;
-                        }
-                    }
-                </script>
+<%--
+                /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/
+--%>
                 <script type="text/javascript">
-                    var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+
+                    var re = /(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}/ ;
                     const password = document.getElementById("password").value;
                     const repassword = document.getElementById("repassword").value;
                     function checkPassword()
                     {
                         // at least one number, one lowercase and one uppercase letter
                         // at least six characters
-                        if(!re.test(password)){
+                        if(password.match(re)){
+                            alert("password format should be contain 0-9 and a-z and A-Z")
                             return false;
                         }
                         if(password!==repassword){
+                            alert("password and repeat password is different")
                             return false;
                         }
                     }
