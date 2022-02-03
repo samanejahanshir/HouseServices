@@ -20,7 +20,9 @@
         <property name="prefix" value="/WEB-INF/jsp/"></property>
         <property name="suffix" value=".jsp"></property>
     </bean>
-
+    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
+    <context:component-scan base-package="ir.maktab" resource-pattern="SwaggerConfig.class" />
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
     <!-- Production implementation of the JavaMailSender interface, supporting
             both JavaMail MimeMessages and Spring SimpleMailMessages -->
     <!--<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

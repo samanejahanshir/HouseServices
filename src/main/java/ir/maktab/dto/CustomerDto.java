@@ -1,5 +1,6 @@
 package ir.maktab.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.enums.UserType;
 import ir.maktab.data.model.Address;
@@ -19,6 +20,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "CustomerDto")
 public class CustomerDto {
     private Integer id;
     @NotBlank(message = "should not be empty")

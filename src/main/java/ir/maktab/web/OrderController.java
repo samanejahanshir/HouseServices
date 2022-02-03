@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import com.wordnik.swagger.annotations.Api;
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.OrderState;
 import ir.maktab.dto.Cart;
@@ -27,6 +28,7 @@ import java.util.List;
 @RequestMapping("/order")
 @Controller
 @RequiredArgsConstructor
+@Api(tags = "this is order controller for handle orders by customer and expert")
 public class OrderController {
     final OrderService orderService;
     final SubServicesService service;

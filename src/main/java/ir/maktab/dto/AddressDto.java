@@ -1,5 +1,6 @@
 package ir.maktab.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Pattern;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel(description = "AddressDto")
 public class AddressDto {
     private Integer id;
     private String city;

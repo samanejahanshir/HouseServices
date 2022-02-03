@@ -1,5 +1,6 @@
 package ir.maktab.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.enums.UserType;
 import ir.maktab.service.validation.OnLogin;
@@ -20,6 +21,7 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "ExpertDto")
 public class ExpertDto {
     private Integer id;
     @NotBlank(message = "should not be empty")

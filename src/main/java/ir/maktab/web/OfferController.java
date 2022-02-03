@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import com.wordnik.swagger.annotations.Api;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OfferFilterSearch;
 import ir.maktab.dto.OrderDto;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping("/offer")
 @Controller
 @RequiredArgsConstructor
+@Api(tags = "this is offer controller for handle offers of orders")
 public class OfferController {
     final OfferService offerService;
     final OrderService orderService;

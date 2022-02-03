@@ -1,5 +1,7 @@
 package ir.maktab.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.model.Expert;
 import lombok.AllArgsConstructor;
@@ -12,14 +14,22 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "OfferDto")
 public class OfferDto {
     private Integer id;
+    @ApiModelProperty(dataType = "Date",value = "date of register offer ")
     private Date offerCreateDate;
+    @ApiModelProperty(dataType = "double",value = "price that expert offered ")
     private double offerPrice;
+    @ApiModelProperty(dataType = "int",value = "The time it takes to place an order ")
     private int durationTime;
+    @ApiModelProperty(dataType = "int",value = "time of start order ")
     private int startTime;
+    @ApiModelProperty(dataType = "ExpertDto",value = "expert that register this offer")
     private ExpertDto expertDto;
+    @ApiModelProperty(dataType = "OrderDto",value = "Offer belongs to that order")
     private OrderDto orderDto;
+    @ApiModelProperty(dataType = "OfferState",value = "state of offer that is new or accept or reject")
     private OfferState state;
 
   /*  public static final class OfferDtoBuilder {

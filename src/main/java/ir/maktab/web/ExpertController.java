@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import com.wordnik.swagger.annotations.Api;
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.VerifyCodeUser;
@@ -22,6 +23,8 @@ import java.util.List;
 @RequestMapping("/expert")
 @Controller
 @RequiredArgsConstructor
+@Api(tags = "this is expert controller for handle orders ")
+
 //@SessionAttributes({"email"})
 public class ExpertController {
     final ExpertService expertService;

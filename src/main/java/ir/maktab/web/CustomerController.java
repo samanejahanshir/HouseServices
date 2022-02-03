@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import com.wordnik.swagger.annotations.Api;
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.UserState;
 import ir.maktab.data.model.VerifyCodeUser;
@@ -26,6 +27,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 //@SessionAttributes({"email"})
+@Api(tags = "this is customer controller for use home services app")
 public class CustomerController {
     final CustomerService customerService;
     final SubServicesService subService;

@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import com.wordnik.swagger.annotations.Api;
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.model.User;
 import ir.maktab.dto.*;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/manager")
+@Api(tags = "this is manager controller for handle app by manager")
 public class ManagerController {
     final ManagerService managerService;
     final UserService userService;

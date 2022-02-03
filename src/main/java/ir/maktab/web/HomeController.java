@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import com.wordnik.swagger.annotations.Api;
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.dto.mapper.UserMapper;
 import ir.maktab.service.CustomerService;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @SessionAttributes({"role_user", "customerDto", "expertDto"})
 @RequiredArgsConstructor
+@Api(tags = "this is home controller - home page")
 @Controller
 public class HomeController {
     final UserService userService;

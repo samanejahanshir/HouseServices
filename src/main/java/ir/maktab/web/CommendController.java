@@ -1,5 +1,6 @@
 package ir.maktab.web;
 
+import com.wordnik.swagger.annotations.Api;
 import ir.maktab.data.model.Commend;
 import ir.maktab.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/commend")
 @Controller
 @RequiredArgsConstructor
+@Api(tags = "this is command controller for customer's commend for order")
 public class CommendController {
     final OrderService orderService;
 

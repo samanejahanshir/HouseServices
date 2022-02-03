@@ -30,14 +30,16 @@
                     cart number:
                 </td>
                 <td>
-                    <form:input type="text" path="number" name="cart" id="cart" placeHolder="0000000000000000"/>
+                    <p id="bank"></p>
+                    <br/>
+                    <form:input  type="text" path="number" name="cart" id="cart" placeHolder="0000000000000000" onchange="check_number();"/>
                 </td>
             </tr>
             <tr>
                 <td>
                 </td>
                 <td>
-                    <form:errors path="number"/>
+                    <form:errors path="number" id="cart_error"/>
                         <%--
                                             <label id="cart_error"></label>
                         --%>
@@ -126,12 +128,37 @@
     </form:form>
 </div>
 
-<script>
+<script >
 
     var timer = null;
 
     function auto_reload() {
         window.location = '/order/allOrders';
+    }
+
+    function  check_number(){
+        var cart=document.getElementById("cart").value;
+       var number= cart.substring(6,-16);
+       var bank=document.getElementById("bank");
+       if(number==="603799"){
+           bank.innerText="bank meli";
+           alert("melli")
+
+       }
+        if(number==="589210"){
+            alert("sepah")
+            bank.innerText=document.getElementById("bank").innerText="bank sepah";
+        }if(number==="627961"){
+            bank.innerText="bank sanat madan";
+        }if(number==="603770"){
+            bank.innerText="bank keshavarzi";
+        }if(number==="628023"){
+            bank.innerText="bank maskan";
+        }if(number==="627353"){
+            bank.innerText="bank tejarat";
+        }if(number==="610433"){
+            bank.innerText="bank mellat";
+        }
     }
     /*function myTimer() {
 
@@ -141,6 +168,7 @@
     setInterval(myTimer,600000);*/
 
 </script>
+<%--<script src="./jquery-3.2.1.min.js" type="text/javascript"></script>--%>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

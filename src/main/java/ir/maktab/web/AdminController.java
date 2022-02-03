@@ -1,5 +1,7 @@
 package ir.maktab.web;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.dto.ConditionSearch;
 import ir.maktab.dto.MainServiceDto;
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
+@Api(tags = "this is admin controller rest api")
 public class AdminController {
     final ManagerService managerService;
     final UserService userService;
@@ -28,12 +31,13 @@ public class AdminController {
     final MainServicesService mainServices;
     final ExpertService expertService;
 
-
+@ApiOperation(value = "get list users (experts and customers)")
     @GetMapping(value = "/listUsers", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserDto> viewListUsers() {
         return userService.getUserByCondition(new ConditionSearch());
     }
 
+    @ApiOperation(value = "filter list users by name and score and ...")
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
     public List<UserDto> searchUsers(@RequestBody ConditionSearch conditionSearch) throws ParseException {
         List<UserDto> userDtoList = null;
@@ -62,8 +66,8 @@ public class AdminController {
             return "index";
         }
     }*/
-
-    @PostMapping(value = "/saveMainService", consumes = MediaType.APPLICATION_JSON_VALUE)
+@ApiOperation(value = "save a new mainService")
+    @PostMapping(value = "/saveMainService")//, consumes = MediaType.APPLICATION_JSON_VALUE
     public void saveMainService(@RequestBody MainServiceDto mainServiceDto) {
         try {
             managerService.saveMainServiceToDb(mainServiceDto);
@@ -85,8 +89,8 @@ public class AdminController {
             return "index";
         }
     }*/
-
-    @PostMapping(value = "/saveSubService", consumes = MediaType.APPLICATION_JSON_VALUE)
+@ApiOperation(value = "save a new subService")
+    @PostMapping(value = "/saveSubService")//, consumes = MediaType.APPLICATION_JSON_VALUE
     public void saveSubService(@RequestBody SubServiceDto subServiceDto) {
         try {
             managerService.saveSubService(subServiceDto);
@@ -94,12 +98,13 @@ public class AdminController {
             e.getStackTrace();
         }
     }
-
+@ApiOperation(value = "view list main services")
     @GetMapping(value = "/viewListMainServices", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MainServiceDto> viewListMainServices() {
         return mainServices.getListMainService();
     }
 
+    @ApiOperation(value = "view list sub services")
     @GetMapping(value = "/viewListSubServices/{groupName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<SubServiceDto> viewListSubServices(@PathVariable String groupName) {
         return subServices.getListSubService(groupName);
@@ -115,8 +120,8 @@ public class AdminController {
             return "index";
         }
     }*/
-
-    @PostMapping(value = "/saveExpertToServices/{service}", consumes = MediaType.APPLICATION_JSON_VALUE)
+@ApiOperation(value = "add a subService to expert's subService list")
+    @PatchMapping(value = "/saveExpertToServices/{service}")//, consumes = MediaType.APPLICATION_JSON_VALUE
     public void saveExpertToServices(@PathVariable("service") String service, @RequestBody String expertEmail) {
         try {
             expertService.addSubServiceToExpertList(expertEmail, service);
@@ -125,17 +130,20 @@ public class AdminController {
         }
     }
 
+    @ApiOperation(value = "view list users that not confirm yet")
     @GetMapping(value = "/viewListNotConfirmUser", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserDto> viewListNotConfirmUsers() {
         return managerService.getListUserNoConfirm();
     }
 
-    @GetMapping(value = "/confirmUser/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "confirm a user by id")
+    @PatchMapping(value = "/confirmUser/{id}")
     public void confirmUser(@PathVariable int id) {
         managerService.confirmUser(id);
     }
 
-    @GetMapping(value = "/confirmAll", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation("confirm all users")
+    @PatchMapping(value = "/confirmAll")
     public void confirmAll() {
         List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
         managerService.confirmAll(listUserNoConfirm);
