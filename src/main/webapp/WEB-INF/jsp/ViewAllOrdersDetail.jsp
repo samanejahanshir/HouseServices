@@ -68,10 +68,10 @@
                 <td>
                 </td>
                 <td>
-                    from:<br/><form:input type="date"  path="startDate" name="startDate"  placeHolder="start date"/>
+                    from:<br/><input type="date"  path="startDate" name="startDate"  placeHolder="start date"/>
                 </td>
                 <td>
-                    to:<br/><form:input type="date" path="endDate" name="endDate"  placeHolder="end date"/>
+                    to:<br/><input type="date" path="endDate" name="endDate"  placeHolder="end date"/>
                 </td>
 
                 <td>

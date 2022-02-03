@@ -1,5 +1,6 @@
 package ir.maktab.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import ir.maktab.data.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel(description = "ConditionSearch")
 public class ConditionSearch {
     private String firstName;
     private String lastName;

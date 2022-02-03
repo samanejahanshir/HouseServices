@@ -1,5 +1,6 @@
 package ir.maktab.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.enums.UserType;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "OrdersSearch")
 public class OrdersSearch {
     private String subServiceName;
     private String MainServiceName;

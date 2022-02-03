@@ -89,7 +89,12 @@ public class UserService {
     }
 
     public List<UserDto> getExpertsByCondition(ConditionSearch condition) {
-        List<ExpertDto> expertDtoList = expertService.getExpertsByCondition(condition);
-        return expertDtoList.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
+        if(condition!=null) {
+            List<ExpertDto> expertDtoList = expertService.getExpertsByCondition(condition);
+            return expertDtoList.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
+        }else {
+            List<Expert> expertList = expertService.getExpertDao().findAll();
+          return   expertList.stream().map(expertMapper::toDto).map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
+        }
     }
 }

@@ -3,10 +3,7 @@ package ir.maktab.web;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import ir.maktab.config.LastViewInterceptor;
-import ir.maktab.dto.ConditionSearch;
-import ir.maktab.dto.MainServiceDto;
-import ir.maktab.dto.SubServiceDto;
-import ir.maktab.dto.UserDto;
+import ir.maktab.dto.*;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -16,8 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -30,19 +29,28 @@ public class AdminController {
     final SubServicesService subServices;
     final MainServicesService mainServices;
     final ExpertService expertService;
+    final OrderService orderService;
 
-@ApiOperation(value = "get list users (experts and customers)")
+    @ApiOperation(value = "get list users (experts and customers)")
     @GetMapping(value = "/listUsers", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserDto> viewListUsers() {
         return userService.getUserByCondition(new ConditionSearch());
     }
 
     @ApiOperation(value = "filter list users by name and score and ...")
-    @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserDto> searchUsers(@RequestBody ConditionSearch conditionSearch) throws ParseException {
+    @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE, produces =MediaType.APPLICATION_JSON_VALUE)
+    public List<UserDto> searchUsers(@RequestBody ConditionSearch conditionSearch,@RequestParam("startDate") String startDate,@RequestParam("endDate")  String endDate) throws ParseException {
         List<UserDto> userDtoList = null;
         try {
             SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
+            if (startDate != null && !startDate.equals("")) {
+                Date start = outSDF.parse(startDate);
+                conditionSearch.setStartDate(start);
+            }
+            if (!endDate.equals("") && endDate != null) {
+                Date end = outSDF.parse(endDate);
+                conditionSearch.setEndDate(end);
+            }
             if ((conditionSearch.getSubServiceName().equals("") || conditionSearch.getSubServiceName() == null) && conditionSearch.getMaxScore() == 0 && conditionSearch.getMinScore() == 0) {
                 userDtoList = userService.getUserByCondition(conditionSearch);
 
@@ -55,18 +63,18 @@ public class AdminController {
         return userDtoList;
     }
 
-   /* @RequestMapping("/addMainService")
-    public String addMainService(Model model, HttpSession session) {
-        if (session.getAttribute("emailManager") != null) {
-            model.addAttribute("message", "");
-            model.addAttribute("mainService", new MainServiceDto());
-            return "AddMainServices";
-        } else {
-            model.addAttribute("message", "you should login");
-            return "index";
-        }
-    }*/
-@ApiOperation(value = "save a new mainService")
+    /* @RequestMapping("/addMainService")
+     public String addMainService(Model model, HttpSession session) {
+         if (session.getAttribute("emailManager") != null) {
+             model.addAttribute("message", "");
+             model.addAttribute("mainService", new MainServiceDto());
+             return "AddMainServices";
+         } else {
+             model.addAttribute("message", "you should login");
+             return "index";
+         }
+     }*/
+    @ApiOperation(value = "save a new mainService")
     @PostMapping(value = "/saveMainService")//, consumes = MediaType.APPLICATION_JSON_VALUE
     public void saveMainService(@RequestBody MainServiceDto mainServiceDto) {
         try {
@@ -75,21 +83,22 @@ public class AdminController {
             e.getStackTrace();
         }
     }
-/*
-    @GetMapping(value = "/addSubService",produces = MediaType.APPLICATION_JSON_VALUE)
-    public String addSubService(Model model, HttpSession session) {
-        //  model.addAttribute("message","");
-        if (session.getAttribute("emailManager") != null) {
-            model.addAttribute("subServiceDto", new SubServiceDto());
-            List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
-            model.addAttribute("MainServiceDtos", mainServiceDtos);
-            return "AddSubService";
-        } else {
-            model.addAttribute("message", "you should login");
-            return "index";
-        }
-    }*/
-@ApiOperation(value = "save a new subService")
+
+    /*
+        @GetMapping(value = "/addSubService",produces = MediaType.APPLICATION_JSON_VALUE)
+        public String addSubService(Model model, HttpSession session) {
+            //  model.addAttribute("message","");
+            if (session.getAttribute("emailManager") != null) {
+                model.addAttribute("subServiceDto", new SubServiceDto());
+                List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
+                model.addAttribute("MainServiceDtos", mainServiceDtos);
+                return "AddSubService";
+            } else {
+                model.addAttribute("message", "you should login");
+                return "index";
+            }
+        }*/
+    @ApiOperation(value = "save a new subService")
     @PostMapping(value = "/saveSubService")//, consumes = MediaType.APPLICATION_JSON_VALUE
     public void saveSubService(@RequestBody SubServiceDto subServiceDto) {
         try {
@@ -98,7 +107,8 @@ public class AdminController {
             e.getStackTrace();
         }
     }
-@ApiOperation(value = "view list main services")
+
+    @ApiOperation(value = "view list main services")
     @GetMapping(value = "/viewListMainServices", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MainServiceDto> viewListMainServices() {
         return mainServices.getListMainService();
@@ -110,17 +120,17 @@ public class AdminController {
         return subServices.getListSubService(groupName);
     }
 
-  /*  @RequestMapping("/addExpertToServices/{service}")
-    public String addExpertToServices(@PathVariable("service") String service, Model model, HttpSession session) {
-        if (session.getAttribute("emailManager") != null) {
-            model.addAttribute("service", service);
-            return "AddExpertToSubService";
-        } else {
-            model.addAttribute("message", "you should login");
-            return "index";
-        }
-    }*/
-@ApiOperation(value = "add a subService to expert's subService list")
+    /*  @RequestMapping("/addExpertToServices/{service}")
+      public String addExpertToServices(@PathVariable("service") String service, Model model, HttpSession session) {
+          if (session.getAttribute("emailManager") != null) {
+              model.addAttribute("service", service);
+              return "AddExpertToSubService";
+          } else {
+              model.addAttribute("message", "you should login");
+              return "index";
+          }
+      }*/
+    @ApiOperation(value = "add a subService to expert's subService list")
     @PatchMapping(value = "/saveExpertToServices/{service}")//, consumes = MediaType.APPLICATION_JSON_VALUE
     public void saveExpertToServices(@PathVariable("service") String service, @RequestBody String expertEmail) {
         try {
@@ -147,6 +157,26 @@ public class AdminController {
     public void confirmAll() {
         List<UserDto> listUserNoConfirm = managerService.getListUserNoConfirm();
         managerService.confirmAll(listUserNoConfirm);
+    }
+    @ApiOperation(value = "view list all orders")
+    @GetMapping(value = "/viewListAllOrders")
+    public List<OrderDto> viewListAllOrders(Model model, HttpSession session) {
+        return orderService.getListAllOrdersUserByCondition(null);
+    }
+    @ApiOperation(value = "view list all orders by filter on order's state and ...")
+    @PostMapping (value = "/searchOrders",consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<OrderDto> searchOrdersByFilter(@RequestBody OrdersSearch ordersSearch,@RequestParam("startDate") String startDate,@RequestParam("endDate")  String endDate) throws ParseException {
+        SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
+        if (startDate != null && !startDate.equals("")) {
+            Date start = outSDF.parse(startDate);
+            ordersSearch.setStartDate(start);
+        }
+        if (!endDate.equals("") && endDate != null) {
+            Date end = outSDF.parse(endDate);
+            ordersSearch.setEndDate(end);
+        }
+       return   orderService.getListAllOrdersUserByCondition(ordersSearch);
     }
 
    /* @RequestMapping("/logout")

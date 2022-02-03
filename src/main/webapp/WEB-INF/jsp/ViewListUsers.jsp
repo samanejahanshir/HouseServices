@@ -45,8 +45,13 @@
                    email: <br/><form:input path="email" name="email" placeHolder="email"/>
                 </td>
                 <td>
-                   role:<br/> <form:input path="role" name="role" placeHolder="role"/>
-                </td>
+                    Role:<br/>
+                    <form:select path="role" cssClass="dropdown form-control"
+                                 cssStyle="width: 12vw">
+                        <option value="">--</option>
+                        <option value="EXPERT">EXPERT</option>
+                        <option value="CUSTOMER">CUSTOMER</option>
+                    </form:select>                </td>
                 <td>
                    minScore:<br/> <form:input path="minScore" name="minScore" placeHolder="min score"/>
                 </td>
@@ -62,7 +67,17 @@
                    to:<br/><input type="date"  name="endDate" />
                 </td>
                 <td>
+<%--
                     subService:<br/><form:input path="subServiceName" name="subServiceName" placeHolder="subServiceName"/>
+--%>                SubService:
+                    <form:select path="subServiceName" cssClass="dropdown form-control"
+                                 cssStyle="width: 12vw">
+                        <option value="">--</option>
+                        <c:forEach items="${allSubService}" var="service">
+                            <option value="${service.name}">${service.name}</option>
+                        </c:forEach>
+                    </form:select>
+
                 </td>
                 <td>
                     <br/>
@@ -87,8 +102,6 @@
                 <th>Role</th>
                 <th>Register Date</th>
                 <th>Orders Detail</th>
-
-
             </tr>
             <c:forEach items="${listUserDto}" var="user">
                 <tr>

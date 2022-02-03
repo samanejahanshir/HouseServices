@@ -210,15 +210,10 @@ public class ExpertController {
     @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
     public String saveNewPassword(Model model, HttpSession session, @RequestParam("password") String password, @RequestParam("re_password") String rePassword) {
         String email = (String) session.getAttribute("email");
-        if (password.equals(rePassword)) {
             expertService.updatePassword(email, password);
             codeUserService.deleteVerifyCode(email);
             model.addAttribute("message", "change pass is successfuly");
-            return "redirect:ExpertPage";
-        } else {
-            model.addAttribute("verify", true);
-            return "ChangePassByCode";
-        }
+            return "ExpertPage";
     }
 
 

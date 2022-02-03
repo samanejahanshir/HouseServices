@@ -69,11 +69,11 @@ public interface ExpertDao extends JpaRepository<Expert, Integer>, JpaSpecificat
             if (condition.getEndDate()!=null && !condition.getEndDate().equals("")) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("registerDate"),condition.getEndDate()));
             }
-            if (!condition.getOrderUser().equals("") && condition.getOrderUser() != null) {
+           /* if (condition.getOrderUser().equals("expert") && condition.getOrderUser() != null) {
                 Join<Expert, Orders> ordersJoin = root.joinList("orders");
                 predicates.add(cq.multiselect(ordersJoin.get("email"), cb.count(root)).groupBy(root.get("email")).getRestriction());
 
-            }
+            }*/
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

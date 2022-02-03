@@ -64,6 +64,8 @@ public class ManagerController {
             List<User> all = userService.getUserDao().findAll();
             List<UserDto> userDtos = all.stream().map(user -> userService.getUserMapper().toDto(user)).collect(Collectors.toList());
             model.addAttribute("listUserDto", userDtos);
+            List<SubServiceDto> allSubService = subServices.getListAllSubService();
+            model.addAttribute("allSubService", allSubService);
             return "ViewListUsers";
         } else {
             model.addAttribute("message", "you should login");
@@ -93,6 +95,8 @@ public class ManagerController {
                 }
                 model.addAttribute("listUserDto", userDtoList);
                 model.addAttribute("conditionSearch", conditionSearch);
+                List<SubServiceDto> allSubService = subServices.getListAllSubService();
+                model.addAttribute("allSubService", allSubService);
             } catch (RuntimeException | ParseException e) {
                 model.addAttribute("message", e.getMessage());
             }
@@ -108,6 +112,14 @@ public class ManagerController {
         if (session.getAttribute("emailManager") != null) {
             model.addAttribute("message", "");
             model.addAttribute("mainService", new MainServiceDto());
+            if (session.getAttribute("messageSuccess") != null) {
+                model.addAttribute("message", session.getAttribute("messageSuccess"));
+                session.removeAttribute("messageSuccess");
+            }
+            if (session.getAttribute("error") != null) {
+                model.addAttribute("message", session.getAttribute("error"));
+                session.removeAttribute("error");
+            }
             return "AddMainServices";
         } else {
             model.addAttribute("message", "you should login");
@@ -116,23 +128,30 @@ public class ManagerController {
     }
 
     @RequestMapping(value = "/saveMainService", method = RequestMethod.POST)
-    public String saveMainService(@ModelAttribute("mainService") MainServiceDto mainServiceDto, Model model) {
+    public String saveMainService(@ModelAttribute("mainService") MainServiceDto mainServiceDto, Model model,HttpSession session) {
         try {
             managerService.saveMainServiceToDb(mainServiceDto);
-            model.addAttribute("message", "save saccessfully");
+            session.setAttribute("messageSuccess", "save successfully service : "+mainServiceDto.getGroupName());
         } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
+            session.setAttribute("error", e.getMessage());
         }
-        return "AddMainServices";
+        return "redirect:/manager/addMainService";
     }
 
     @RequestMapping("/addSubService")
     public String addSubService(Model model, HttpSession session) {
-        //  model.addAttribute("message","");
         if (session.getAttribute("emailManager") != null) {
             model.addAttribute("subServiceDto", new SubServiceDto());
             List<MainServiceDto> mainServiceDtos = mainServices.getListMainService();
             model.addAttribute("MainServiceDtos", mainServiceDtos);
+            if (session.getAttribute("messageSuccess") != null) {
+                model.addAttribute("message", session.getAttribute("messageSuccess"));
+                session.removeAttribute("messageSuccess");
+            }
+            if (session.getAttribute("error") != null) {
+                model.addAttribute("message", session.getAttribute("error"));
+                session.removeAttribute("error");
+            }
             return "AddSubService";
         } else {
             model.addAttribute("message", "you should login");
@@ -141,14 +160,14 @@ public class ManagerController {
     }
 
     @RequestMapping(value = "/saveSubService", method = RequestMethod.POST)
-    public String saveSubService(@ModelAttribute("subServiceDto") SubServiceDto subServiceDto, Model model) {
+    public String saveSubService(@ModelAttribute("subServiceDto") SubServiceDto subServiceDto, Model model,HttpSession session) {
         try {
             managerService.saveSubService(subServiceDto);
-            model.addAttribute("message", "save saccessfully");
+            session.setAttribute("messageSuccess", "save successfully service : "+subServiceDto.getName());
         } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
+            session.setAttribute("error", e.getMessage());
         }
-        return "AddSubService";
+        return "redirect:/manager/addSubService";
     }
 
     @RequestMapping("/viewListMainServices")
@@ -190,6 +209,9 @@ public class ManagerController {
     public String addExpertToServices(@PathVariable("service") String service, Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
             model.addAttribute("service", service);
+            List<UserDto> expertDtos = userService.getExpertsByCondition(null);
+            model.addAttribute("expertDtos", expertDtos);
+            model.addAttribute("expert", new ExpertDto());
             return "AddExpertToSubService";
         } else {
             model.addAttribute("message", "you should login");
@@ -198,15 +220,15 @@ public class ManagerController {
     }
 
     @RequestMapping(value = "/saveExpertToServices/{service}", method = RequestMethod.POST)
-    public String saveExpertToServices(@PathVariable("service") String service, Model model, @RequestParam("expertEmail") String expertEmail, HttpSession session) {
+    public String saveExpertToServices(@PathVariable("service") String service, Model model, @ModelAttribute("expert") ExpertDto expertDto, HttpSession session) {
         String groupName = "";
         try {
             SubServiceDto subServiceByName = subServices.getSubServiceByName(service);
             groupName = subServiceByName.getGroupName();
-            expertService.addSubServiceToExpertList(expertEmail, service);
-            session.setAttribute("messageSuccess", "expert added to list services");
+            expertService.addSubServiceToExpertList(expertDto.getEmail(), service);
+            session.setAttribute("messageSuccess", expertDto.getEmail()+" added to list services");
         } catch (RuntimeException e) {
-            session.setAttribute("error", e.getMessage());
+            session.setAttribute("error", "for "+expertDto.getEmail() + " "+ e.getMessage());
         }
         return "redirect:/manager/viewListSubServices/" + groupName;
     }
@@ -319,7 +341,16 @@ public class ManagerController {
     }
 
     @RequestMapping(value = "/searchOrders", method = RequestMethod.POST)
-    public String searchOrdersByFilter(@ModelAttribute("orderSearch") OrdersSearch ordersSearch, Model model, HttpSession session) {
+    public String searchOrdersByFilter(@ModelAttribute("orderSearch") OrdersSearch ordersSearch,@RequestParam("startDate")String startDate,@RequestParam("endDate")String endDate, Model model, HttpSession session) throws ParseException {
+        SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
+        if (startDate != null && !startDate.equals("")) {
+            Date start = outSDF.parse(startDate);
+            ordersSearch.setStartDate(start);
+        }
+        if (!endDate.equals("") && endDate != null) {
+            Date end = outSDF.parse(endDate);
+            ordersSearch.setEndDate(end);
+        }
         List<OrderDto> listOrders = orderService.getListAllOrdersUserByCondition(ordersSearch);
         List<MainServiceDto> mainServiceList = mainServices.getListMainService();
         List<SubServiceDto> subServiceList = subServices.getListAllSubService();
