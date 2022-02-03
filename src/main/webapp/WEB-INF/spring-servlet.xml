@@ -13,16 +13,22 @@
 
     <!-- Provide support for component scanning -->
     <context:component-scan base-package="ir.maktab" />
-
+    <mvc:resources mapping="/static/**" location="static/"
+                   cache-period="31556926"/>
     <!--Provide support for conversion, formatting and validation -->
     <mvc:annotation-driven/>
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"></property>
         <property name="suffix" value=".jsp"></property>
     </bean>
+<!--
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
+-->
     <context:component-scan base-package="ir.maktab" resource-pattern="SwaggerConfig.class" />
+<!--
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+-->
+
     <!-- Production implementation of the JavaMailSender interface, supporting
             both JavaMail MimeMessages and Spring SimpleMailMessages -->
     <!--<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

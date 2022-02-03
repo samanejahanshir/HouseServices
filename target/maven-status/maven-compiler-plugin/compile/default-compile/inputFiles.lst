@@ -42,6 +42,7 @@ C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\service
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\web\OfferController.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\data\enums\OrderState.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\web\CustomerController.java
+C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\config\SwaggerConfig.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\data\dao\UserDao.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\dto\Cart.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\dto\mapper\CommendMapper.java

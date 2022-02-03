@@ -132,9 +132,9 @@ public class AdminController {
       }*/
     @ApiOperation(value = "add a subService to expert's subService list")
     @PatchMapping(value = "/saveExpertToServices/{service}")//, consumes = MediaType.APPLICATION_JSON_VALUE
-    public void saveExpertToServices(@PathVariable("service") String service, @RequestBody String expertEmail) {
+    public void saveExpertToServices(@PathVariable("service") String service,@RequestBody ExpertDto expertDto) {
         try {
-            expertService.addSubServiceToExpertList(expertEmail, service);
+            expertService.addSubServiceToExpertList(expertDto.getEmail(), service);
         } catch (RuntimeException e) {
             e.getStackTrace();
         }

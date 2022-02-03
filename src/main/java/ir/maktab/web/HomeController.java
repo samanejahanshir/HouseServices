@@ -9,6 +9,7 @@ import ir.maktab.service.ManagerService;
 import ir.maktab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @SessionAttributes({"role_user", "customerDto", "expertDto"})
 @RequiredArgsConstructor
@@ -29,8 +31,13 @@ public class HomeController {
     final ExpertService expertService;
 
     @RequestMapping("/index")
-    public String displayHome() {
-        return "index";
+    public String displayHome(HttpSession session, Model model) {
+
+        if(session.getAttribute("error")!=null){
+            model.addAttribute("message",session.getAttribute("error"));
+            session.removeAttribute("error");
+        }
+            return "index";
     }
 
     @RequestMapping("/")

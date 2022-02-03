@@ -51,9 +51,9 @@ public class ManagerController {
                 return "managerPage";
             }
         } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
+            session.setAttribute("error", e.getMessage());
         }
-        return "index";
+        return "redirect:/index";
 
     }
 

@@ -40,6 +40,7 @@ ir\maktab\dto\ConditionSearch.class
 ir\maktab\data\model\Offer$OfferBuilder.class
 ir\maktab\dto\OrdersSearch$OrdersSearchBuilder.class
 ir\maktab\exceptions\InvalidUserTypeException.class
+ir\maktab\config\SwaggerConfig.class
 ir\maktab\exceptions\SubServiceNotFoundException.class
 ir\maktab\dto\mapper\AddressMapper.class
 ir\maktab\data\model\Orders.class

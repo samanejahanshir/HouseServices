@@ -75,19 +75,19 @@ public class ExpertController {
         try {
             expertDto = expertService.findByEmailAndPass(email, password);
         } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
+           session.setAttribute("error", e.getMessage());
         }
         if (expertDto != null) {
             if (expertDto.getState().equals(UserState.CONFIRMED)) {
                 session.setAttribute("email", email);
                 return "ExpertPage";
             } else {
-                model.addAttribute("message", "you are not confirm");
-                return "index";
+                session.setAttribute("error", "you are not confirm");
+                return "redirect:/index";
             }
 
         } else {
-            return "index";
+            return "redirect:/index";
         }
 
     }
@@ -149,8 +149,6 @@ public class ExpertController {
     @RequestMapping("/changePass")
     public String changePass(Model model) {
         model.addAttribute("role_user", "expert");
-        // String password = "";
-        // model.addAttribute("newPass", password);
         return "ChangePass";
     }
 
@@ -158,7 +156,6 @@ public class ExpertController {
     public String sendEmailForChangePass(@RequestParam("email") String inputEmail, Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
         if (inputEmail.equals(email)) {
-            // return "SendEmail";
             int code = sendMail(email);
             if (code != 0) {
                 VerifyCodeUser verifyCodeUser = VerifyCodeUser.builder()

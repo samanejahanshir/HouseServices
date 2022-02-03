@@ -72,18 +72,18 @@ public class CustomerController {
         try {
             customerDto = customerService.findByEmailAndPass(email, password);
         } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
+            session.setAttribute("error", e.getMessage());
         }
         if (customerDto != null) {
             if (customerDto.getState().equals(UserState.CONFIRMED)) {
                 session.setAttribute("email", email);
                 return "CustomerPage";
             } else {
-                model.addAttribute("message", "you are not confirm");
-                return "index";
+                session.setAttribute("error", "you are not confirm");
+                return "redirect:/index";
             }
         } else {
-            return "index";
+            return "redirect:/index";
         }
     }
 

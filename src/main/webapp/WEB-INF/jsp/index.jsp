@@ -17,9 +17,8 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body style="background-color: #c3e7f8">
-<br>
-<p>${message}</p>
-<br>
+
+<header>
 <div class="container align-items-center border border-primary " style="background-color: #adc4fc">
     <ul class="nav nav-pills align-items-center ">
         <li class="nav-item">
@@ -45,22 +44,30 @@
         </li>
     </ul>
 </div>
-
+</header>
+<main>
+    <div class="w-100 " style="height: 20px">
+        <p style="margin-left: 90px; margin-top: 5px;">${message}</p>
+    </div>
 <div class="container" style="margin-top: 30px">
     <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
+        <div class="carousel-inner w-100 h-75 border rounded border-primary shadow bg-white rounded">
             <div class="carousel-item active">
-                <img src="images/R.jpg" class="d-block w-100">
+                <img src="static/images/R.jpg" class="d-block w-100 h-100">
             </div>
             <div class="carousel-item">
-                <img src=images/RE.jpg" class="d-block w-100">
+                <img src="static/images/RE.jpg" class="d-block w-100 h-100 ">
             </div>
             <div class="carousel-item">
-                <img src="images/th.jpg" class="d-block w-100">
+                <img src="static/images/th.jpg" class="d-block w-100 h-100 ">
             </div>
         </div>
     </div>
 </div>
+</main>
+<footer>
+<div class="border-primary w-99 m-2" style="background-color: #adc4fc;height: 48px;"></div>
+</footer>
 <script src=" https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
                 integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
                 crossorigin="anonymous"></script>
