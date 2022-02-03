@@ -34,7 +34,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="firstName"/>
+                    <form:errors path="firstName" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -49,7 +49,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="lastName"/>
+                    <form:errors path="lastName" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -64,7 +64,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="email"/>
+                    <form:errors path="email" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -78,7 +78,7 @@
             <tr>
                 <td></td>
                 <td>
-                    <form:errors path="password"/>
+                    <form:errors path="password" cssClass="text-danger"/>
 
                 </td>
             </tr>
@@ -94,7 +94,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="image"/>
+                    <form:errors path="image" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -107,6 +107,9 @@
         </table>
     </form:form>
 </div>
+<footer>
+<div class="border border-primary w-99 m-2" style="background-color: #adc4fc;height: 48px;"></div>
+</footer>
 <script>
     const imageFile = document.getElementById("image");
 

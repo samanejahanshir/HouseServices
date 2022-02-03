@@ -35,7 +35,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="firstName"/>
+                    <form:errors path="firstName" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -50,7 +50,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="lastName"/>
+                    <form:errors path="lastName" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -65,7 +65,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="email"/>
+                    <form:errors path="email" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -81,7 +81,7 @@
                     <label>password :</label>
                 </td>
                 <td>
-                    <form:errors path="password"/>
+                    <form:errors path="password" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -94,6 +94,9 @@
         </table>
     </form:form>
 </div>
+<footer>
+<div class="border border-primary w-99 m-2" style="background-color: #adc4fc;height: 48px;"></div>
+</footer>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

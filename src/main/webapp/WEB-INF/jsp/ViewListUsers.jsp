@@ -117,6 +117,9 @@
         </table>
     </form:form>
 </div>
+<footer>
+<div class="border border-primary w-99 m-2" style="background-color: #adc4fc;height: 48px;"></div>
+</footer>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

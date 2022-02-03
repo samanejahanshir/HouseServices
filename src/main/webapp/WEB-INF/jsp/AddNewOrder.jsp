@@ -141,7 +141,7 @@
                     <td>
                     </td>
                     <td>
-                        <form:errors path="address.postalCode"/>
+                        <form:errors path="address.postalCode" cssClass="text-danger"/>
                     </td>
                 </tr>
                 <tr>
@@ -175,7 +175,9 @@
         </table>
     </form:form>
 </div>
-
+<footer>
+<div class="border border-primary w-99 m-2" style="background-color: #adc4fc;height: 48px;"></div>
+</footer>
 <script>
     //  const postalCode = document.getElementById("postalCode");
 
