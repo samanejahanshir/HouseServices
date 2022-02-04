@@ -12,7 +12,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -53,7 +55,10 @@ public interface CustomerDao extends JpaRepository<Customer, Integer>, JpaSpecif
             }
            /* if (!condition.getOrderUser().equals("") && condition.getOrderUser() != null) {
                 Join<Customer, Orders> ordersJoin = root.joinList("orders");
-               cq.multiselect(ordersJoin.get("email"), cb.count(root)).groupBy(root.get("email")).getOrderList().forEach(System.out::println);
+              // cq.multiselect(ordersJoin.get("email"), cb.count(root)).groupBy(root.get("email")).getOrderList().forEach(System.out::println);
+                Expression<Long> count = cb.count(root.get("email"));
+                CriteriaQuery<?> query = cq.select(ordersJoin).groupBy(ordersJoin.get("email")).having(cb.ge(count, 0));
+                predicates.add(query.getGroupRestriction());
 
             }*/
             return cb.and(predicates.toArray(new Predicate[0]));

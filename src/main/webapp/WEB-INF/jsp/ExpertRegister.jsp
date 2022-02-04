@@ -112,12 +112,17 @@
 </footer>
 <script>
     const imageFile = document.getElementById("image");
-
+    var allowedExtensions = /(\.jpg|\.jpeg)$/i;
     imageFile.onchange = function () {
         const maxAllowedSize = 300 * 1024;
         if (this.files[0].size > maxAllowedSize) {
             alert("Image File is too big! should be <300kb");
             this.value = "";
+        }
+        if(!allowedExtensions.exec(imageFile.value)) {
+            alert('Please upload file having extensions .jpeg/.jpg only.');
+            this.value = "";
+            return false;
         }
     }
 </script>
