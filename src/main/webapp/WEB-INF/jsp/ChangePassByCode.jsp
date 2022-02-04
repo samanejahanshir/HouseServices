@@ -106,9 +106,9 @@
         </c:if>
 <%--
                 /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/
---%><footer>
-                <div class="border border-primary w-99 m-2" style="background-color: #adc4fc;height: 48px;"></div>
-                </footer>
+--%><footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2" >
+                <div class="w-100" style="background-color: #adc4fc;height: 50px;">Home Services</div>
+            </footer>
                 <script type="text/javascript">
 
                     var re = /(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}/ ;

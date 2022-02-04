@@ -107,8 +107,8 @@
         </table>
     </form:form>
 </div>
-<footer>
-<div class="border border-primary w-99 m-2" style="background-color: #adc4fc;height: 48px;"></div>
+<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2">
+    <div class="w-100" style="background-color: #adc4fc;height: 50px;">Home Services</div>
 </footer>
 <script>
     const imageFile = document.getElementById("image");
