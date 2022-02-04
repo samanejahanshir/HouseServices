@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <html>
 <head>
@@ -20,27 +20,32 @@
 <div class="w-100 " style="height: 20px">
     <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
 </div>
-<form action="/customer/home">
-    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
-            style="margin: 2vh 2vw">Dashboard
-    </button>
-</form>
-
-    <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
-            onclick="history.back()" style="margin: 2vh 2vw">back
-    </button>
-
+<div class="container row">
+    <div class="col-2">
+        <form action="/customer/home">
+            <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+                    style="margin: 2vh 2vw">Dashboard
+            </button>
+        </form>
+    </div>
+    <div class="col-1">
+        <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
+                onclick="history.back()" style="margin: 2vh 2vw">back
+        </button>
+    </div>
+</div>
 <div class="container col-12">
     <h1>Users List</h1>
 
-    <form:form cssClass="text-center"  modelAttribute="offerFilter" action="/offer/searchOffers/${orderId}"  method="post">
+    <form:form cssClass="text-center" modelAttribute="offerFilter" action="/offer/searchOffers/${orderId}"
+               method="post">
         <table class="table table-striped table-primary text-dark table-hover">
             <tr>
                 <td>
-                   byPrice: <form:checkbox  path="filter"  value="byPrice"/>
+                    byPrice: <form:checkbox path="filter" value="byPrice"/>
                 </td>
                 <td>
-                  byScore:  <form:checkbox path="filter" value="byScore" />
+                    byScore: <form:checkbox path="filter" value="byScore"/>
                 </td>
 
                 <td>
@@ -60,7 +65,7 @@
                 <th>select offer</th>
             </tr>
 
-            <c:forEach var="offer" items="${listOffers}" >
+            <c:forEach var="offer" items="${listOffers}">
                 <tr>
                     <td>${offer.id}</td>
                     <td>${offer.offerCreateDate}</td>
@@ -70,14 +75,14 @@
                     <td>${offer.expertDto.firstName} ${offer.expertDto.lastName}</td>
                     <td>${offer.state}</td>
                     <c:if test="${offer.orderDto.state=='WAIT_SELECT_EXPERT'}">
-                    <td><a href="/offer/selectOffer/${offer.id}">select</a></td>
+                        <td><a href="/offer/selectOffer/${offer.id}">select</a></td>
                     </c:if>
                 </tr>
             </c:forEach>
         </table>
     </form:form>
 </div>
-<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2" >
+<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2">
     <div class="w-100" style="background-color: #adc4fc;height: 50px;">Home Services</div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"

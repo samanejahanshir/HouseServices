@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 <head>
@@ -19,34 +19,46 @@
 <div class="w-100 " style="height: 20px">
     <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
 </div>
-<form action="/manager/home">
-    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
-            style="margin: 2vh 2vw">Dashboard
-    </button>
-</form>
-
-    <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
-            onclick="history.back()" style="margin: 2vh 2vw">back
-    </button>
+<div class="container row">
+    <div class="col-2">
+        <form action="/manager/home">
+            <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+                    style="margin: 2vh 2vw">Dashboard
+            </button>
+        </form>
+    </div>
+    <div class="col-1">
+        <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
+                onclick="history.back()" style="margin: 2vh 2vw">back
+        </button>
+    </div>
+</div>
 
 <div class="container col-12">
     <a href="/manager/confirmAll">confirm all</a>
-<table class="table table-bordered table-striped table-primary text-dark">
-    <tr><th>Id</th><th>FirstName</th><th>LastName</th><th>Email</th><th>Role</th><th>RegisterDate</th></tr>
-    <c:forEach var="user" items="${userDtos}" >
+    <table class="table table-bordered table-striped table-primary text-dark">
         <tr>
-            <td>${user.id}</td>
-            <td>${user.firstName}</td>
-            <td>${user.lastName}</td>
-            <td>${user.email}</td>
-            <td>${user.role}</td>
-            <td>${user.registerDate}</td>
-            <td><a href="/manager/confirmUser/${user.id}">Confirm</a> </td>
+            <th>Id</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>RegisterDate</th>
         </tr>
-    </c:forEach>
-</table>
+        <c:forEach var="user" items="${userDtos}">
+            <tr>
+                <td>${user.id}</td>
+                <td>${user.firstName}</td>
+                <td>${user.lastName}</td>
+                <td>${user.email}</td>
+                <td>${user.role}</td>
+                <td>${user.registerDate}</td>
+                <td><a href="/manager/confirmUser/${user.id}">Confirm</a></td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
-<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2" >
+<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2">
     <div class="w-100" style="background-color: #adc4fc;height: 50px;">Home Services</div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"

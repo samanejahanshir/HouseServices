@@ -19,16 +19,20 @@
 <div class="w-100 " style="height: 20px">
     <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
 </div>
-<form action="/manager/home">
-    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
-            style="margin: 2vh 2vw">Dashboard
-    </button>
-</form>
-
-    <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
-            onclick="history.back()" style="margin: 2vh 2vw">back
-    </button>
-
+<div class="container row">
+    <div class="col-2">
+        <form action="/manager/home">
+            <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+                    style="margin: 2vh 2vw">Dashboard
+            </button>
+        </form>
+    </div>
+    <div class="col-1">
+        <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
+                onclick="history.back()" style="margin: 2vh 2vw">back
+        </button>
+    </div>
+</div>
 <div class="container col-12">
     <h1>Orders List</h1>
 
@@ -69,10 +73,10 @@
                 <td>
                 </td>
                 <td>
-                    from:<br/><input type="date"  path="startDate" name="startDate"  placeHolder="start date"/>
+                    from:<br/><input type="date" path="startDate" name="startDate" placeHolder="start date"/>
                 </td>
                 <td>
-                    to:<br/><input type="date" path="endDate" name="endDate"  placeHolder="end date"/>
+                    to:<br/><input type="date" path="endDate" name="endDate" placeHolder="end date"/>
                 </td>
 
                 <td>
@@ -81,7 +85,8 @@
                 </td>
 
             </tr>
-            <tr><th>Id</th>
+            <tr>
+                <th>Id</th>
                 <th>DoingDate</th>
                 <th>DoingTime</th>
                 <th>RegisterDate</th>
@@ -89,7 +94,7 @@
                 <th>state</th>
                 <th>sub service</th>
             </tr>
-            <c:forEach var="order" items="${listOrders}" >
+            <c:forEach var="order" items="${listOrders}">
                 <tr>
                     <td>${order.id}</td>
                     <td>${order.orderDoingDate}</td>
@@ -103,7 +108,7 @@
         </table>
     </form:form>
 </div>
-<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2" >
+<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2">
     <div class="w-100" style="background-color: #adc4fc;height: 50px;">Home Services</div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"

@@ -21,16 +21,20 @@
 <div class="w-100 " style="height: 20px">
     <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
 </div>
-<form action="/customer/home">
-    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
-            style="margin: 2vh 2vw">Dashboard
-    </button>
-</form>
-
-    <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
-            onclick="history.back()" style="margin: 2vh 2vw">back
-    </button>
-
+<div class="container row">
+    <div class="col-2">
+        <form action="/customer/home">
+            <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+                    style="margin: 2vh 2vw">Dashboard
+            </button>
+        </form>
+    </div>
+    <div class="col-1">
+        <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
+                onclick="history.back()" style="margin: 2vh 2vw">back
+        </button>
+    </div>
+</div>
 <%--
 <c:set  var="email" value="${email}"/>
 --%>
@@ -176,7 +180,7 @@
         </table>
     </form:form>
 </div>
-<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2" >
+<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2">
     <div class="w-100" style="background-color: #adc4fc;height: 50px;">Home Services</div>
 </footer>
 <script>

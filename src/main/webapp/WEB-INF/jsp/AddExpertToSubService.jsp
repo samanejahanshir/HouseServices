@@ -12,25 +12,30 @@
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
 </head>
 <body style="background-color: #c3e7f8">
 <div class="w-100 " style="height: 20px">
     <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
 </div>
-<form action="/manager/home">
-    <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
-            style="margin: 2vh 2vw">Dashboard
-    </button>
-</form>
-
-    <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
-            onclick="history.back()" style="margin: 2vh 2vw">back
-    </button>
-
+<div class="container row">
+    <div class="col-2">
+        <form action="/manager/home">
+            <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
+                    style="margin: 2vh 2vw">Dashboard
+            </button>
+        </form>
+    </div>
+    <div class="col-1">
+        <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
+                onclick="history.back()" style="margin: 2vh 2vw">back
+        </button>
+    </div>
+</div>
 <div class="container col-12">
-    <form:form modelAttribute="expert"  action="/manager/saveExpertToServices/${service} " method="post">
+    <form:form modelAttribute="expert" action="/manager/saveExpertToServices/${service} " method="post">
         <h2 style="text-justify: distribute-center-last">Add Expert To Services</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
             <tr>
@@ -44,7 +49,8 @@
                     <c:forEach items="${expertDtos}" var="expert">
                     <option value="${expert.email}">${expert.email}</option>
                     </c:forEach>
-                    </form:select>            </tr>
+                    </form:select>
+            </tr>
             <tr>
                 <td>
                 </td>
@@ -55,10 +61,14 @@
         </table>
     </form:form>
 </div>
-<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2" >
+<footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2">
     <div class="w-100" style="background-color: #adc4fc;height: 50px;">Home Services</div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
 </body>
 </html>
