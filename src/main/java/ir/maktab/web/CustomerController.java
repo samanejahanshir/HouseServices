@@ -116,7 +116,6 @@ public class CustomerController {
         return "ViewListSubServiceManager";
     }
 
-    //TODO send email for change password
     @RequestMapping("/changePass")
     public String changePass(Model model) {
         model.addAttribute("role_user", "customer");

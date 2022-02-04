@@ -148,9 +148,11 @@ public class OrderService {
         List<OrderDto> orderDto = null;
         if (expert != null) {
             if (!expert.getServices().isEmpty()) {
-                List<String> subServiceNames = expert.getServices().stream().map(SubServices::getName).collect(Collectors.toList());
-                List<Orders> orders = orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
-                //  List<Orders> orders = orderDao.findByStateEqualsOOrStateEqualsAndSubServicesIn(OrderState.WAIT_SELECT_EXPERT, OrderState.WAIT_OFFER_EXPERTS, expert.getServices());
+               List<SubServices> services= expert.getServices();
+              //  List<String> subServiceNames = expert.getServices().stream().map(SubServices::getName).collect(Collectors.toList());
+               // List<Orders> orders = orderDao.getListOrdersOfSubServiceExpert(subServiceNames);
+                 List<Orders> orders = orderDao.findByStateEqualsAndSubServicesIn(OrderState.WAIT_OFFER_EXPERTS,services);
+
                 orderDto = orders.stream().map(orderMapper::toDto).collect(Collectors.toList());
             }
         } else {

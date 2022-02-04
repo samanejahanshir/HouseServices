@@ -24,15 +24,21 @@
     </button>
 </form>
 
-    <button type="submit" id="back" name="back" class="btn btn-primary btn-group"
-            onclick="history.back()" style="margin: 2vh 2vw">back
-    </button>
+<button type="submit" id="back" name="back" class="btn btn-primary btn-group"
+        onclick="history.back()" style="margin: 2vh 2vw">back
+</button>
 
 <div class="container col-12">
-    <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/expert/saveOffer/${idOrder}"
-               modelAttribute="offerDto">
+    <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/offer/updateOffer"
+               modelAttribute="offerDto" >
         <h2 style="text-justify: distribute-center-last">Add Offer</h2>
+        <form:hidden path="id"/>
+       <%-- <form:hidden path="state"/>
+        <form:hidden path="orderDto"/>
+        <form:hidden path="expertDto"/>
+        <form:hidden path="offerCreateDate"/>--%>
         <table class="table table-bordered table-striped table-primary text-dark">
+
             <tr>
                 <td>
                     <form:label path="startTime">start time :</form:label>
@@ -62,7 +68,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:button name="add">add offer</form:button>
+                    <form:button name="update">update</form:button>
                 </td>
             </tr>
         </table>

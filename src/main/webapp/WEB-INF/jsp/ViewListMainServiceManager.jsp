@@ -16,8 +16,9 @@
 
 </head>
 <body style="background-color: #c3e7f8">
-<p>${message}</p>
-<br>
+<div class="w-100 " style="height: 20px">
+    <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
+</div>
 <c:if test="${role_user.equals('manager')}">
 <form action="/manager/home">
     </c:if>

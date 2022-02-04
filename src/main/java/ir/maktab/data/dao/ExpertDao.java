@@ -26,20 +26,12 @@ public interface ExpertDao extends JpaRepository<Expert, Integer>, JpaSpecificat
 
     Optional<Expert> findByEmail(String email);
 
-    //@transactional
-    @Query(value = "from Expert e join fetch e.services where e.email=:email")
-    Optional<Expert> getExpertByEmailJoinSubService(@Param("email") String email);
-
     @Query(value = "select e from Expert e join fetch e.services s join fetch s.mainServices m where m.groupName=:groupName")
     List<Expert> getListExpertByGroupName(@Param("groupName") String groupName);
 
 
     @Query(value = "select e from Expert e join fetch e.services s where s.name=:subService")
     List<Expert> getListExpertBySubServiceName(@Param("subService") String subService);
-
-    @Modifying
-    @Query(value = "update Expert set password=:password where email=:email")
-    int UpdatePassword(@Param("email") String email, @Param("password") String newPassword);
 
     static Specification<Expert> selectByCondition(ConditionSearch condition) {
         return (root, cq, cb) -> {

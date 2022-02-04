@@ -2,7 +2,9 @@ package ir.maktab.web;
 
 import com.wordnik.swagger.annotations.Api;
 import ir.maktab.config.LastViewInterceptor;
+import ir.maktab.data.enums.UserType;
 import ir.maktab.data.model.User;
+import ir.maktab.data.model.VerifyCodeUser;
 import ir.maktab.dto.*;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +14,10 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,6 +35,8 @@ public class ManagerController {
     final MainServicesService mainServices;
     final ExpertService expertService;
     final OrderService orderService;
+    final VerifyCodeUserService codeUserService;
+
 
     @RequestMapping("/home")
     public String homePageManager(Model model) {
@@ -286,11 +292,64 @@ public class ManagerController {
         return "ChangePass";
     }
 
+    @RequestMapping(value = "/sendEmail", method = RequestMethod.POST)
+    public String sendEmailForChangePass(@RequestParam("email") String inputEmail, Model model, HttpSession session) {
+        String email = (String) session.getAttribute("emailManager");
+        if (inputEmail.equals(email)) {
+            int code = sendMail(email);
+            if (code != 0) {
+                VerifyCodeUser verifyCodeUser = VerifyCodeUser.builder()
+                        .code(code)
+                        .email(email)
+                        .build();
+                codeUserService.save(verifyCodeUser);
+                model.addAttribute("role_user", "manager");
+                model.addAttribute("verifyCode", new VerifyCodeUser());
+                return "ChangePassByCode";
+            } else {
+                return "ChangePass";
+            }
+        } else {
+            model.addAttribute("message", "email invalid!!");
+            return "ChangePass";
+        }
+    }
+
+    @RequestMapping(value = "/checkVerifyCode", method = RequestMethod.POST)
+    public String checkVerifyCode(@RequestParam("code") int code, Model model, HttpSession session) {
+        String email = (String) session.getAttribute("emailManager");
+        int code1 = codeUserService.getVerifyCodeByEmail(email);
+        if (code == code1) {
+            model.addAttribute("verify", true);
+        } else {
+            model.addAttribute("verify", false);
+            model.addAttribute("message", "verify code not valid");
+        }
+        model.addAttribute("role_user", "manager");
+        return "ChangePassByCode";
+
+    }
+
+    private int sendMail(String email) {
+        int code = 0;
+        try {
+            code = (int) (Math.random() * (999999 - 100000 + 1) + 1000000);
+            String mailText = "verify code is : " + code;
+            MailService.sendMail(email, "verifyCode", mailText);
+            return code;
+        } catch (MessagingException | IOException e) {
+            e.printStackTrace();
+            code = 0;
+            return code;
+        }
+    }
+
     @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
-    public String saveNewPassword(@RequestParam("password") String password, Model model, HttpSession session) {
+    public String saveNewPassword(Model model, HttpSession session, @RequestParam("password") String password, @RequestParam("re_password") String rePassword) {
         String email = (String) session.getAttribute("emailManager");
         managerService.updatePassword(email, password);
         model.addAttribute("message", "change pass is successfuly");
+        codeUserService.deleteVerifyCode(email);
         return "managerPage";
     }
 
@@ -315,7 +374,8 @@ public class ManagerController {
     @RequestMapping("/viewOrders/{id}")
     public String viewListOrderUser(@PathVariable("id") int id, Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
-            List<OrderDto> listOrders = orderService.getListAllOrdersUser(id);
+            List<OrderDto> listOrders=orderService.getListAllOrdersUser(id);
+           model.addAttribute("listOrders",listOrders);
             return "ViewOrdersUser";
         } else {
             model.addAttribute("message", "you should login");

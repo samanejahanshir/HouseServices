@@ -74,15 +74,6 @@ public class ExpertService {
         expertDao.save(expert);
     }
 
-   /* public Expert getExpertByEmailJoinSubService(String email) {
-        Optional<Expert> expertOptional = expertDao.getExpertByEmailJoinSubService(email);
-        if (expertOptional.isPresent()) {
-            return expertOptional.get();
-        } else {
-            throw new RuntimeException("this expert by this email not exist");
-        }
-    }*/
-
     public void updateExpert(Expert expert) {
         Expert expertByEmail = getExpertByEmail(expert.getEmail());
         if (expertByEmail != null) {
@@ -130,7 +121,9 @@ public class ExpertService {
     public void addOfferToOrder(String email, OfferDto offerDto) {
         Expert expert = getExpertByEmail(email);
         if (expert != null) {
-            List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
+          //  List<Offer> offers = offerDao.getListOfferByExpertId(expert.getId());
+            List<Offer> offers = offerDao.findByExpert_Id(expert.getId());
+
             if (offers.stream().filter(offer -> !offer.getState().equals(OfferState.REJECT) && offer.getOrders().getOrderDoingDate().equals(offerDto.getOrderDto().getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
             ).findFirst().isEmpty()) {
                 if (offerDto.getOfferPrice() >= offerDto.getOrderDto().getSubServiceDto().getBasePrice()) {

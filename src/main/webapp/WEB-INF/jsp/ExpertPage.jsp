@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
 <body style="background-color: #c3e7f8">
-<p>${message}</p>
+<div class="w-100 " style="height: 20px">
+    <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
+</div>
 <c:set  var="email" value="${email}"/>
 <div class="container col-12">
     <div class="card" style="width: 18rem;">
@@ -22,6 +24,7 @@
             <li class="list-group-item"><a href="/expert/addServiceToList">Add a subService to my list</a></li>
             <li class="list-group-item"><a href="/expert/changePass">Change password</a></li>
             <li class="list-group-item"><a href="/expert/viewInformation">view information</a></li>
+            <li class="list-group-item"><a href="/offer/viewListOfferExpert">view List Offers</a></li>
             <li class="list-group-item"><a href="/order/allOrdersExpert">view all orders</a></li>
             <li class="list-group-item"><a href="/order/historyWorks">view history works</a></li>
             <li class="list-group-item"><a href="/order/listWorks">List works</a></li>

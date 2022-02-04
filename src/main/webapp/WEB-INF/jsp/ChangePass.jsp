@@ -16,11 +16,12 @@
 
 </head>
 <body style="background-color: #c3e7f8">
-<p>${message}</p>
-<br>
-<%--<c:if test="${role_user.equals('manager')}">
+<div class="w-100 " style="height: 20px">
+    <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
+</div>
+<c:if test="${role_user.equals('manager')}">
 <form action="/manager/home">
-    </c:if>--%>
+    </c:if>
    <c:if test="${role_user.equals('expert')}">
      <form action="/expert/home">
          </c:if>
@@ -43,9 +44,9 @@
             <c:if test="${role_user.equals('customer')}">
             <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/sendEmail">
                 </c:if>
-                <%-- <c:if test="${role_user.equals('manager')}">
-                 <form cssClass="p-1 my-5 mx-5" method="post" action="/manager/saveNewPass">
-                     </c:if>--%>
+                 <c:if test="${role_user.equals('manager')}">
+                 <form cssClass="p-1 my-5 mx-5" method="post" action="/manager/sendEmail">
+                     </c:if>
                 <h2 style="text-justify: distribute-center-last">Change Password</h2>
                 <table class="table table-bordered table-striped table-primary text-dark">
                     <tr>
@@ -56,14 +57,6 @@
                             <input type="email" name="email">
                         </td>
                     </tr>
-                    <%-- <tr>
-                         <td>
-                            New Password:
-                         </td>
-                         <td>
-                             <input type="password" name="password">
-                         </td>
-                     </tr>--%>
                     <tr>
                         <td>
                         </td>

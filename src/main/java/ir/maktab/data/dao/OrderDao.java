@@ -20,13 +20,15 @@ import java.util.List;
 import java.util.Objects;
 
 @Repository
-public interface OrderDao extends JpaRepository<Orders, Integer> , JpaSpecificationExecutor<Orders> {
+public interface OrderDao extends JpaRepository<Orders, Integer>, JpaSpecificationExecutor<Orders> {
 
     @Query(value = "select o from Orders o inner  join o.subServices s where s.name in :list and o.state='WAIT_OFFER_EXPERTS' or o.state='WAIT_SELECT_EXPERT'")
     List<Orders> getListOrdersOfSubServiceExpert(@Param("list") List<String> subServices);
 
+    List<Orders> findByStateEqualsAndSubServicesIn(OrderState state,List<SubServices> subServices);
     List<Orders> findByExpertEquals(Expert expert);
-    List<Orders> findByExpertEqualsAndStateIsNotIn(Expert expert,List<OrderState> state);
+
+    List<Orders> findByExpertEqualsAndStateIsNotIn(Expert expert, List<OrderState> state);
 
     @Modifying
     @Query(value = "update Orders o set o.state=:state where o.id=:id")
@@ -40,28 +42,28 @@ public interface OrderDao extends JpaRepository<Orders, Integer> , JpaSpecificat
     @Query(value = "select o from  Customer c inner join c.orders o  where o.customer.id=:id and o.state <> 'PAID'")
     List<Orders> getListOrdersThatNotFinished(@Param("id") int customerId);
 
-    List<Orders> findByStateEqualsAndExpert(OrderState state,Expert expert);
+    List<Orders> findByStateEqualsAndExpert(OrderState state, Expert expert);
 
     static Specification<Orders> selectByCondition(OrdersSearch ordersSearch) {
         return (root, cq, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (ordersSearch.getState() != null) {
-                predicates.add(cb.equal(root.get("state"),ordersSearch.getState()));
+                predicates.add(cb.equal(root.get("state"), ordersSearch.getState()));
             }
-            if (ordersSearch.getSubServiceName()!=null && !ordersSearch.getSubServiceName().equals("")) {
+            if (ordersSearch.getSubServiceName() != null && !ordersSearch.getSubServiceName().equals("")) {
                 Join<Orders, SubServices> serviceJoin = root.join("subServices");
-                predicates.add(cb.equal(serviceJoin.get("name"),ordersSearch.getSubServiceName()));
+                predicates.add(cb.equal(serviceJoin.get("name"), ordersSearch.getSubServiceName()));
             }
-            if (ordersSearch.getMainServiceName()!=null && !ordersSearch.getMainServiceName().equals("")) {
+            if (ordersSearch.getMainServiceName() != null && !ordersSearch.getMainServiceName().equals("")) {
                 Join<Orders, SubServices> serviceJoin = root.join("subServices");
                 Join<SubServices, MainServices> mainServices = serviceJoin.join("mainServices");
                 predicates.add(cb.equal(mainServices.get("groupName"), ordersSearch.getMainServiceName()));
             }
-            if (ordersSearch.getStartDate()!=null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("orderDoingDate"),ordersSearch.getStartDate()));
+            if (ordersSearch.getStartDate() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("orderDoingDate"), ordersSearch.getStartDate()));
             }
-            if (ordersSearch.getEndDate()!=null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("orderDoingDate"),ordersSearch.getEndDate()));
+            if (ordersSearch.getEndDate() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("orderDoingDate"), ordersSearch.getEndDate()));
             }
             return cb.and(predicates.toArray(new Predicate[0]));
         };

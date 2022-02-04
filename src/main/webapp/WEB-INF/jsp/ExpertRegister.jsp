@@ -15,8 +15,9 @@
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body style="background-color: #c3e7f8">
-<p>${message}</p>
-<br>
+<div class="w-100 " style="height: 20px">
+    <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
+</div>
 <div class="container col-12">
     <form:form cssClass="p-1 my-5 mx-5"  method="post" action="/expert/register"
                modelAttribute="expertDto">

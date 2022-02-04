@@ -16,11 +16,12 @@
 
 </head>
 <body style="background-color: #c3e7f8">
-<p>${message}</p>
-<br>
-<%--<c:if test="${role_user.equals('manager')}">
+<div class="w-100 " style="height: 20px">
+    <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
+</div>
+<c:if test="${role_user.equals('manager')}">
 <form action="/manager/home">
-    </c:if>--%>
+    </c:if>
 <c:if test="${role_user.equals('expert')}">
 <form action="/expert/home">
     </c:if>
@@ -42,9 +43,9 @@
             <c:if test="${role_user.equals('customer')}">
             <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/checkVerifyCode">
                 </c:if>
-                <%-- <c:if test="${role_user.equals('manager')}">
-                 <form cssClass="p-1 my-5 mx-5" method="post" action="/manager/saveNewPass">
-                     </c:if>--%>
+                 <c:if test="${role_user.equals('manager')}">
+                 <form cssClass="p-1 my-5 mx-5" method="post" action="/manager/checkVerifyCode">
+                     </c:if>
                 <h2 style="text-justify: distribute-center-last">Change Password</h2>
                 <table class="table table-bordered table-striped table-primary text-dark">
                     <tr>
@@ -68,14 +69,14 @@
         </c:if>
     <c:if test="${verify==true}">
         <c:if test="${role_user=='expert'}">
-        <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/saveNewPass" onsubmit="return checkPassword();">
+        <form cssClass="p-1 my-5 mx-5" method="post" action="/expert/saveNewPass" <%--onsubmit="return checkPassword();"--%>>
             </c:if>
             <c:if test="${role_user=='customer'}">
-            <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/saveNewPass" onsubmit="return checkPassword();">
+            <form cssClass="p-1 my-5 mx-5" method="post" action="/customer/saveNewPass" <%--onsubmit="return checkPassword();"--%>>
                 </c:if>
-                <%-- <c:if test="${role_user.equals('manager')}">
-                 <form cssClass="p-1 my-5 mx-5" method="post" action="/manager/saveNewPass">
-                     </c:if>--%>
+                 <c:if test="${role_user.equals('manager')}">
+                 <form cssClass="p-1 my-5 mx-5" method="post" action="/manager/saveNewPass" <%--onsubmit="return checkPassword();"--%>>
+                     </c:if>
                 <h2 style="text-justify: distribute-center-last">Change Password</h2>
                 <table class="table table-bordered table-striped table-primary text-dark">
                     <tr>
@@ -111,14 +112,18 @@
             </footer>
                 <script type="text/javascript">
 
-                    var re = /(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}/ ;
+                   // var re =/(?=.*\d.*)(?=.*[a-zA-Z].*){8,}/;
                     const password = document.getElementById("password").value;
                     const repassword = document.getElementById("repassword").value;
                     function checkPassword()
                     {
                         // at least one number, one lowercase and one uppercase letter
                         // at least six characters
-                        if(password.match(re)){
+                        if(password.length<8){
+                            alert("password length should be >8")
+                            return false;
+                        }
+                        if(isNaN(password)){
                             alert("password format should be contain 0-9 and a-z and A-Z")
                             return false;
                         }

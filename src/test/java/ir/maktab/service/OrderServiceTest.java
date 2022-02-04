@@ -100,7 +100,7 @@ static ExpertService expertService;
     void selectOfferForOrderTest() {
         List<OrderDto> orderDtos = orderService.getListOrdersThatNotFinished("zahra@email.com");
         System.out.println(orderDtos.get(0));
-        List<OfferDto> listOffers = offerService.getListOffers(orderDtos.get(0));
+        List<OfferDto> listOffers = offerService.getListOffersForCustomer(orderDtos.get(0));
         listOffers.forEach(System.out::println);
         orderService.selectOfferForOrder(listOffers.get(0));
     }

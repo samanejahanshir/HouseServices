@@ -16,8 +16,9 @@
 
 </head>
 <body style="background-color: #c3e7f8">
-<p>${message}</p>
-<br>
+<div class="w-100 " style="height: 20px">
+    <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
+</div>
 <form action="/customer/home">
     <button type="submit" id="dashboard" name="dashboard" class="btn btn-primary btn-group"
             style="margin: 2vh 2vw">Dashboard

@@ -18,8 +18,10 @@ public interface OfferDao extends JpaRepository<Offer, Integer> {
     @Modifying
     void deleteByIdIn(List<Integer> ids);
 
-    @Query(value = "from  Offer  o join fetch o.expert e where e.id=:id")
-    List<Offer> getListOfferByExpertId(@Param("id") int expertId);
+   /* @Query(value = "from  Offer  o join fetch o.expert e where e.id=:id")
+    List<Offer> getListOfferByExpertId(@Param("id") int expertId);*/
+
+    List<Offer> findByExpert_Id(int id);
 
     List<Offer> findByOrders_Id(int orders_Id);
 

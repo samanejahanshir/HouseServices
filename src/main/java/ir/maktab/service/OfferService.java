@@ -2,13 +2,14 @@ package ir.maktab.service;
 
 import ir.maktab.data.dao.OfferDao;
 import ir.maktab.data.dao.SubServiceDao;
-import ir.maktab.data.enums.OrderState;
+import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.Offer;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.mapper.OfferMapper;
 import ir.maktab.exceptions.InvalidPriceException;
+import ir.maktab.exceptions.OfferConflictByOtherException;
 import ir.maktab.exceptions.OfferNotFound;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,15 @@ public class OfferService {
     final ExpertService expertService;
 
     @Transactional
-    public List<OfferDto> getListOffers(OrderDto orderDto) {
+    public List<OfferDto> getListOffersForCustomer(OrderDto orderDto) {
         List<Offer> listOffers = offerDao.findByOrders_Id(orderDto.getId());
+        return listOffers.stream().map(offerMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<OfferDto> getListOffersForExpert(String email) {
+        Expert expert = expertService.getExpertByEmail(email);
+        List<Offer> listOffers = offerDao.findByExpert_Id(expert.getId());
         return listOffers.stream().map(offerMapper::toDto).collect(Collectors.toList());
     }
 
@@ -52,7 +60,7 @@ public class OfferService {
             listOffers = offerDao.findByOrders_Id(orderDto.getId(), offerPriceAndScore);
             return listOffers.stream().map(offerMapper::toDto).collect(Collectors.toList());
         } else {
-            return getListOffers(orderDto);
+            return getListOffersForCustomer(orderDto);
         }
     }
 
@@ -85,5 +93,25 @@ public class OfferService {
         } else {
             throw new OfferNotFound();
         }
+    }
+
+    public void updateOffer(OfferDto offerDto,String email){
+        Expert expert = expertService.getExpertByEmail(email);
+        List<Offer> offers = offerDao.findByExpert_Id(expert.getId());
+        if (offers.stream().filter(offer -> !offer.getState().equals(OfferState.REJECT) && offer.getOrders().getOrderDoingDate().equals(offerDto.getOrderDto().getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
+        ).findFirst().isEmpty()) {
+            if (offerDto.getOfferPrice() >= offerDto.getOrderDto().getSubServiceDto().getBasePrice()) {
+                OfferDto offer1 =findOfferById(offerDto.getId());
+                Offer offer = offerMapper.toEntity(offer1);
+                offer.setDurationTime(offerDto.getDurationTime());
+                offer.setOfferPrice(offerDto.getOfferPrice());
+                offer.setStartTime(offerDto.getStartTime());
+                offerDao.save(offer);
+            }else {
+                throw new InvalidPriceException();
+            }
+            throw new OfferConflictByOtherException();
+        }
+
     }
 }

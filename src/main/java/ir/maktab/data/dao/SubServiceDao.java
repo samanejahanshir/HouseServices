@@ -18,13 +18,7 @@ public interface SubServiceDao extends JpaRepository<SubServices, Integer> {
     @Modifying
     int deleteByName(String subService);
 
-    //Optional<SubServices> findByNameAndGroupName(String name,String groupName);
-
-    //@Query(value = "from SubServices where name=:subService")
     Optional<SubServices> findByName(String name);
-    //Optional<SubServices> findByNameAndGroupName(String name,String groupName);
-
-    //Optional<SubServices> findByName(String name);
 
     List<SubServices> findAllByMainServices_GroupName(String groupName);
 

@@ -17,7 +17,9 @@
 
 </head>
 <body onload="timer=setTimeout('auto_reload()',600000)">
-<P>${message}</P>
+<div class="w-100 " style="height: 20px">
+    <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
+</div>
 <div class="container col-12">
     <p id="timertag"></p>
     <form:form cssClass="p-1 my-5 mx-5" method="post" action="/order/paymentOnline"
