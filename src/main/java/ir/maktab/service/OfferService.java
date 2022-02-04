@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -98,10 +99,10 @@ public class OfferService {
     public void updateOffer(OfferDto offerDto,String email){
         Expert expert = expertService.getExpertByEmail(email);
         List<Offer> offers = offerDao.findByExpert_Id(expert.getId());
-        if (offers.stream().filter(offer -> !offer.getState().equals(OfferState.REJECT) && offer.getOrders().getOrderDoingDate().equals(offerDto.getOrderDto().getOrderDoingDate()) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
-        ).findFirst().isEmpty()) {
-            if (offerDto.getOfferPrice() >= offerDto.getOrderDto().getSubServiceDto().getBasePrice()) {
-                OfferDto offer1 =findOfferById(offerDto.getId());
+        OfferDto offer1 =findOfferById(offerDto.getId());
+        if (offers.stream().filter(offer -> !offer.getState().equals(OfferState.REJECT) && offer.getStartTime() + offer.getDurationTime() > offerDto.getStartTime()
+       && !Objects.equals(offerDto.getId(), offer.getId())).findFirst().isEmpty()) {
+            if (offerDto.getOfferPrice() >= offer1.getOrderDto().getSubServiceDto().getBasePrice()) {
                 Offer offer = offerMapper.toEntity(offer1);
                 offer.setDurationTime(offerDto.getDurationTime());
                 offer.setOfferPrice(offerDto.getOfferPrice());
@@ -110,6 +111,8 @@ public class OfferService {
             }else {
                 throw new InvalidPriceException();
             }
+
+        }else {
             throw new OfferConflictByOtherException();
         }
 

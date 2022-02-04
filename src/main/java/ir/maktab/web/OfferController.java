@@ -132,7 +132,7 @@ public class OfferController {
         System.out.println(offerDto);
         String email = (String) session.getAttribute("email");
         offerService.updateOffer(offerDto,email);
-        session.setAttribute("messageSuccess", "delete offer successfully");
+        session.setAttribute("messageSuccess", "update offer successfully");
         return "redirect:/offer/viewListOfferExpert";
     }
 
