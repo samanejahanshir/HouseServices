@@ -206,7 +206,7 @@ public class OrderController {
             } catch (RuntimeException e) {
                 session.setAttribute("error", e.getMessage());
             }
-            return "redirect:/order/newOrders";
+            return "redirect:/order/allOrders";
         } else {
             model.addAttribute("message", "you should login");
             return "index";
@@ -234,7 +234,7 @@ public class OrderController {
         } catch (RuntimeException e) {
             session.setAttribute("error", e.getMessage());
         }
-        return "redirect:/order/newOrders";
+        return "redirect:/order/allOrders";
     }
 
     @RequestMapping("/showScore/{orderId}")
