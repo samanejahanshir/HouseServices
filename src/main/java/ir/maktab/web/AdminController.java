@@ -39,7 +39,7 @@ public class AdminController {
 
     @ApiOperation(value = "filter list users by name and score and ...")
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE, produces =MediaType.APPLICATION_JSON_VALUE)
-    public List<UserDto> searchUsers(@RequestBody ConditionSearch conditionSearch,@RequestParam("startDate") String startDate,@RequestParam("endDate")  String endDate) throws ParseException {
+    public List<UserDto> searchUsers(@RequestBody ConditionSearch conditionSearch,@RequestParam(value = "startDate",required = false) String startDate,@RequestParam(value = "endDate",required = false)  String endDate) throws ParseException {
         List<UserDto> userDtoList = null;
         try {
             SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");

@@ -27,7 +27,7 @@ public class CustomerService {
 
     public void saveCustomer(Customer customer) {
         if (customerDao.findByEmail(customer.getEmail()).isEmpty()) {
-            customer.setState(UserState.NOT_CONFIRMED);
+            customer.setState(UserState.NEW);
             customerDao.save(customer);
         } else {
             throw new UserByEmailExistException();

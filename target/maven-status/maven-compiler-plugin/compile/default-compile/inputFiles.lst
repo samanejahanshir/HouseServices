@@ -32,6 +32,7 @@ C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\service
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\dto\OrderDto.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\dto\mapper\CustomerMapper.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\data\model\Expert.java
+C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\data\model\ConfirmationToken.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\exceptions\MainServiceDuplicateException.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\service\validation\CheckValidation.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\dto\OfferFilterSearch.java
@@ -83,6 +84,7 @@ C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\data\en
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\service\MailService.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\dto\mapper\OfferMapper.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\web\CommendController.java
+C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\data\dao\ConfirmationTokenDao.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\data\model\Manager.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\data\model\User.java
 C:\Users\MitKnight\IdeaProjects\HW18\HomeService\src\main\java\ir\maktab\exceptions\UserNotFoundException.java

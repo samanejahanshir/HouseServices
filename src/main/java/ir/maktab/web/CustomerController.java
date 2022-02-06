@@ -2,12 +2,12 @@ package ir.maktab.web;
 
 import com.wordnik.swagger.annotations.Api;
 import ir.maktab.config.LastViewInterceptor;
+import ir.maktab.data.dao.ConfirmationTokenDao;
 import ir.maktab.data.enums.UserState;
+import ir.maktab.data.model.ConfirmationToken;
+import ir.maktab.data.model.User;
 import ir.maktab.data.model.VerifyCodeUser;
-import ir.maktab.dto.Cart;
-import ir.maktab.dto.CustomerDto;
-import ir.maktab.dto.MainServiceDto;
-import ir.maktab.dto.SubServiceDto;
+import ir.maktab.dto.*;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RequestMapping("/customer")
 @Controller
@@ -34,6 +35,7 @@ public class CustomerController {
     final UserService userService;
     final MainServicesService mainServices;
     final VerifyCodeUserService codeUserService;
+    final ConfirmationTokenDao confirmationTokenDao;
 
     @RequestMapping("/home")
     public String homePageManager(Model model) {
@@ -50,14 +52,38 @@ public class CustomerController {
     public String customerRegister(@ModelAttribute("customerDto") @Validated CustomerDto customerDto, Model model, HttpSession session) {
         try {
             userService.saveCustomer(customerDto);
+            User user = userService.getUserByEmail(customerDto.getEmail());
+            ConfirmationToken confirmationToken = ConfirmationToken.builder()
+                    .userEntity(user)
+                    .confirmationToken(UUID.randomUUID().toString())
+                    .build();
+            confirmationTokenDao.save(confirmationToken);
+            String text = "To confirm your account, please click here : "
+                    + "http://localhost:8080/customer/confirm-account?token=" + confirmationToken.getConfirmationToken();
+            MailService.sendMail(user.getEmail(), "verify email", text);
             session.setAttribute("email", customerDto.getEmail());
-            model.addAttribute("message", "register done successfully,you should waiting for confirm by manager");
-        } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
+            session.setAttribute("messageSuccess", "register done successfully,please check your email and confirm your account");
+        } catch (RuntimeException| MessagingException | IOException e) {
+            session.setAttribute("error", e.getMessage());
             return "CustomerRegister";
         }
-        return "index";
+        return "redirect:/index";
+    }
 
+    @RequestMapping(value = "/confirm-account", method = {RequestMethod.GET, RequestMethod.POST})
+    public String confirmUserAccount(HttpSession session, @RequestParam("token") String confirmationToken) {
+        ConfirmationToken token = confirmationTokenDao.findByConfirmationToken(confirmationToken);
+
+        if (token != null) {
+            User user = userService.getUserByEmail(token.getUserEntity().getEmail());
+            user.setState(UserState.NOT_CONFIRMED);
+            userService.updateUser(user);
+            confirmationTokenDao.delete(token);
+            session.setAttribute("messageSuccess", "your email verified successfully,please wait to confirm by manager");
+        } else {
+            session.setAttribute("error", "The link is invalid or broken!");
+        }
+        return "redirect:/index";
     }
 
     @RequestMapping("/Signin")
@@ -180,10 +206,10 @@ public class CustomerController {
     @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
     public String saveNewPassword(Model model, HttpSession session, @RequestParam("password") String password, @RequestParam("re_password") String rePassword) {
         String email = (String) session.getAttribute("email");
-            customerService.updatePassword(email, password);
-            model.addAttribute("message", "change pass is successfuly");
-            codeUserService.deleteVerifyCode(email);
-            return "CustomerPage";
+        customerService.updatePassword(email, password);
+        model.addAttribute("message", "change pass is successfuly");
+        codeUserService.deleteVerifyCode(email);
+        return "CustomerPage";
     }
 
     @RequestMapping("/incrementCredit")

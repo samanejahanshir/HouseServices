@@ -137,9 +137,9 @@ static ExpertService expertService;
         orderService.updateOrderStateToPaidByCredit(9);
     }
 
-    @Test
+   /* @Test
     void getScoreOfOrderTest(){
         int score = orderService.getScoreOrderForExpert(9);
         Assertions.assertEquals(6,score);
-    }
+    }*/
 }

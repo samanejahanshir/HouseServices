@@ -40,6 +40,7 @@ ir\maktab\dto\ConditionSearch.class
 ir\maktab\data\model\Offer$OfferBuilder.class
 ir\maktab\dto\OrdersSearch$OrdersSearchBuilder.class
 ir\maktab\exceptions\InvalidUserTypeException.class
+ir\maktab\data\model\ConfirmationToken.class
 ir\maktab\config\SwaggerConfig.class
 ir\maktab\exceptions\SubServiceNotFoundException.class
 ir\maktab\dto\mapper\AddressMapper.class
@@ -91,6 +92,7 @@ ir\maktab\web\ExpertController.class
 ir\maktab\exceptions\UserByEmailExistException.class
 ir\maktab\dto\MainServiceDto$MainServiceDtoBuilder.class
 ir\maktab\service\VerifyCodeUserService.class
+ir\maktab\data\model\ConfirmationToken$ConfirmationTokenBuilder.class
 ir\maktab\service\CustomerService.class
 ir\maktab\data\model\Customer.class
 ir\maktab\exceptions\UserNotFoundException.class
@@ -102,6 +104,7 @@ ir\maktab\dto\OfferDto$OfferDtoBuilder.class
 ir\maktab\data\model\Commend$CommendBuilder.class
 ir\maktab\data\model\Address$AddressBuilder.class
 ir\maktab\data\model\VerifyCodeUser$VerifyCodeUserBuilder.class
+ir\maktab\data\dao\ConfirmationTokenDao.class
 ir\maktab\data\enums\OfferState.class
 ir\maktab\service\MainServicesService.class
 ir\maktab\data\model\Expert$ExpertBuilder.class

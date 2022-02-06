@@ -42,7 +42,7 @@ public class ExpertService {
 
     public void saveExpert(Expert expert) {
         if (expertDao.findByEmail(expert.getEmail()).isEmpty()) {
-            expert.setState(UserState.NOT_CONFIRMED);
+            expert.setState(UserState.NEW);
             expertDao.save(expert);
         } else {
             throw new UserByEmailExistException();

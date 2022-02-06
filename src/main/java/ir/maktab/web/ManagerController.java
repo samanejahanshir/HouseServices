@@ -80,7 +80,7 @@ public class ManagerController {
     }
 
     @PostMapping("/search")
-    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch, Model model, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate, HttpSession session) {
+    public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch, Model model, @RequestParam(value = "startDate",required = false) String startDate, @RequestParam(value = "endDate",required = false) String endDate, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
             try {
                 SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");

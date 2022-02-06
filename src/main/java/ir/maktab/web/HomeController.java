@@ -37,6 +37,10 @@ public class HomeController {
             model.addAttribute("message",session.getAttribute("error"));
             session.removeAttribute("error");
         }
+        if(session.getAttribute("messageSuccess")!=null){
+            model.addAttribute("message",session.getAttribute("messageSuccess"));
+            session.removeAttribute("messageSuccess");
+        }
             return "index";
     }
 

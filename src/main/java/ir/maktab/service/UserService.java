@@ -64,6 +64,18 @@ public class UserService {
         }
     }
 
+    public void updateUser(User user){
+        userDao.save(user);
+    }
+    public User getUserByEmail(String email){
+        Optional<User> optionalUser = userDao.findByEmail(email);
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        } else {
+            throw new UserNotFoundException();
+        }
+    }
+
     public List<UserDto> getUserByCondition(ConditionSearch condition) {
         if (condition != null) {
             if (condition.getOrderUser() != null && condition.getOrderUser().equals("expert")) {
