@@ -60,4 +60,8 @@ public class HomeController {
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return new ModelAndView(lastView, ex.getBindingResult().getModel());
     }
+    @RequestMapping("/Signin")
+    public String signIn(Model model) {
+        return "Login";
+    }
 }

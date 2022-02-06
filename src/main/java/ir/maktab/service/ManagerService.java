@@ -138,8 +138,8 @@ public class ManagerService {
         userDtos.forEach(userDto -> confirmUser(userDto.getId()));
     }
 
-    public Manager getManagerByNameAndPass(String userName, String password) {
-        Optional<Manager> managerOptional = managerDao.findByUserNameAndPassword(userName, password);
+    public Manager getManagerByEmailAndPass(String userName, String password) {
+        Optional<Manager> managerOptional = managerDao.findByEmailAndPassword(userName, password);
         if (managerOptional.isPresent()) {
             return managerOptional.get();
         } else {
@@ -152,7 +152,7 @@ public class ManagerService {
     }
 
     public void updatePassword(String email, String newPassword) {
-        Optional<Manager> optionalManager = managerDao.findByUserName(email);
+        Optional<Manager> optionalManager = managerDao.findByEmail(email);
         if (optionalManager.isPresent()) {
             Manager manager = optionalManager.get();
             manager.setPassword(newPassword);

@@ -14,11 +14,11 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Entity
 @Data
-public class Manager {
+public class Manager extends User{
     @Id
     @GeneratedValue
     private Integer id;
-    private String userName;
+    private String email;
     private String password;
 
 }

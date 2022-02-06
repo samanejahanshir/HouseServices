@@ -4,6 +4,7 @@ ir\maktab\data\model\MainServices$MainServicesBuilder.class
 ir\maktab\web\ManagerController.class
 ir\maktab\data\enums\UserType.class
 ir\maktab\config\SpringConfig.class
+ir\maktab\config\WebSecurityConfig.class
 ir\maktab\exceptions\OfferConflictByOtherException.class
 ir\maktab\data\dao\SubServiceDao.class
 ir\maktab\exceptions\InvalidFormatNameException.class
@@ -79,6 +80,7 @@ ir\maktab\service\validation\CheckValidation.class
 ir\maktab\data\model\Expert.class
 ir\maktab\exceptions\CustomerNotExistException.class
 ir\maktab\exceptions\CreditNotEnoughException.class
+ir\maktab\config\UserDetail.class
 ir\maktab\data\model\User.class
 ir\maktab\exceptions\MainServiceNotFoundException.class
 ir\maktab\service\ManagerService.class

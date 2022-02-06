@@ -1,7 +1,6 @@
 package ir.maktab.service;
 
 import ir.maktab.config.SpringConfig;
-import ir.maktab.data.model.Customer;
 import ir.maktab.data.model.Manager;
 import ir.maktab.dto.CustomerDto;
 import ir.maktab.dto.MainServiceDto;
@@ -103,18 +102,18 @@ public class ManagerServiceTest {
 
     @Test
     void getManagerTest() {
-        Manager manager = managerService.getManagerByNameAndPass("admin", "admin");
+        Manager manager = managerService.getManagerByEmailAndPass("admin", "admin");
         Assertions.assertNull(manager);
     }
 
-    @Test
+  /*  @Test
     void saveManagerTest() {
         Manager manager = Manager.builder()
                 .userName("admin")
                 .password("1234sd34A")
                 .build();
         managerService.saveManager(manager);
-    }
+    }*/
 
     @Test
     void deleteMainServicesTest() {

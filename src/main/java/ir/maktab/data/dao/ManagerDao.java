@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface ManagerDao extends JpaRepository<Manager, Integer> {
 
-    Optional<Manager> findByUserNameAndPassword(String userName, String password);
-    Optional<Manager> findByUserName(String userName);
+    Optional<Manager> findByEmailAndPassword(String email, String password);
+    Optional<Manager> findByEmail(String email);
 
 }

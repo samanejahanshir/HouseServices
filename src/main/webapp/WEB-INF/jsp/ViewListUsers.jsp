@@ -117,7 +117,9 @@
                     <td>${user.email}</td>
                     <td>${user.role}</td>
                     <td>${user.registerDate}</td>
+                    <c:if test="${user.role !='MANAGER'}">
                     <td><a href="/manager/viewOrders/${user.id}">order detail</a></td>
+                    </c:if>
                 </tr>
             </c:forEach>
         </table>

@@ -2,12 +2,12 @@ package ir.maktab.web;
 
 import com.wordnik.swagger.annotations.Api;
 import ir.maktab.config.LastViewInterceptor;
-import ir.maktab.data.enums.UserType;
 import ir.maktab.data.model.User;
 import ir.maktab.data.model.VerifyCodeUser;
 import ir.maktab.dto.*;
 import ir.maktab.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
@@ -48,11 +48,11 @@ public class ManagerController {
         model.addAttribute("role_user", "manager");
         return "Login";
     }
-
+  //  @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public String dologin(Model model, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
         try {
-            if (managerService.getManagerByNameAndPass(email, password) != null) {
+            if (managerService.getManagerByEmailAndPass(email, password) != null) {
                 session.setAttribute("emailManager", email);
                 return "managerPage";
             }
@@ -62,7 +62,7 @@ public class ManagerController {
         return "redirect:/index";
 
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/listUsers")
     public String viewListUsers(Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -78,7 +78,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @PostMapping("/search")
     public String searchUsers(@ModelAttribute("conditionSearch") ConditionSearch conditionSearch, Model model, @RequestParam(value = "startDate",required = false) String startDate, @RequestParam(value = "endDate",required = false) String endDate, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -112,7 +112,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/addMainService")
     public String addMainService(Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -132,7 +132,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping(value = "/saveMainService", method = RequestMethod.POST)
     public String saveMainService(@ModelAttribute("mainService") MainServiceDto mainServiceDto, Model model,HttpSession session) {
         try {
@@ -143,7 +143,7 @@ public class ManagerController {
         }
         return "redirect:/manager/addMainService";
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/addSubService")
     public String addSubService(Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -164,7 +164,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping(value = "/saveSubService", method = RequestMethod.POST)
     public String saveSubService(@ModelAttribute("subServiceDto") SubServiceDto subServiceDto, Model model,HttpSession session) {
         try {
@@ -175,7 +175,7 @@ public class ManagerController {
         }
         return "redirect:/manager/addSubService";
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/viewListMainServices")
     public String viewListMainServices(Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -189,7 +189,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/viewListSubServices/{groupName}")
     public String viewListSubServices(Model model, @PathVariable String groupName, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -210,7 +210,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/addExpertToServices/{service}")
     public String addExpertToServices(@PathVariable("service") String service, Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -224,7 +224,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping(value = "/saveExpertToServices/{service}", method = RequestMethod.POST)
     public String saveExpertToServices(@PathVariable("service") String service, Model model, @ModelAttribute("expert") ExpertDto expertDto, HttpSession session) {
         String groupName = "";
@@ -238,7 +238,7 @@ public class ManagerController {
         }
         return "redirect:/manager/viewListSubServices/" + groupName;
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/viewListNotConfirmUser")
     public String viewListNotConfirmUsers(Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -254,7 +254,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/confirmUser/{id}")
     public String confirmUser(@PathVariable int id, Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -266,7 +266,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+  //  @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/confirmAll")
     public String confirmAll(Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -285,13 +285,13 @@ public class ManagerController {
         session.removeAttribute("emailManager");
         return "redirect:/index";
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/changePass")
     public String changePass(Model model) {
         model.addAttribute("role_user", "manager");
         return "ChangePass";
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping(value = "/sendEmail", method = RequestMethod.POST)
     public String sendEmailForChangePass(@RequestParam("email") String inputEmail, Model model, HttpSession session) {
         String email = (String) session.getAttribute("emailManager");
@@ -314,7 +314,7 @@ public class ManagerController {
             return "ChangePass";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping(value = "/checkVerifyCode", method = RequestMethod.POST)
     public String checkVerifyCode(@RequestParam("code") int code, Model model, HttpSession session) {
         String email = (String) session.getAttribute("emailManager");
@@ -343,7 +343,7 @@ public class ManagerController {
             return code;
         }
     }
-
+  //  @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping(value = "/saveNewPass", method = RequestMethod.POST)
     public String saveNewPassword(Model model, HttpSession session, @RequestParam("password") String password, @RequestParam("re_password") String rePassword) {
         String email = (String) session.getAttribute("emailManager");
@@ -371,6 +371,7 @@ public class ManagerController {
        model.put("message", ex.getMessage());
        return new ModelAndView("AddMainServices", model);
    }*/
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping("/viewOrders/{id}")
     public String viewListOrderUser(@PathVariable("id") int id, Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -382,7 +383,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping(value = "/viewListAllOrders")
     public String viewListAllOrders(Model model, HttpSession session) {
         if (session.getAttribute("emailManager") != null) {
@@ -399,7 +400,7 @@ public class ManagerController {
             return "index";
         }
     }
-
+   // @PreAuthorize("hasAuthority('MANAGER')")
     @RequestMapping(value = "/searchOrders", method = RequestMethod.POST)
     public String searchOrdersByFilter(@ModelAttribute("orderSearch") OrdersSearch ordersSearch,@RequestParam("startDate")String startDate,@RequestParam("endDate")String endDate, Model model, HttpSession session) throws ParseException {
         SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
