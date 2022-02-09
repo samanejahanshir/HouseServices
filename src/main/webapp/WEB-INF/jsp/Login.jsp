@@ -20,7 +20,7 @@
     <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
 </div>
 <div class="container col-12">
-    <c:if test="${role_user.equals('customer')}">
+   <%-- <c:if test="${role_user.equals('customer')}">
     <form method="post" action="<c:url value="/customer/doLogin"/>">
         </c:if>
         <c:if test="${role_user.equals('expert')}">
@@ -29,8 +29,10 @@
             <c:if test="${role_user.equals('manager')}">
             <form method="post" action="<c:url value="/manager/doLogin"/>">
                 </c:if>
-                <h2>Sign in ${role_user}</h2>
-                <table class="table table-bordered table-striped table-primary text-dark">
+                <h2>Sign in ${role_user}</h2>--%>
+       <form method="post" action="<c:url value="/dologin"/>">
+
+       <table class="table table-bordered table-striped table-primary text-dark">
                     <tr>
                         <td>
                             <label>Email: :</label>

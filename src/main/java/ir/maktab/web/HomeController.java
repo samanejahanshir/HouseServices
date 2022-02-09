@@ -2,6 +2,9 @@ package ir.maktab.web;
 
 import com.wordnik.swagger.annotations.Api;
 import ir.maktab.config.LastViewInterceptor;
+import ir.maktab.data.enums.UserState;
+import ir.maktab.data.enums.UserType;
+import ir.maktab.data.model.User;
 import ir.maktab.dto.mapper.UserMapper;
 import ir.maktab.service.CustomerService;
 import ir.maktab.service.ExpertService;
@@ -13,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -60,8 +64,39 @@ public class HomeController {
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
         return new ModelAndView(lastView, ex.getBindingResult().getModel());
     }
-    @RequestMapping("/Signin")
-    public String signIn(Model model) {
+    @RequestMapping("/login")
+    public String login(Model model) {
         return "Login";
+    }
+
+    @RequestMapping("/dologin")
+    public String doLogin(Model model,@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
+        User user = userService.getUserByEmail(email);
+        if (user != null) {
+            if (user.getState().equals(UserState.CONFIRMED)) {
+                if(user.getRole().equals(UserType.CUSTOMER)){
+                    session.setAttribute("email", email);
+                    //return "redirect:/customer/home";
+                    return "CustomerPage";
+                }
+                else if(user.getRole().equals(UserType.EXPERT)){
+                    session.setAttribute("email", email);
+                    //return "redirect:/expert/home";
+                    return "ExpertPage";
+
+                }
+                else{
+                    session.setAttribute("emailManager", email);
+                    //return "redirect:/manager/home";
+                    return "managerPage";
+                }
+
+            } else {
+                session.setAttribute("error", "you are not confirm");
+                return "redirect:/index";
+            }
+        } else {
+            return "redirect:/index";
+        }
     }
 }

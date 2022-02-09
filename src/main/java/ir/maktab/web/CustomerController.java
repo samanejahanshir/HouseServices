@@ -38,7 +38,7 @@ public class CustomerController {
     final ConfirmationTokenDao confirmationTokenDao;
 
     @RequestMapping("/home")
-    public String homePageManager(Model model) {
+    public String homePageCustomer(Model model) {
         return "CustomerPage";
     }
 

@@ -46,7 +46,7 @@ public class ExpertController {
     }
 
     @RequestMapping("/home")
-    public String homePageManager(Model model) {
+    public String homePageExpert(Model model) {
         return "ExpertPage";
     }
 

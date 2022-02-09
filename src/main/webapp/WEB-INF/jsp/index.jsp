@@ -36,9 +36,10 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Sign
                 in</a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="<c:url value="/expert/Signin"/>">Sign in expert</a>
+               <%-- <a class="dropdown-item" href="<c:url value="/expert/Signin"/>">Sign in expert</a>
                 <a class="dropdown-item" href="<c:url value="/customer/Signin"/>">Sign in customer</a>
-                <a class="dropdown-item" href="<c:url value="/manager/Signin"/>">Sign in manager</a>
+                <a class="dropdown-item" href="<c:url value="/manager/Signin"/>">Sign in manager</a>--%>
+                   <a class="dropdown-item" href="<c:url value="/login"/>">Sign in</a>
 
             </div>
         </li>

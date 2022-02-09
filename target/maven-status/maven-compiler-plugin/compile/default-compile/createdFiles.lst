@@ -105,6 +105,7 @@ ir\maktab\dto\mapper\SubServiceMapper.class
 ir\maktab\dto\OfferDto$OfferDtoBuilder.class
 ir\maktab\data\model\Commend$CommendBuilder.class
 ir\maktab\data\model\Address$AddressBuilder.class
+ir\maktab\config\LoginSuccessHandler.class
 ir\maktab\data\model\VerifyCodeUser$VerifyCodeUserBuilder.class
 ir\maktab\data\dao\ConfirmationTokenDao.class
 ir\maktab\data\enums\OfferState.class
