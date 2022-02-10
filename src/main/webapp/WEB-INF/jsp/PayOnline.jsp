@@ -141,9 +141,9 @@
     }
 
     function  check_number(){
-        var cart=document.getElementById("cart").value;
-       var number= cart.substring(6,-16);
-       var bank=document.getElementById("bank");
+        let cart=document.getElementById("cart").value;
+       let number= cart.substr(0,6);
+       let bank=document.getElementById("bank");
        if(number==="603799"){
            bank.innerText="bank meli";
            alert("melli")

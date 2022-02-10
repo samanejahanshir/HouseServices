@@ -76,19 +76,19 @@ public class HomeController {
             if (user.getState().equals(UserState.CONFIRMED)) {
                 if(user.getRole().equals(UserType.CUSTOMER)){
                     session.setAttribute("email", email);
-                    //return "redirect:/customer/home";
-                    return "CustomerPage";
+                    return "redirect:/customer/home";
+                    //return "CustomerPage";
                 }
                 else if(user.getRole().equals(UserType.EXPERT)){
                     session.setAttribute("email", email);
-                    //return "redirect:/expert/home";
-                    return "ExpertPage";
+                    return "redirect:/expert/home";
+                   // return "ExpertPage";
 
                 }
                 else{
                     session.setAttribute("emailManager", email);
-                    //return "redirect:/manager/home";
-                    return "managerPage";
+                    return "redirect:/manager/home";
+                   // return "managerPage";
                 }
 
             } else {
@@ -98,5 +98,10 @@ public class HomeController {
         } else {
             return "redirect:/index";
         }
+    }
+
+    @RequestMapping("/error")
+    public String errorPage(){
+        return "errorPage";
     }
 }

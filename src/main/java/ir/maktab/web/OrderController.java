@@ -3,12 +3,14 @@ package ir.maktab.web;
 import com.wordnik.swagger.annotations.Api;
 import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.enums.OrderState;
+import ir.maktab.data.model.PaymentHistory;
 import ir.maktab.dto.Cart;
 import ir.maktab.dto.MainServiceDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.SubServiceDto;
 import ir.maktab.service.MainServicesService;
 import ir.maktab.service.OrderService;
+import ir.maktab.service.PaymentHistoryService;
 import ir.maktab.service.SubServicesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -34,9 +36,20 @@ public class OrderController {
     final SubServicesService service;
     final SubServicesService subServices;
     final MainServicesService mainServices;
+    final PaymentHistoryService paymentHistoryService;
 
     @RequestMapping("/allOrders")
     public String displayListOrders(Model model, HttpSession session) {
+        if (session.getAttribute("messageSuccess") != null) {
+            String message = (String) session.getAttribute("messageSuccess");
+            model.addAttribute("message", message);
+            session.removeAttribute("messageSuccess");
+        }
+        if (session.getAttribute("error") != null) {
+            String message = (String) session.getAttribute("error");
+            model.addAttribute("message", message);
+            session.removeAttribute("error");
+        }
         String email = (String) session.getAttribute("email");
         List<OrderDto> orderDtoList = orderService.getListOrders(email);
         model.addAttribute("listOrdersDto", orderDtoList);
@@ -190,6 +203,12 @@ public class OrderController {
         if (session.getAttribute("email") != null) {
             orderService.updateOrderState(orderId, OrderState.DONE);
             session.setAttribute("messageSuccess", "work done.");
+            try {
+                orderService.updateOrderStateToPaidByCredit(orderId);
+                session.setAttribute("messageSuccess", "The payment was success.");
+            } catch (RuntimeException e) {
+                session.setAttribute("error", e.getMessage());
+            }
             return "redirect:/order/select/" + orderId;
         } else {
             model.addAttribute("message", "you should login");
@@ -201,7 +220,9 @@ public class OrderController {
     public String paymentByCreditForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             try {
+                String email=(String) session.getAttribute("email");
                 orderService.updateOrderStateToPaidByCredit(orderId);
+                paymentHistoryService.save(orderId,email,"ByCredit");
                 session.setAttribute("messageSuccess", "The payment was success.");
             } catch (RuntimeException e) {
                 session.setAttribute("error", e.getMessage());
@@ -230,6 +251,8 @@ public class OrderController {
     public String paymentOnlineDone(Model model, HttpSession session, @ModelAttribute("cart") @Validated Cart cart) {
         try {
             orderService.updateOrderStateToPaidOnline(cart.getIdOrder());
+            String email=(String) session.getAttribute("email");
+            paymentHistoryService.save(cart.getIdOrder(),email,"PayOnline");
             session.setAttribute("messageSuccess", "payment was successfully");
         } catch (RuntimeException e) {
             session.setAttribute("error", e.getMessage());

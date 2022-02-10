@@ -85,7 +85,7 @@
                     </form:select>
 
                 </td>
-                <td>
+               <%-- <td>
                     <br/>
                     count add order(customer):<form:radiobutton path="orderUser" value="customer"/>
                 </td>
@@ -93,7 +93,7 @@
                     <br/>
                     count done order(expert):<form:radiobutton path="orderUser" value="expert"/>
 
-                </td>
+                </td>--%>
                 <td>
                     <br/>
                     <form:button name="search">Search</form:button>

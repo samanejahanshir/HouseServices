@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class UserDetail implements UserDetailsService {
+public class MyUserDetail implements UserDetailsService {
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
 
