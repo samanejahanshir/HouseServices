@@ -56,7 +56,7 @@
                 <td>${service.basePrice}</td>
                 <td>${service.description}</td>
                 <c:if test="${role_user.equals('customer')}">
-                    <td><a href="/order/addNewOrder/${service.name}">New Order</a></td>
+                    <td><a href="/customer/order/addNewOrder/${service.name}">New Order</a></td>
                 </c:if>
                 <c:if test="${role_user.equals('expert')}">
                     <td><a href="/expert/addSubServiceToList/${service.name}">add to my list subservice</a></td>

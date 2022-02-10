@@ -22,7 +22,7 @@
 </div>
 <div class="container col-12">
     <p id="timertag"></p>
-    <form:form cssClass="p-1 my-5 mx-5" method="post" action="/order/paymentOnline"
+    <form:form cssClass="p-1 my-5 mx-5" method="post" action="/customer/order/paymentOnline"
                modelAttribute="cart">
         <h2 style="text-justify: distribute-center-last">Add Order</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
@@ -137,7 +137,7 @@
     var timer = null;
 
     function auto_reload() {
-        window.location = '/order/allOrders';
+        window.location = '/customer/order/allOrders';
     }
 
     function  check_number(){

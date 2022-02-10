@@ -62,10 +62,10 @@
                     <td><a href="/expert/addOffer/${order.id}">add offer</a></td>
                 </c:if>
                 <c:if test="${typeList=='workList'}">
-                    <td><a href="/order/select/${order.id}">select</a></td>
+                    <td><a href="/expert/order/select/${order.id}">select</a></td>
                 </c:if>
                 <c:if test="${typeList=='historyList'}">
-                    <td><a href="/order/showScore/${order.id}">show score</a></td>
+                    <td><a href="/expert/order/showScore/${order.id}">show score</a></td>
                 </c:if>
             </tr>
         </c:forEach>

@@ -40,7 +40,7 @@
 --%>
 
 <div class="container col-12">
-    <form:form cssClass="p-1 my-5 mx-5" method="post" action="/order/saveOrder"
+    <form:form cssClass="p-1 my-5 mx-5" method="post" action="/customer/order/saveOrder"
                modelAttribute="orderDto" onsubmit="return checkPostalCode(this);">
         <h2 style="text-justify: distribute-center-last">Add Order</h2>
         <table class="table table-bordered table-striped table-primary text-dark">

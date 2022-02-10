@@ -21,13 +21,13 @@
 <div class="container col-12">
     <div class="card" style="width: 18rem;">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="/order/allOrders">View All Orders</a></li>
-            <li class="list-group-item"><a href="/order/newOrders">View New Orders</a></li>
+            <li class="list-group-item"><a href="/customer/order/allOrders">View All Orders</a></li>
+            <li class="list-group-item"><a href="/customer/order/newOrders">View New Orders</a></li>
             <li class="list-group-item"><a href="/customer/viewInformation">View Information</a></li>
             <li class="list-group-item"><a href="/customer/viewListServices">View List Services</a></li>
             <li class="list-group-item"><a href="/customer/incrementCredit">Increment Credit</a></li>
             <li class="list-group-item"><a href="/customer/changePass">Change Password</a></li>
-            <li class="list-group-item"><a href="/order/addNewOrder">Add New Order</a></li>
+            <li class="list-group-item"><a href="/customer/order/addNewOrder">Add New Order</a></li>
             <li class="list-group-item"><a href="/customer/paymentHistory">Payment History</a></li>
             <li class="list-group-item"><a href="/customer/logout">Log Out</a></li>
 

@@ -40,7 +40,7 @@
 --%>
 
 <div class="container col-12">
-    <form:form cssClass="text-center" modelAttribute="orderDto" action="/order/search" method="post">
+    <form:form cssClass="text-center" modelAttribute="orderDto" action="/customer/order/search" method="post">
         <table class="table table-striped table-primary text-dark table-hover">
             <tr>
                 <td>
@@ -66,7 +66,7 @@
 
     <c:if test="${select==true}">
 
-        <form:form cssClass="text-center" modelAttribute="orderDto" action="/order/saveNewOrder" method="post"
+        <form:form cssClass="text-center" modelAttribute="orderDto" action="/customer/order/saveNewOrder" method="post"
                    onsubmit="return checkPostalCode(this);">
             <table class="table table-striped table-primary text-dark table-hover">
                 <tr>
@@ -171,14 +171,14 @@
     </c:if>
 
 
-    <form:form cssClass="p-1 my-5 mx-5" method="post" action="/order/saveOrder"
+   <%-- <form:form cssClass="p-1 my-5 mx-5" method="post" action="/customer/order/saveOrder"
                modelAttribute="orderDto" onsubmit="return checkPostalCode(this);">
         <h2 style="text-justify: distribute-center-last">Add Order</h2>
         <table class="table table-bordered table-striped table-primary text-dark">
 
 
         </table>
-    </form:form>
+    </form:form>--%>
 </div>
 <footer class=" w-100 footer-no-nav navbar-fixed-bottom border border-primary text-center text-lg-start text-primary mt-2">
     <div class="w-100" style="background-color: #adc4fc;height: 50px;">Home Services</div>

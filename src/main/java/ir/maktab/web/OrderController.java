@@ -27,7 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@RequestMapping("/order")
 @Controller
 @RequiredArgsConstructor
 @Api(tags = "this is order controller for handle orders by customer and expert")
@@ -38,7 +37,7 @@ public class OrderController {
     final MainServicesService mainServices;
     final PaymentHistoryService paymentHistoryService;
 
-    @RequestMapping("/allOrders")
+    @RequestMapping("/customer/order/allOrders")
     public String displayListOrders(Model model, HttpSession session) {
         if (session.getAttribute("messageSuccess") != null) {
             String message = (String) session.getAttribute("messageSuccess");
@@ -56,7 +55,7 @@ public class OrderController {
         return "ViewOrdersCustomer";
     }
 
-    @RequestMapping("/newOrders")
+    @RequestMapping("/customer/order/newOrders")
     public String displayNewOrders(Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             String email = (String) session.getAttribute("email");
@@ -80,7 +79,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping("/addNewOrder/{name}")
+    @RequestMapping("/customer/order/addNewOrder/{name}")
     public String addNewOrder(@PathVariable("name") String nameService, Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             session.setAttribute("subService", nameService);
@@ -92,7 +91,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping("/addNewOrder")
+    @RequestMapping("/customer/order/addNewOrder")
     public String addNewOrderCustomer(Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             model.addAttribute("orderDto", new OrderDto());
@@ -105,7 +104,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @RequestMapping(value = "/customer/order/search", method = RequestMethod.POST)
     public String searchSubServices(@ModelAttribute("orderDto") OrderDto orderDto, Model model, HttpSession session) {
         List<SubServiceDto> listSubService = subServices.getListSubService(orderDto.getSubServiceDto().getGroupName());
         model.addAttribute("subServiceDtoList", listSubService);
@@ -115,7 +114,7 @@ public class OrderController {
         return "AddNewOrder";
     }
 
-    @RequestMapping(value = "/saveNewOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "/customer/order/saveNewOrder", method = RequestMethod.POST)
     public String saveNewOrder(@ModelAttribute("orderDto") @Validated OrderDto orderDto, @RequestParam("orderDate") String date, HttpSession session, Model model) throws ParseException {
         String email = (String) session.getAttribute("email");
         SimpleDateFormat outSDF = new SimpleDateFormat("yyyy-MM-dd");
@@ -126,7 +125,7 @@ public class OrderController {
         return "CustomerPage";
     }
 
-    @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "/customer/order/saveOrder", method = RequestMethod.POST)
     public String saveNewOrderFromServiceInSession(@ModelAttribute("orderDto") @Validated OrderDto orderDto, @RequestParam("orderDate") String date, HttpSession session, Model model) throws ParseException {
         String email = (String) session.getAttribute("email");
         String subService = (String) session.getAttribute("subService");
@@ -140,7 +139,7 @@ public class OrderController {
         return "CustomerPage";
     }
 
-    @RequestMapping(value = "/allOrdersExpert")
+    @RequestMapping(value = "/expert/order/allOrdersExpert")
     public String viewAllOrderOfExpert(Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             String email = (String) session.getAttribute("email");
@@ -154,7 +153,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping(value = "/listWorks")
+    @RequestMapping(value = "/expert/order/listWorks")
     public String viewListWorkOfExpert(Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             String email = (String) session.getAttribute("email");
@@ -168,7 +167,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping("/select/{orderId}")
+    @RequestMapping("/expert/order/select/{orderId}")
     public String selectWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             OrderDto orderDto = orderService.getOrderById(orderId);
@@ -186,7 +185,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping("/startWork/{orderId}")
+    @RequestMapping("/expert/order/startWork/{orderId}")
     public String startWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             orderService.updateOrderState(orderId, OrderState.STARTED);
@@ -198,7 +197,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping("/endWork/{orderId}")
+    @RequestMapping("/expert/order/endWork/{orderId}")
     public String endWorkByExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             orderService.updateOrderState(orderId, OrderState.DONE);
@@ -216,7 +215,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping("/payByCredit/{orderId}")
+    @RequestMapping("/customer/order/payByCredit/{orderId}")
     public String paymentByCreditForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             try {
@@ -234,7 +233,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping("/payOnline/{orderId}")
+    @RequestMapping("/customer/order/payOnline/{orderId}")
     public String paymentOnlineForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             OrderDto orderDto = orderService.getOrderById(orderId);
@@ -247,7 +246,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping(value = "/paymentOnline", method = RequestMethod.POST)
+    @RequestMapping(value = "/customer/order/paymentOnline", method = RequestMethod.POST)
     public String paymentOnlineDone(Model model, HttpSession session, @ModelAttribute("cart") @Validated Cart cart) {
         try {
             orderService.updateOrderStateToPaidOnline(cart.getIdOrder());
@@ -260,7 +259,7 @@ public class OrderController {
         return "redirect:/order/allOrders";
     }
 
-    @RequestMapping("/showScore/{orderId}")
+    @RequestMapping("/expert/order/showScore/{orderId}")
     public String showScoreOrderForExpert(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             try {
@@ -282,7 +281,7 @@ public class OrderController {
         return "errorPage";
     }*/
 
-    @RequestMapping("/historyWorks")
+    @RequestMapping("/expert/order/historyWorks")
     public String showHistoryWorks(Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             String email = (String) session.getAttribute("email");
