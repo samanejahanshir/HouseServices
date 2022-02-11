@@ -426,7 +426,7 @@ public class ManagerController {
     public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request, Model model) {
 //        String referer = request.getHeader("Referer");
         String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
-        model.addAttribute("message", ex.getMessage());
+      //  model.addAttribute("message", ex.getMessage());
         return new ModelAndView(lastView, ex.getBindingResult().getModel());
     }
 }

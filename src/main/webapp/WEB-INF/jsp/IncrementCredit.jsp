@@ -38,10 +38,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="number"/>
-                        <%--
-                                            <label id="cart_error"></label>
-                        --%>
+                    <form:errors path="number" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -56,11 +53,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="cvv2"/>
-
-                        <%--
-                                            <label id="cvv2_error"></label>
-                        --%>
+                    <form:errors path="cvv2" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -78,13 +71,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="year"/> <form:errors path="month"/>
-
-
-                        <%--
-                                            <label id="year_error"></label> <label id="month_error"></label>
-                        --%>
-
+                    <form:errors path="year" cssClass="text-danger"/> <form:errors path="month" cssClass="text-danger"/>
                 </td>
             </tr>
             <tr>
@@ -99,11 +86,7 @@
                 <td>
                 </td>
                 <td>
-                    <form:errors path="password"/>
-
-                        <%--
-                                            <label id="pass_error"></label>
-                        --%>
+                    <form:errors path="password" cssClass="text-danger"/>
                 </td>
             </tr>
 
@@ -136,7 +119,7 @@
     function auto_reload() {
         window.location = '/customer/home';
     }
-    /*function myTimer() {
+   /* function myTimer() {
 
         var time=new Date();
         document.getElementById("timer").innerText=(d.getTime()-time.getTime()).toString();

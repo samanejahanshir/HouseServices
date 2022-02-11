@@ -1,16 +1,17 @@
 package ir.maktab.web;
 
 import com.wordnik.swagger.annotations.Api;
+import ir.maktab.config.LastViewInterceptor;
 import ir.maktab.data.model.Commend;
 import ir.maktab.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RequestMapping("/commend")
@@ -45,5 +46,11 @@ public class CommendController {
             session.setAttribute("error", e.getMessage());
         }
         return "redirect:/commend/addCommend/" + id;
+    }
+    @ExceptionHandler(value = BindException.class)
+    public ModelAndView bindExceptionHandler(BindException ex, HttpServletRequest request) {
+//        String referer = request.getHeader("Referer");
+        String lastView = (String) request.getSession().getAttribute(LastViewInterceptor.LAST_VIEW_ATTRIBUTE);
+        return new ModelAndView(lastView, ex.getBindingResult().getModel());
     }
 }

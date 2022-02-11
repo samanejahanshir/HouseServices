@@ -79,7 +79,6 @@
             </tr>
             <tr>
                 <td>
-                    <label>password :</label>
                 </td>
                 <td>
                     <form:errors path="password" cssClass="text-danger"/>

@@ -114,7 +114,7 @@
                     <td>
                     </td>
                     <td>
-                        <form:errors path="orderDoingTime"/>
+                        <form:errors path="orderDoingTime" cssClass="text-danger"/>
                     </td>
                 </tr>
 

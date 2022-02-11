@@ -16,7 +16,7 @@
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
 </head>
-<body onload="timer=setTimeout('auto_reload()',600000)">
+<body onload="timer=setTimeout('auto_reload()',600000)" style="background-color: #c3e7f8">
 <div class="w-100 " style="height: 20px">
     <p style="margin-left: 10px; margin-top: 5px;">${message}</p>
 </div>

@@ -40,7 +40,7 @@
     <table class="table table-striped table-primary text-dark table-hover">
         <tr>
             <th>Id</th>
-            <th>order uuid</th>
+            <th>order id</th>
             <th>expert</th>
             <th>date</th>
             <th>type</th>

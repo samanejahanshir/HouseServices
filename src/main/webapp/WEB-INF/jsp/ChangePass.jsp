@@ -10,7 +10,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-    <title>Change pass</title>
+    <title>Change password</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
@@ -65,7 +65,8 @@
                         <td>
                         </td>
                         <td>
-                            <input type="submit" value="send code to email for change password">
+                            <input type="submit" value="send code to email for change password" class="btn btn-primary btn-group"
+                                  >
                         </td>
                     </tr>
                 </table>
