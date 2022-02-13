@@ -176,6 +176,10 @@ public class OrderController {
                 message = (String) session.getAttribute("messageSuccess");
                 session.removeAttribute("messageSuccess");
             }
+            if (session.getAttribute("error") != null) {
+                message = (String) session.getAttribute("error");
+                session.removeAttribute("error");
+            }
             model.addAttribute("orderDto", orderDto);
             model.addAttribute("message", message);
             return "SelectOrderToWorking";
@@ -206,7 +210,7 @@ public class OrderController {
                 orderService.updateOrderStateToPaidByCredit(orderId);
                 session.setAttribute("messageSuccess", "The payment was success.");
             } catch (RuntimeException e) {
-                session.setAttribute("error", e.getMessage());
+                session.setAttribute("error", e.getMessage()+" customer should pay online");
             }
             return "redirect:/expert/order/select/" + orderId;
         } else {
@@ -224,7 +228,7 @@ public class OrderController {
                 paymentHistoryService.save(orderId,email,"ByCredit");
                 session.setAttribute("messageSuccess", "The payment was success.");
             } catch (RuntimeException e) {
-                session.setAttribute("error", e.getMessage());
+                session.setAttribute("error", "your credit not enough");
             }
             return "redirect:/customer/order/allOrders";
         } else {
@@ -236,7 +240,10 @@ public class OrderController {
     @RequestMapping("/customer/order/payOnline/{orderId}")
     public String paymentOnlineForEndingWork(@PathVariable("orderId") int orderId, Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
-            OrderDto orderDto = orderService.getOrderById(orderId);
+            if(orderId!=0) {
+                session.setAttribute("orderId",orderId);
+            }
+            OrderDto orderDto = orderService.getOrderById((int)session.getAttribute("orderId"));
             model.addAttribute("orderDto", orderDto);
             model.addAttribute("cart", new Cart());
             return "PayOnline";
@@ -253,6 +260,7 @@ public class OrderController {
             String email=(String) session.getAttribute("email");
             paymentHistoryService.save(cart.getIdOrder(),email,"PayOnline");
             session.setAttribute("messageSuccess", "payment was successfully");
+            session.removeAttribute("orderId");
         } catch (RuntimeException e) {
             session.setAttribute("error", e.getMessage());
         }

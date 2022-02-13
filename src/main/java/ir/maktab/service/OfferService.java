@@ -6,6 +6,7 @@ import ir.maktab.data.enums.OfferState;
 import ir.maktab.data.enums.OrderState;
 import ir.maktab.data.model.Expert;
 import ir.maktab.data.model.Offer;
+import ir.maktab.data.model.Orders;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OrderDto;
 import ir.maktab.dto.mapper.OfferMapper;
@@ -78,8 +79,10 @@ public class OfferService {
                     Offer offer = offerMapper.toEntity(offerDto);
                     offer.setState(OfferState.NEW);
                     offerDao.save(offer);
-                    offerDto.getOrderDto().setState(OrderState.WAIT_SELECT_EXPERT);
-                    orderService.getOrderDao().save(orderService.getOrderMapper().toEntity(offerDto.getOrderDto()));
+                   // offerDto.getOrderDto().setState(OrderState.WAIT_SELECT_EXPERT);
+                    Orders order = orderService.getOrderMapper().toEntity(offerDto.getOrderDto());
+                    order.setState(OrderState.WAIT_SELECT_EXPERT);
+                    orderService.getOrderDao().save(order);
                 } else {
                     throw new InvalidPriceException();
                 }
