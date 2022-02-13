@@ -31,14 +31,15 @@ import java.util.stream.Collectors;
 @Data
 public class ExpertService {
     final ExpertDao expertDao;
-    final OrderDao orderDao;
-    final SubServiceDao subServiceDao;
+    //final OrderDao orderDao;
+   // final SubServiceDao subServiceDao;
    // final OfferDao offerDao;
-    final CustomerDao customerDao;
+   // final CustomerDao customerDao;
     final ExpertMapper expertMapper;
+    final SubServicesService subServicesService;
    // final OfferMapper offerMapper;
-    final OrderMapper orderMapper;
-    final SubServiceMapper subServiceMapper;
+   // final OrderMapper orderMapper;
+    //final SubServiceMapper subServiceMapper;
 
     public void saveExpert(Expert expert) {
         if (expertDao.findByEmail(expert.getEmail()).isEmpty()) {
@@ -86,7 +87,7 @@ public class ExpertService {
     @Transactional
     public void addSubServiceToExpertList(String email, String subService) {
         Expert expert = getExpertByEmail(email);
-        Optional<SubServices> subServicesOptional = subServiceDao.findByName(subService);
+        Optional<SubServices> subServicesOptional = subServicesService.getSubServices().findByName(subService);
         if (subServicesOptional.isPresent() && expert != null) {
             SubServices subServices = subServicesOptional.get();
             if (expert.getServices() != null) {
@@ -107,7 +108,7 @@ public class ExpertService {
     //TODO
     @Transactional
     public void deleteSubServiceFromExpert(String email, String subService) {
-        Optional<SubServices> subServicesOptional = subServiceDao.findByName(subService);
+        Optional<SubServices> subServicesOptional =subServicesService.getSubServices().findByName(subService);
         Expert expert = getExpertByEmail(email);
         if (subServicesOptional.isPresent() && expert != null) {
             expert.getServices().remove(subServicesOptional.get());
@@ -143,9 +144,9 @@ public class ExpertService {
         }
     }
 */
-    public void updateOrderState(int idOrder, OrderState state) {
+  /*  public void updateOrderState(int idOrder, OrderState state) {
         orderDao.updateOrderState(idOrder, state);
-    }
+    }*/
 
     public List<ExpertDto> getExpertsByCondition(ConditionSearch condition) {
         List<Expert> userList = expertDao.findAll(ExpertDao.selectByCondition(condition));
@@ -160,7 +161,7 @@ public class ExpertService {
     public ExpertDto getInformation(String email) {
         Expert expert = getExpertByEmail(email);
         ExpertDto expertDto = expertMapper.toDto(expert);
-        List<SubServiceDto> serviceDtos = expert.getServices().stream().map(subServiceMapper::toDto).collect(Collectors.toList());
+        List<SubServiceDto> serviceDtos = expert.getServices().stream().map(subServicesService.getSubServiceMapper()::toDto).collect(Collectors.toList());
         expertDto.setSubServiceDto(serviceDtos);
         return expertDto;
     }

@@ -30,18 +30,18 @@ public class UserService {
     private final UserDao userDao;
     private final ExpertService expertService;
     private final CustomerService customerService;
-    private final ExpertMapper expertMapper;
-    private final CustomerMapper customerMapper;
+   // private final ExpertMapper expertMapper;
+   // private final CustomerMapper customerMapper;
     private final UserMapper userMapper;
 
     public void saveExpert(ExpertDto expertDto) {
-        Expert expert = expertMapper.toEntity(expertDto);
+        Expert expert = expertService.getExpertMapper().toEntity(expertDto);
         expert.setRole(UserType.EXPERT);
         expertService.saveExpert(expert);
     }
 
     public void saveCustomer(CustomerDto customerDto) {
-        Customer customer = customerMapper.toEntity(customerDto);
+        Customer customer = customerService.getCustomerMapper().toEntity(customerDto);
         customer.setRole(UserType.CUSTOMER);
         customerService.saveCustomer(customer);
     }
@@ -106,7 +106,7 @@ public class UserService {
             return expertDtoList.stream().map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
         }else {
             List<Expert> expertList = expertService.getExpertDao().findAll();
-          return   expertList.stream().map(expertMapper::toDto).map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
+          return   expertList.stream().map(expertService.getExpertMapper()::toDto).map(userMapper::expertDtoToUserDto).collect(Collectors.toList());
         }
     }
 }

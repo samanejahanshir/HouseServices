@@ -26,27 +26,30 @@ import java.util.stream.Collectors;
 @Data
 public class ManagerService {
     private final ManagerDao managerDao;
-    private final SubServiceDao servicesDao;
-    private final MainServiceDao mainServiceDao;
-    private final ExpertDao expertDao;
-    private final UserDao userDao;
-    private final SubServiceMapper subServiceMapper;
-    private final MainServiceMapper mainServiceMapper;
-    private final UserMapper userMapper;
-    private final CustomerMapper customerMapper;
+    //private final SubServiceDao servicesDao;
+    //private final MainServiceDao mainServiceDao;
+   // private final ExpertDao expertDao;
+   // private final UserDao userDao;
+    //private final SubServiceMapper subServiceMapper;
+    //private final MainServiceMapper mainServiceMapper;
+    //private final UserMapper userMapper;
+    //private final CustomerMapper customerMapper;
+    private  final  ExpertService expertService;
     private final CustomerService customerService;
+    final MainServicesService mainServicesService;
+    final  SubServicesService subServicesService;
     private final UserService userService;
 
 
 
     public void saveSubService(SubServiceDto subServiceDto) {
-        Optional<MainServices> mainServiceOptional = mainServiceDao.findByGroupName(subServiceDto.getGroupName());
+        Optional<MainServices> mainServiceOptional =mainServicesService.getMainServiceDao().findByGroupName(subServiceDto.getGroupName());
         if (mainServiceOptional.isPresent()) {
             MainServices mainServices = mainServiceOptional.get();
-            if (servicesDao.findByName(subServiceDto.getName()).isEmpty()) {
-                SubServices subServices = subServiceMapper.toEntity(subServiceDto);
+            if (subServicesService.getSubServices().findByName(subServiceDto.getName()).isEmpty()) {
+                SubServices subServices = subServicesService.getSubServiceMapper().toEntity(subServiceDto);
                 subServices.setMainServices(mainServices);
-                servicesDao.save(subServices);
+               subServicesService.getSubServices().save(subServices);
             } else {
                 throw new SubServiceDuplicateException();
             }
@@ -57,56 +60,56 @@ public class ManagerService {
 
     @Transactional
     public void deleteMainServices(String groupName) {
-        List<SubServices> subServicesList = servicesDao.findAllByMainServices_GroupName(groupName);
-        List<Expert> experts = expertDao.getListExpertByGroupName(groupName);
+        List<SubServices> subServicesList = subServicesService.getSubServices().findAllByMainServices_GroupName(groupName);
+        List<Expert> experts = expertService.getExpertDao().getListExpertByGroupName(groupName);
         for (Expert expert : experts) {
             expert.getServices().removeAll(expert.getServices().stream().filter(subServices -> subServices.getMainServices().getGroupName().equals(groupName)).collect(Collectors.toList()));
         }
-        expertDao.saveAll(experts);
-        servicesDao.deleteAll(subServicesList);
-        mainServiceDao.deleteByGroupName(groupName);
+        expertService.getExpertDao().saveAll(experts);
+        subServicesService.getSubServices().deleteAll(subServicesList);
+        mainServicesService.getMainServiceDao().deleteByGroupName(groupName);
     }
 
     @Transactional
     public void deleteSubServices(String subServices) {
         //TODO delete from expert list
-        Optional<SubServices> subServiceOptional = servicesDao.findByName(subServices);
+        Optional<SubServices> subServiceOptional = subServicesService.getSubServices().findByName(subServices);
         if (subServiceOptional.isPresent()) {
             SubServices subService = subServiceOptional.get();
-            List<Expert> experts = expertDao.getListExpertBySubServiceName(subServices);
+            List<Expert> experts = expertService.getExpertDao().getListExpertBySubServiceName(subServices);
             for (Expert expert : experts) {
                 expert.getServices().remove(subService);
             }
-            expertDao.saveAll(experts);
-            servicesDao.delete(subService);
+            expertService.getExpertDao().saveAll(experts);
+            subServicesService.getSubServices().delete(subService);
         } else {
             throw new SubServiceNotFoundException();
         }
     }
 
     public void saveMainServiceToDb(MainServiceDto mainServiceDto) {
-        Optional<MainServices> mainServiceOptional = mainServiceDao.findByGroupName(mainServiceDto.getGroupName());
+        Optional<MainServices> mainServiceOptional = mainServicesService.getMainServiceDao().findByGroupName(mainServiceDto.getGroupName());
         if (mainServiceOptional.isEmpty()) {
-            MainServices mainServices = mainServiceMapper.toEntity(mainServiceDto);
-            mainServiceDao.save(mainServices);
+            MainServices mainServices = mainServicesService.getMainServiceMapper().toEntity(mainServiceDto);
+            mainServicesService.getMainServiceDao().save(mainServices);
         } else {
             throw new MainServiceDuplicateException();
         }
     }
 
     public List<UserDto> getListUsers() {
-        List<User> users = userDao.findAll();
-        return users.stream().map(userMapper::toDto).collect(Collectors.toList());
+        List<User> users = userService.getUserDao().findAll();
+        return users.stream().map(userService.getUserMapper()::toDto).collect(Collectors.toList());
     }
 
     public List<CustomerDto> getListCustomerNoConfirm() {
         List<Customer> customers = customerService.getCustomerDao().findByStateEquals(UserState.NOT_CONFIRMED);
-        return customers.stream().map(customerMapper::toDto).collect(Collectors.toList());
+        return customers.stream().map(customerService.getCustomerMapper()::toDto).collect(Collectors.toList());
     }
 
     public List<UserDto> getListUserNoConfirm() {
-        List<User> users = userDao.findByStateEquals(UserState.NOT_CONFIRMED);
-        return users.stream().map(userMapper::toDto).collect(Collectors.toList());
+        List<User> users = userService.getUserDao().findByStateEquals(UserState.NOT_CONFIRMED);
+        return users.stream().map(userService.getUserMapper()::toDto).collect(Collectors.toList());
     }
 
     public void confirmCustomer(CustomerDto customerDto) {
@@ -124,7 +127,7 @@ public class ManagerService {
         User user = userService.getUserById(id);
         if (user != null) {
             user.setState(UserState.CONFIRMED);
-            userDao.save(user);
+            userService.getUserDao().save(user);
         } else {
             throw new CustomerNotExistException();
         }

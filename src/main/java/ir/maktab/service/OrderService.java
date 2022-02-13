@@ -39,7 +39,7 @@ public class OrderService {
     final CustomerService customerService;
     final ExpertService expertService;
     final OfferDao offerDao;
-    final CustomerMapper customerMapper;
+   // final CustomerMapper customerMapper;
     final CommendService commendService;
     final CommendMapper commendMapper;
     final UserService userService;
@@ -50,7 +50,7 @@ public class OrderService {
         Customer customer = customerService.getCustomerByEmail(email);
         Optional<SubServices> subServicesOptional = subServiceDao.findByName(orderDto.getSubServiceDto().getName());
         if (subServicesOptional.isPresent() && customer != null) {
-            orderDto.setCustomerDto(customerMapper.toDto(customer));
+            orderDto.setCustomerDto(customerService.getCustomerMapper().toDto(customer));
             Orders orders = orderMapper.toEntity(orderDto);
             orders.setUuid(UUID.randomUUID().toString());
             orders.setState(OrderState.WAIT_OFFER_EXPERTS);

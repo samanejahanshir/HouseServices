@@ -46,7 +46,7 @@ public class ExpertServiceTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        SubServices subServices = managerService.getServicesDao().findByName("nama kari").get();
+        SubServices subServices = managerService.getSubServicesService().getSubServices().findByName("nama kari").get();
         Expert expert = Expert.builder()
                 .firstName("ali")
                 .lastName("rezaii")
@@ -153,10 +153,10 @@ public class ExpertServiceTest {
         }
     }*/
 
-    @Test
+  /*  @Test
     void updateOrderStateTest() {
         expertService.updateOrderState(2, OrderState.DONE);
-    }
+    }*/
 
     @Test
     void getUsersByCondition_BySubServiceName() {
