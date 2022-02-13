@@ -61,7 +61,7 @@
         </c:if>
             <c:if test="${order.state=='WAIT_SELECT_EXPERT'}">
 
-            <td><a href="/offer/viewListOffers/${order.id}">view Offers</a></td>
+            <td><a href="/customer/offer/viewListOffers/${order.id}">view Offers</a></td>
             </c:if>
             <c:if test="${(order.state=='DONE')}">
                 <td><a href="/customer/order/payOnline/${order.id}">pay online</a></td>

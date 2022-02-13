@@ -59,10 +59,10 @@
                 <td>${orderDto.customerDto.firstName} ${orderDto.customerDto.lastName}</td>
                 <td>${orderDto.address.city}-${orderDto.address.street}-${orderDto.address.postalCode}-${orderDto.address.tag}</td>
                 <c:if test="${orderDto.state=='WAIT_EXPERT_COME'}">
-                    <td><a href="/order/startWork/${orderDto.id}">start</a></td>
+                    <td><a href="/expert/order/startWork/${orderDto.id}">start</a></td>
                 </c:if>
                 <c:if test="${orderDto.state=='STARTED'}">
-                    <td><a href="/order/endWork/${orderDto.id}">end</a></td>
+                    <td><a href="/expert/order/endWork/${orderDto.id}">end</a></td>
                 </c:if>
                     <%--
                                 <td><a href="/order/paymentCustomer/${orderDto.id}">Payment customer</a> </td>

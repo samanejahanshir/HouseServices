@@ -244,7 +244,7 @@ public class ExpertController {
     }
 
 
-    @RequestMapping("/addOffer/{id}")
+  /*  @RequestMapping("/addOffer/{id}")
     public String addOfferToOrder(@PathVariable("id") int id, Model model, HttpSession session) {
         model.addAttribute("offerDto", new OfferDto());
         model.addAttribute("idOrder", id);
@@ -271,7 +271,7 @@ public class ExpertController {
             session.setAttribute("error", e.getMessage());
         }
         return "redirect:/expert/addOffer/" + offerDto.getOrderDto().getId();
-    }
+    }*/
 
     @RequestMapping("/logout")
     public String logOut(HttpSession session) {

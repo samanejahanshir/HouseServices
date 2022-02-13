@@ -106,7 +106,7 @@ public class ExpertServiceTest {
     }
 
 
-    @Test
+  /*  @Test
     void addOfferToOrder_ThrowException() {
         Date date = null;
         try {
@@ -129,9 +129,9 @@ public class ExpertServiceTest {
             Assertions.assertEquals("there is a offer by this date and time", exp.getMessage());
 
         }
-    }
+    }*/
 
-    @Test
+  /*  @Test
     void addOfferToOrder() {
         Date date = null;
         try {
@@ -151,7 +151,7 @@ public class ExpertServiceTest {
             expertService.addOfferToOrder("ali@email.com", offerDto);
 
         }
-    }
+    }*/
 
     @Test
     void updateOrderStateTest() {

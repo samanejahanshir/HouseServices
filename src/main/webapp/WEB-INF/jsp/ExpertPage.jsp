@@ -24,7 +24,7 @@
             <li class="list-group-item"><a href="/expert/addServiceToList">Add a subService to my list</a></li>
             <li class="list-group-item"><a href="/expert/changePass">Change password</a></li>
             <li class="list-group-item"><a href="/expert/viewInformation">view information</a></li>
-            <li class="list-group-item"><a href="/offer/viewListOfferExpert">view List Offers</a></li>
+            <li class="list-group-item"><a href="/expert/offer/viewListOfferExpert">view List Offers</a></li>
             <li class="list-group-item"><a href="/expert/order/allOrdersExpert">view all orders</a></li>
             <li class="list-group-item"><a href="/expert/order/historyWorks">view history works</a></li>
             <li class="list-group-item"><a href="/expert/order/listWorks">List works</a></li>

@@ -35,7 +35,7 @@
 </div>
 
 <div class="container col-12">
-    <form:form cssClass="p-1 my-5 mx-5" method="post" action="/expert/saveOffer/${idOrder}"
+    <form:form cssClass="p-1 my-5 mx-5" method="post" action="/expert/offer/saveOffer/${idOrder}"
                modelAttribute="offerDto">
         <h2 style="text-justify: distribute-center-last">Add Offer</h2>
         <table class="table table-bordered table-striped table-primary text-dark">

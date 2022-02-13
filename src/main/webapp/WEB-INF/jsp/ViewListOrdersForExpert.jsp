@@ -59,7 +59,7 @@
                 <td>${order.subServiceDto.name}</td>
                 <td>${order.customerDto.firstName} ${order.customerDto.lastName}</td>
                 <c:if test="${typeList=='allOrders'}">
-                    <td><a href="/expert/addOffer/${order.id}">add offer</a></td>
+                    <td><a href="/expert/offer/addOffer/${order.id}">add offer</a></td>
                 </c:if>
                 <c:if test="${typeList=='workList'}">
                     <td><a href="/expert/order/select/${order.id}">select</a></td>

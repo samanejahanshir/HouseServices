@@ -6,6 +6,7 @@ import ir.maktab.data.model.Offer;
 import ir.maktab.dto.OfferDto;
 import ir.maktab.dto.OfferFilterSearch;
 import ir.maktab.dto.OrderDto;
+import ir.maktab.service.ExpertService;
 import ir.maktab.service.OfferService;
 import ir.maktab.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +24,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@RequestMapping("/offer")
+//@RequestMapping("/offer")
 @Controller
 @RequiredArgsConstructor
 @Api(tags = "this is offer controller for handle offers of orders")
 public class OfferController {
     final OfferService offerService;
     final OrderService orderService;
+  //  final ExpertService expertService;
 
-    @RequestMapping("/viewListOffers/{id}")
+    @RequestMapping("/customer/offer/viewListOffers/{id}")
     public String displayListOffers(@PathVariable int id, Model model, HttpSession session) {
         if (session.getAttribute("email") != null) {
             OrderDto orderDto = orderService.getOrderById(id);
@@ -54,7 +56,7 @@ public class OfferController {
         }
     }
 
-    @PostMapping("/searchOffers/{id}")
+    @PostMapping("/customer/offer/searchOffers/{id}")
     public String searchOffers(@PathVariable int id, @ModelAttribute("offerFilter") OfferFilterSearch offerFilter, Model model
             , HttpSession session) {
         model.addAttribute("orderId", id);
@@ -73,7 +75,7 @@ public class OfferController {
         return "ViewListOffersForOrder";
     }
 
-    @RequestMapping("/selectOffer/{id}")
+    @RequestMapping("/customer/offer/selectOffer/{id}")
     public String selectOffer(@PathVariable int id, Model model, HttpSession session, @ModelAttribute("offerFilter") OfferFilterSearch offerFilter) {
         int orderId = 0;
         try {
@@ -87,10 +89,10 @@ public class OfferController {
         } catch (RuntimeException e) {
             session.setAttribute("error", e.getMessage());
         }
-        return "redirect:/offer/viewListOffers/" + orderId;
+        return "redirect:/customer/offer/viewListOffers/" + orderId;
     }
 
-    @RequestMapping("/viewListOfferExpert")
+    @RequestMapping("/expert/offer/viewListOfferExpert")
     public String viewListOffersForExpert(Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
         if (session.getAttribute("messageSuccess") != null) {
@@ -106,14 +108,14 @@ public class OfferController {
         return "ViewListOfferForExpert";
     }
 
-    @RequestMapping("/delete/{offerId}")
+    @RequestMapping("/expert/offer/delete/{offerId}")
     public String deleteOffer(@PathVariable("offerId") int id, Model model, HttpSession session) {
         offerService.getOfferDao().deleteById(id);
         session.setAttribute("messageSuccess", "delete offer successfully");
-        return "redirect:/offer/viewListOfferExpert";
+        return "redirect:/expert/offer/viewListOfferExpert";
     }
 
-    @RequestMapping("/edit/{offerId}")
+    @RequestMapping("/expert/offer/edit/{offerId}")
     public String editOffer(@PathVariable("offerId") int id, Model model, HttpSession session) {
         Optional<Offer> offer = offerService.getOfferDao().findById(id);
         if (offer.isPresent()) {
@@ -122,20 +124,52 @@ public class OfferController {
             return "EditOffer";
         } else {
             session.setAttribute("error", "offer not found");
-            return "redirect:/offer/viewListOfferExpert";
+            return "redirect:/expert/offer/viewListOfferExpert";
         }
 
     }
 
-    @RequestMapping(value = "/updateOffer", method = RequestMethod.POST)
+    @RequestMapping(value = "/expert/offer/updateOffer", method = RequestMethod.POST)
     public String updateOffer(@ModelAttribute("offerDto") @Validated OfferDto offerDto, Model model, HttpSession session) {
         System.out.println(offerDto);
         String email = (String) session.getAttribute("email");
-        offerService.updateOffer(offerDto,email);
+        try {
+            offerService.updateOffer(offerDto, email);
+        }catch (RuntimeException e){
+            session.setAttribute("error", e.getMessage());
+        }
         session.setAttribute("messageSuccess", "update offer successfully");
-        return "redirect:/offer/viewListOfferExpert";
+        return "redirect:/expert/offer/viewListOfferExpert";
     }
 
+    @RequestMapping("/expert/offer/addOffer/{id}")
+    public String addOfferToOrder(@PathVariable("id") int id, Model model, HttpSession session) {
+        model.addAttribute("offerDto", new OfferDto());
+        model.addAttribute("idOrder", id);
+        if (session.getAttribute("error") != null) {
+            model.addAttribute("message", session.getAttribute("error"));
+            session.removeAttribute("error");
+        }
+        if (session.getAttribute("messageSuccess") != null) {
+            model.addAttribute("message", session.getAttribute("messageSuccess"));
+            session.removeAttribute("messageSuccess");
+        }
+        return "AddOfferToOrder";
+    }
+
+    @RequestMapping("/expert/offer/saveOffer/{orderId}")
+    public String saveOffer(@PathVariable("orderId") int orderId, @ModelAttribute("offerDto") OfferDto offerDto, HttpSession session, Model model) {
+        try {
+            OrderDto orderDto = orderService.getOrderById(orderId);
+            offerDto.setOrderDto(orderDto);
+            String email = (String) session.getAttribute("email");
+            offerService.addOfferToOrder(email, offerDto);
+            session.setAttribute("messageSuccess", "offer added successfuly");
+        } catch (RuntimeException e) {
+            session.setAttribute("error", e.getMessage());
+        }
+        return "redirect:/expert/offer/addOffer/" + offerDto.getOrderDto().getId();
+    }
     /* @ExceptionHandler(RuntimeException.class)
      public final String handleException(RuntimeException ex, Model model, WebRequest request) {
          model.addAttribute("message", ex.getMessage());

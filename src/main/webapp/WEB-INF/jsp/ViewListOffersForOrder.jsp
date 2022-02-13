@@ -37,7 +37,7 @@
 <div class="container col-12">
     <h1>Users List</h1>
 
-    <form:form cssClass="text-center" modelAttribute="offerFilter" action="/offer/searchOffers/${orderId}"
+    <form:form cssClass="text-center" modelAttribute="offerFilter" action="/customer/offer/searchOffers/${orderId}"
                method="post">
         <table class="table table-striped table-primary text-dark table-hover">
             <tr>
@@ -75,7 +75,7 @@
                     <td>${offer.expertDto.firstName} ${offer.expertDto.lastName}</td>
                     <td>${offer.state}</td>
                     <c:if test="${offer.orderDto.state=='WAIT_SELECT_EXPERT'}">
-                        <td><a href="/offer/selectOffer/${offer.id}">select</a></td>
+                        <td><a href="/customer/offer/selectOffer/${offer.id}">select</a></td>
                     </c:if>
                 </tr>
             </c:forEach>

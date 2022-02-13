@@ -33,10 +33,10 @@ public class ExpertService {
     final ExpertDao expertDao;
     final OrderDao orderDao;
     final SubServiceDao subServiceDao;
-    final OfferDao offerDao;
+   // final OfferDao offerDao;
     final CustomerDao customerDao;
     final ExpertMapper expertMapper;
-    final OfferMapper offerMapper;
+   // final OfferMapper offerMapper;
     final OrderMapper orderMapper;
     final SubServiceMapper subServiceMapper;
 
@@ -117,7 +117,7 @@ public class ExpertService {
         }
     }
 
-    @Transactional
+  /*  @Transactional
     public void addOfferToOrder(String email, OfferDto offerDto) {
         Expert expert = getExpertByEmail(email);
         if (expert != null) {
@@ -142,7 +142,7 @@ public class ExpertService {
             }
         }
     }
-
+*/
     public void updateOrderState(int idOrder, OrderState state) {
         orderDao.updateOrderState(idOrder, state);
     }

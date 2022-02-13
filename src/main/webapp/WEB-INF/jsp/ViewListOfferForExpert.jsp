@@ -35,7 +35,7 @@
     </div>
 </div>
 <div class="container col-12">
-    <h1>Users List</h1>
+    <h1>Offers List</h1>
 
     <table class="table table-striped table-primary text-dark table-hover">
         <tr>
@@ -61,10 +61,10 @@
                 <td>${offer.orderDto.subServiceDto.name}</td>
                 <td>${offer.orderDto.customerDto.firstName} ${offer.orderDto.customerDto.lastName} </td>
                 <c:if test="${offer.state!= 'ACCEPT'}">
-                    <td><a href="/offer/delete/${offer.id}">delete</a></td>
+                    <td><a href="/expert/offer/delete/${offer.id}">delete</a></td>
                 </c:if>
                 <c:if test="${offer.state == 'NEW'}">
-                    <td><a href="/offer/edit/${offer.id}">edit</a></td>
+                    <td><a href="/expert/offer/edit/${offer.id}">edit</a></td>
                 </c:if>
             </tr>
         </c:forEach>

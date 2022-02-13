@@ -190,7 +190,7 @@ public class OrderController {
         if (session.getAttribute("email") != null) {
             orderService.updateOrderState(orderId, OrderState.STARTED);
             session.setAttribute("messageSuccess", "work started");
-            return "redirect:/order/select/" + orderId;
+            return "redirect:/expert/order/select/" + orderId;
         } else {
             model.addAttribute("message", "you should login");
             return "index";
@@ -208,7 +208,7 @@ public class OrderController {
             } catch (RuntimeException e) {
                 session.setAttribute("error", e.getMessage());
             }
-            return "redirect:/order/select/" + orderId;
+            return "redirect:/expert/order/select/" + orderId;
         } else {
             model.addAttribute("message", "you should login");
             return "index";
@@ -226,7 +226,7 @@ public class OrderController {
             } catch (RuntimeException e) {
                 session.setAttribute("error", e.getMessage());
             }
-            return "redirect:/order/allOrders";
+            return "redirect:/customer/order/allOrders";
         } else {
             model.addAttribute("message", "you should login");
             return "index";
@@ -256,7 +256,7 @@ public class OrderController {
         } catch (RuntimeException e) {
             session.setAttribute("error", e.getMessage());
         }
-        return "redirect:/order/allOrders";
+        return "redirect:/customer/order/allOrders";
     }
 
     @RequestMapping("/expert/order/showScore/{orderId}")
@@ -268,7 +268,7 @@ public class OrderController {
             } catch (RuntimeException e) {
                 session.setAttribute("error", e.getMessage());
             }
-            return "redirect:/order/historyWorks";
+            return "redirect:/expert/order/historyWorks";
         } else {
             model.addAttribute("message", "you should login");
             return "index";
